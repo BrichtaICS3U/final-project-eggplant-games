@@ -17,7 +17,8 @@ PG_TEXT = (4,167,119)       #pregame text
 #background(s)
 T_background = pygame.image.load("Menu_Background.png") #this is the background for the title screen
 C_background = pygame.image.load("Controls_back.jpg")   #this is the background for the controls screen
-
+S_bakckground = pygame.image.load("S_B.jpg")            #this is the background for the settings screen
+PG_Background = pygame.image.load("Settings_B.jpg")     #this is the background for the pre game screen
 
 # screen dimensions and game clock #
 SCREEN_WIDTH = 1250
@@ -101,29 +102,26 @@ def Game_intro():
     global layer
     layer = 4
 
-def Music_ON():
+def MENU_Music_ON():
     """this function will turn on the music if the On button is pressed for the music"""
-    global Music
-    Music = 1
 
-def Music_OFF():
+
+def MENU_Music_OFF():
     """this function will turn the music off when the off Buton is pressed"""
-    global Music
-    Music = 0
+    
     
 def Quit():
     """this function will cause the game to end and close the program"""
     global Game
     Game = False
     
-# --------------------- End of functions list ----------------------- #    
+# --------------------- End of functions list ----------------------- #
 
 
 
 # this will be the main code for the game #
 layer = 1
 Game = True
-Music = 1
 while Game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -135,11 +133,7 @@ while Game:
                 layer == 1
 # code for the main menu will be located here # 
     screen.fill(WHITE)
-    if Music == 1:
-        pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
-        pygame.mixer.music.load('Menu_Music.mp3')
-        pygame.mixer.music.play(-1)
-
+    
     if layer == 1:
         #title
         screen.blit(T_background,(0,0))                           #Main menu background
@@ -152,12 +146,13 @@ while Game:
         
     elif layer == 2:
         #Settings
+        screen.blit(S_bakckground,(0,0))
         TEXT("Settings",180,50,70)                                          #settings Heading
         TEXT("Music",SCREEN_WIDTH/2,175,50)                                 #Music Sub-Heading
         TEXT("Difficulty",SCREEN_WIDTH/2,450,50)                            #Difficulty Sub-Heading
 
-        Button("ON",SCREEN_WIDTH/3,250,100,65,BC1,BC2,35,Music_ON)            #this Button toggles the music on 
-        Button("OFF",SCREEN_WIDTH/1.75 + 20 ,250,100,65,BC1,BC2,35,Music_OFF)  #this Button toggles the music off
+        Button("ON",SCREEN_WIDTH/3,250,100,65,BC1,BC2,35,MENU_Music_ON)            #this Button toggles the music on 
+        Button("OFF",SCREEN_WIDTH/1.75 + 20 ,250,100,65,BC1,BC2,35,MENU_Music_OFF)  #this Button toggles the music off
 
         Button("Baby",SCREEN_WIDTH/6 ,525,220,65,BC1,BC2,35,None)         #this Button is used to toggle the easiest difficulty    
         Button("Boring",525,525,220,65,BC1,BC2,35,None)                   #this Button is used to toggle the medium difficulty 
@@ -193,6 +188,7 @@ while Game:
 
     elif layer == 4:
         #game intro
+        screen.blit(PG_Background ,(0,0))
         TEXT("sample_txt.mp4",SCREEN_WIDTH/2,50,70)
         TEXT("SAMPLE_text.gahwfajbhfrawjf",SCREEN_WIDTH/2,200,25,PG_TEXT)
 
