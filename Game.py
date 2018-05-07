@@ -12,6 +12,7 @@ BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
 I_TEXT = (255,164,0)        #instructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
+PG_TEXT = (4,167,119)       #pregame text
 
 #background(s)
 T_background = pygame.image.load("Menu_Background.png") #this is the background for the title screen
@@ -71,11 +72,11 @@ def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
     Btextrect.center = (x + (w/2), y + (h/2))                       #
     screen.blit(Btext,Btextrect)                                    #
     
-def TEXT(TXT,x,y,TF):
+def TEXT(TXT,x,y,TF,TC = (130,2,99)):
     """this function exists to create headings for each menu screens"""
 
     fontTitle = pygame.font.Font('freesansbold.ttf', TF)
-    textSurfaceTitle = fontTitle.render(TXT, True,M_TEXT)
+    textSurfaceTitle = fontTitle.render(TXT, True,TC)
     textRectTitle = textSurfaceTitle.get_rect()
     textRectTitle.center = (x,y)
     screen.blit(textSurfaceTitle,textRectTitle)
@@ -141,7 +142,7 @@ while Game:
 
     if layer == 1:
         #title
-        screen.blit(T_background,(0,0))
+        screen.blit(T_background,(0,0))                           #Main menu background
         TEXT("Ctrl and Destroy",300,50,70)                        #Game title
 
         Button("Start", 20,200,210,80,BC1,BC2,35,Game_intro)      #this Button leads to the game intro, and then into the game
@@ -166,8 +167,8 @@ while Game:
 
     elif layer == 3:
         #Controls
-        screen.blit(C_background,(0,0))
-        TEXT("Game Controls",300,50,70)                             #Controls Heading
+        screen.blit(C_background,(0,0))                           #Controls Background
+        TEXT("Game Controls",300,50,70)                           #Controls Heading
         
         #move controls
         Button("W",120,100,50,50,BC1,BC2,35,None,"Move UP")       #hovering over this button will tell the player how to move up
@@ -179,6 +180,7 @@ while Game:
         Button("E",120,300,50,50,BC1,BC2,35,None,"Melee Atk")     #hovering over this button will tell the player how to Attack 
 
         #shoot controls
+        #have to manualy create arrows using a sprite engine
         Button("",120,430,50,50,BC1,BC2,35,None,"Shoot UP")       #hovering over this button will tell the player how to shoot up  
         Button("",120,500,50,50,BC1,BC2,35,None,"Shoot DOWN")     #hovering over this button will tell the player how to shoot down
         Button("",50,500,50,50,BC1,BC2,35,None,"Shoot LEFT")      #hovering over this button will tell the player how to shoot left
@@ -192,6 +194,7 @@ while Game:
     elif layer == 4:
         #game intro
         TEXT("sample_txt.mp4",SCREEN_WIDTH/2,50,70)
+        TEXT("SAMPLE_text.gahwfajbhfrawjf",SCREEN_WIDTH/2,200,25,PG_TEXT)
 
         Button("Back",20,700,80,50,BC1,BC2,25,Menu)#temporary, for test and faster performence purposes 
             
