@@ -7,10 +7,10 @@ BLACK = (0, 0, 0)
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, health=100):
+    def __init__(self, width, height, HP=100):
         # Call the parent class (Sprite) constructor
         super().__init__()
-        self.health = health
+        self.HP = HP
         
         # Pass in the color of the hero, x and y position, width and height.
         # Set the background color and set it to be transparent
@@ -55,11 +55,36 @@ class Hero(pygame.sprite.Sprite):
         health = 0
         print("You died!")
 
+class Bullet(pygame.sprite.Sprite):
+    
+    def __init__(self, colour, width, height, speed=2):
+        super().__init__()
+        self.speed = speed
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+
+        pygame.draw.rect(self.image, BLACK, [0, 0, width, height])
+        self.rect = self.image.get_rect()
+    
+    def fire(self, player, enemy):
+        # find vector between bullet and enemy
+        dist_x = player.rect.x - enemy.rect.x
+        dist_y = player.rect.y - enemy.rect.y
+        
+        # get diagonal line between bullet and enemy
+        distance = math.hypot(dist_x, dist_y)
+        dist_x, dist_y = dist_x / distance, dist_y / distance
+        
+        # move along vector towards the player at current speed
+        self.rect.x -= dist_x * self.speed
+        self.rect.y -= dist_y * self.speed
+        
+        
 class Enemy(pygame.sprite.Sprite):
-    #Enemy class that derives from pygame "Sprite" class.
     
     def __init__(self, colour, width, height, HP=100, dmg=10):
-        # Call the parent class (Sprite) constructor
         super().__init__()
         self.colour = colour
         self.HP = HP
@@ -78,15 +103,27 @@ class Enemy(pygame.sprite.Sprite):
 
     def move_to_player(self, player):
         #https://stackoverflow.com/questions/20044791/how-to-make-an-enemy-follow-the-player-in-pygame
+        
         # find direction vector between enemy and player
         dist_x = self.rect.x - player.rect.x
         dist_y = self.rect.y - player.rect.y
+        
         # get diagonal line between enemy and player
         distance = math.hypot(dist_x, dist_y)
+
+        if distance == 0:           #Enemy pushes player back on collision
+            player.rect.x -= 20
+            player.rect.y -= 20
+            dist_x = self.rect.x - player.rect.x
+            dist_y = self.rect.y - player.rect.y
+            distance = math.hypot(dist_x, dist_y)
+
         dist_x, dist_y = dist_x / distance, dist_y / distance
+        
         # move along vector towards the player at current speed
-        self.rect.x -= dist_x * 3
-        self.rect.y -= dist_y * 3
+        speed = 2
+        self.rect.x -= dist_x * speed
+        self.rect.y -= dist_y * speed
 
         
 
