@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-from hero import Hero
+from hero import Hero, Enemy, Bullet
 
 
 # define colours #
@@ -87,7 +87,14 @@ def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
     screen.blit(Btext,Btextrect)                                    #
     
 def TEXT(TXT,x,y,TF,TC = (130,2,99)):
-    """this function exists to create headings for each menu screens"""
+    """
+        this function exists to create headings for each menu screens
+        TXT   --- the text that the the function will create
+        x     --- the x position of the text
+        y     --- the y position of the text
+        TF    --- the font of the text
+        TC    --- the colour of the text
+    """
 
     fontTitle = pygame.font.Font('freesansbold.ttf', TF)
     textSurfaceTitle = fontTitle.render(TXT, True,TC)
@@ -129,11 +136,14 @@ def Quit():
     Menu = False
     
 # --------------------- End of functions list ----------------------- #
+
+# --------------------- this will be the main code for the game -------------------- #
 """this is where the bulk of the game code will be located. the point of placing it 
 in a function is so that we can easily call it when needed"""
 
 #sprite list
 all_sprites_list = pygame.sprite.Group()
+Hero_Sprite_list = pygame.sprite.Group()
 Bullet_sprites_list = pygame.sprite.Group()
 
 #player character
@@ -149,6 +159,10 @@ def Game():
     global SCREEN_WIDTH
     global SCREEN_HEIGHT
     Game = True
+    lvl = GRAY
+    shoot = True
+
+    
     while Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -157,7 +171,7 @@ def Game():
                 if event.key==pygame.K_p:
                     Game = False
 
-        screen.fill(GRAY)
+        screen.fill(lvl)
 
         keys = pygame.key.get_pressed()
 
@@ -183,15 +197,20 @@ def Game():
                     player.move()
                     
         #player shooting
-        if pygame.event==pygame.MOUSEBUTTONDOWN:
-            
-            bullet = Bullet(BLACK,10,10)
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:
+                bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))
+                shoot = False
+                all_sprites_list.add(bullet)
+                Bullet_sprites_list.add(bullet)
+                
+        #this allows the player to shoot again when he/she relases the mouse button        
+        if event.type==pygame.MOUSEBUTTONUP:
+            shoot = True
 
-            bullet.rect.x = player.rect.x
-            bullet.rect.y = player.rect.y
+        #update sprite list(s)
+        all_sprites_list.update()
+        Bullet_sprites_list.update()
 
-            all_sprites_list.add(bullet)
-            Bullet_sprites_list.add(bullet)
         
         #wall restrictions
         #Right wall
@@ -217,16 +236,15 @@ def Game():
 
 
         
-        all_sprites_list.update()
+        
 
 
         all_sprites_list.draw(screen)
         
         pygame.display.flip()
         clock.tick(60)
-# ------------------- end of main code ------------------ #
+# ------------------- end of main Game code ------------------ #
 
-# this will be the main code for the game #
 layer = 1
 Menu = True  
 while Menu:
@@ -238,6 +256,7 @@ while Menu:
                 Menu = False
             elif event.key==pygame.K_ESCAPE:
                 layer == 1
+                
 # code for the main menu will be located here # 
     screen.fill(WHITE)
     
