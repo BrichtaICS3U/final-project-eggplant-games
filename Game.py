@@ -1,5 +1,7 @@
 import pygame
 pygame.init()
+from hero import Hero
+
 
 # define colours #
 WHITE = (255,255,255)       #White
@@ -127,8 +129,102 @@ def Quit():
     Menu = False
     
 # --------------------- End of functions list ----------------------- #
+"""this is where the bulk of the game code will be located. the point of placing it 
+in a function is so that we can easily call it when needed"""
+
+#sprite list
+all_sprites_list = pygame.sprite.Group()
+Bullet_sprites_list = pygame.sprite.Group()
+
+#player character
+player = Hero(30,40)
+player.rect.x = SCREEN_WIDTH/2
+player.rect.y = SCREEN_HEIGHT/2
+playerHealth = player.HP
+
+#add the player to the universal list
+all_sprites_list.add(player)
+
+def Game():
+    global SCREEN_WIDTH
+    global SCREEN_HEIGHT
+    Game = True
+    while Game:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key==pygame.K_p:
+                    Game = False
+
+        screen.fill(GRAY)
+
+        keys = pygame.key.get_pressed()
+
+        #player movement
+        if keys[pygame.K_a]:
+            player.move()
+        elif keys[pygame.K_s]:
+            player.move()
+        elif keys[pygame.K_d]:
+            player.move()
+        elif keys[pygame.K_w]:
+            player.move()
+
+        #player sprinting
+        if keys[pygame.K_LSHIFT]:
+                if keys[pygame.K_a]:
+                    player.move()
+                elif keys[pygame.K_s]:
+                    player.move()
+                elif keys[pygame.K_d]:
+                    player.move()
+                elif keys[pygame.K_w]:
+                    player.move()
+                    
+        #player shooting
+        if pygame.event==pygame.MOUSEBUTTONDOWN:
+            
+            bullet = Bullet(BLACK,10,10)
+
+            bullet.rect.x = player.rect.x
+            bullet.rect.y = player.rect.y
+
+            all_sprites_list.add(bullet)
+            Bullet_sprites_list.add(bullet)
+        
+        #wall restrictions
+        #Right wall
+        if player.rect.x + 30 > SCREEN_WIDTH:
+            player.rect.x -= 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.x -= 2
+        #Left wall
+        elif player.rect.x < 0:
+            player.rect.x += 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.x += 2
+        #top wall
+        elif player.rect.y < 0:
+            player.rect.y += 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.y += 2
+        #Bottom wall
+        elif player.rect.y + 40 > SCREEN_HEIGHT:
+            player.rect.y -= 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.y -= 2
 
 
+        
+        all_sprites_list.update()
+
+
+        all_sprites_list.draw(screen)
+        
+        pygame.display.flip()
+        clock.tick(60)
+# ------------------- end of main code ------------------ #
 
 # this will be the main code for the game #
 layer = 1
@@ -211,7 +307,7 @@ while Menu:
         
 
         Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)#temporary, for test and faster performence purposes
-        Button("Continue",SCREEN_WIDTH/2 - 75,650,150,75,BC1,BC2,25)
+        Button("Continue",SCREEN_WIDTH/2 - 75,650,150,75,BC1,BC2,25,Game)
             
 
 
