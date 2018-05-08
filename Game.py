@@ -12,7 +12,7 @@ BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
 I_TEXT = (255,164,0)        #instructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
-PG_TEXT = (4,167,119)       #pregame text
+PG_TEXT = (255,164,0)       #pregame text
 
 #background(s)
 T_background = pygame.image.load("Menu_Background.png") #this is the background for the title screen
@@ -26,6 +26,17 @@ SCREEN_HEIGHT = 800
 size = (SCREEN_WIDTH,SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
+
+
+# ----------- Music ----------- #
+Music = True
+
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
+pygame.mixer.music.load("Menu_Music.mp3")
+pygame.mixer.music.play(-1)
+    
+# ----------- end of music catagory ------------- #
+
 
 
 # ---------- this will be catagory of functions to be used in the summative ----------- #
@@ -82,7 +93,7 @@ def TEXT(TXT,x,y,TF,TC = (130,2,99)):
     textRectTitle.center = (x,y)
     screen.blit(textSurfaceTitle,textRectTitle)
     
-def Menu():
+def M_Menu():
     """this function will bring the user back to the menu"""
     global layer
     layer = 1
@@ -104,16 +115,16 @@ def Game_intro():
 
 def MENU_Music_ON():
     """this function will turn on the music if the On button is pressed for the music"""
-
+    pygame.mixer.music.unpause()
 
 def MENU_Music_OFF():
     """this function will turn the music off when the off Buton is pressed"""
-    
+    pygame.mixer.music.pause()
     
 def Quit():
     """this function will cause the game to end and close the program"""
-    global Game
-    Game = False
+    global Menu
+    Menu = False
     
 # --------------------- End of functions list ----------------------- #
 
@@ -121,14 +132,14 @@ def Quit():
 
 # this will be the main code for the game #
 layer = 1
-Game = True
-while Game:
+Menu = True  
+while Menu:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            Game = False
+            Menu = False
         elif event.type == pygame.KEYDOWN:
             if event.key==pygame.K_x:
-                Game = False
+                Menu = False
             elif event.key==pygame.K_ESCAPE:
                 layer == 1
 # code for the main menu will be located here # 
@@ -152,13 +163,13 @@ while Game:
         TEXT("Difficulty",SCREEN_WIDTH/2,450,50)                            #Difficulty Sub-Heading
 
         Button("ON",SCREEN_WIDTH/3,250,100,65,BC1,BC2,35,MENU_Music_ON)            #this Button toggles the music on 
-        Button("OFF",SCREEN_WIDTH/1.75 + 20 ,250,100,65,BC1,BC2,35,MENU_Music_OFF)  #this Button toggles the music off
+        Button("OFF",SCREEN_WIDTH/1.75 + 20 ,250,100,65,BC1,BC2,35,MENU_Music_OFF) #this Button toggles the music off
 
         Button("Baby",SCREEN_WIDTH/6 ,525,220,65,BC1,BC2,35,None)         #this Button is used to toggle the easiest difficulty    
         Button("Boring",525,525,220,65,BC1,BC2,35,None)                   #this Button is used to toggle the medium difficulty 
         Button("Thrilling",842 ,525,220,65,BC1,BC2,35,None)               #this Button is used to toggle the hardest difficulty
         
-        Button("Back",20,700,80,50,BC1,BC2,25,Menu)                       #this Button will return the user to the main menu
+        Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)                     #this Button will return the user to the main menu
 
     elif layer == 3:
         #Controls
@@ -184,15 +195,23 @@ while Game:
         #pause menu bind
         Button("ESC",100,630,90,50,BC1,BC2,35,None,"Toggle Menu") #hovering over this button will tell the player how to toggle the main menu
         
-        Button("Back",20,700,80,50,BC1,BC2,25,Menu,None)          #this Button will return the user to the main menu
+        Button("Back",20,700,80,50,BC1,BC2,25,M_Menu,None)        #this Button will return the user to the main menu
 
     elif layer == 4:
         #game intro
         screen.blit(PG_Background ,(0,0))
-        TEXT("sample_txt.mp4",SCREEN_WIDTH/2,50,70)
-        TEXT("SAMPLE_text.gahwfajbhfrawjf",SCREEN_WIDTH/2,200,25,PG_TEXT)
+        TEXT("Transcript #423-27b",SCREEN_WIDTH/2,50,70)
+        TEXT("June 12, 18927",100,200,25,PG_TEXT)
+        TEXT("Since the catastrophe caused by the Xepher plant in 18905, the planet has undergone transformations rendering it into a wasteland.", SCREEN_WIDTH/2,240,18,PG_TEXT)
+        TEXT("The catastrophe caused a  massive increase in radiation levels on the surface. As well as deadly natural phenomenons.", SCREEN_WIDTH/2,280,18,PG_TEXT)
+        TEXT("Trillions were killed in a matter of hours.", SCREEN_WIDTH/2,320,18,PG_TEXT)
+        
+        TEXT('Those who survived have migrated into the hollows of the earths crust and have taken to the name "Nesters"',SCREEN_WIDTH/2,380,18,PG_TEXT)
+        TEXT("Due to extensive exposure to radiation most Nesters are far too frail to fight the monsters that lurk under the crust.",SCREEN_WIDTH/2,420,18,PG_TEXT)
+        
 
-        Button("Back",20,700,80,50,BC1,BC2,25,Menu)#temporary, for test and faster performence purposes 
+        Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)#temporary, for test and faster performence purposes
+        Button("Continue",SCREEN_WIDTH/2 - 75,650,150,75,BC1,BC2,25)
             
 
 
