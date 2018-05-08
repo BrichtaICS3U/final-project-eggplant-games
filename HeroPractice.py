@@ -32,7 +32,7 @@ all_sprites_list = pygame.sprite.Group()
 enemy_list = pygame.sprite.Group()
 bullet_list = pygame.sprite.Group()
 
-#Create Hero, enemy, bullets 
+#Create Hero, enemy
 player = Hero(30, 50)
 player.rect.x = 200
 player.rect.y = 300
@@ -68,14 +68,14 @@ while carryOn:
 
         #Player Sprint
         if keys[pygame.K_LSHIFT]:
-                if keys[pygame.K_a]:
-                    player.sprint()
-                elif keys[pygame.K_d]:
-                    player.sprint()
-                elif keys[pygame.K_w]:
-                    player.sprint()
-                elif keys[pygame.K_s]:
-                    player.sprint()
+            if keys[pygame.K_a]:
+                player.sprint()
+            elif keys[pygame.K_d]:
+                player.sprint()
+            elif keys[pygame.K_w]:
+                player.sprint()
+            elif keys[pygame.K_s]:
+                player.sprint()
                     
         #Enemy follow player
         enemy.move_to_player(player)
@@ -83,17 +83,15 @@ while carryOn:
         #If enemy hits player
         collision_list = pygame.sprite.spritecollide(player, enemy_list, False)
 
+        #Shooting bullets
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # Fire a bullet if the user clicks the mouse button
-            bullet = Bullet(BLACK, 10, 10)
-            # Set the bullet so it is where the player is
-            bullet.rect.x = player.rect.x
-            bullet.rect.y = player.rect.y
+            # Fire a bullet (from player) if the user clicks the mouse button
+            bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
             # Add the bullet to the lists
             all_sprites_list.add(bullet)
             bullet_list.add(bullet)
-            bullet.fire(player, enemy)
-            print('Bullet fired')
+            bullet_collision = pygame.sprite.spritecollide(bullet, enemy_list, False)
+            
                         
         #Game Logic
         all_sprites_list.update()
@@ -107,11 +105,22 @@ while carryOn:
         pygame.draw.rect(screen, GREEN, [100, 30, 15, 25], 0)
         TEXT("Player Health", 60, 20, 15)
 
-        x = 100
+        #Updating health bars
         for collision in collision_list:
-            pygame.draw.rect(screen, WHITE, [x, 30, 15, 25], 0)
-            x -= 20
-        
+            player.HP -= 20
+
+        #while player.HP <= 100:
+            #if player.HP == 80:
+                #pygame.draw.rect(screen, WHITE, [100, 30, 15, 25], 0)
+            #elif player.HP == 60:
+                #pygame.draw.rect(screen, WHITE, [80, 30, 15, 25], 0)
+            #elif player.HP == 40:
+                #pygame.draw.rect(screen, WHITE, [60, 30, 15, 25], 0)
+            #elif player.HP == 20:
+                #pygame.draw.rect(screen, WHITE, [40, 30, 15, 25], 0)
+            #elif player.HP == 0:
+                #pygame.draw.rect(screen, WHITE, [20, 30, 15, 25], 0)
+                #player.die()
         
         #Draw all the sprites
         all_sprites_list.draw(screen)
