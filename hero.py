@@ -36,14 +36,12 @@ class Hero(pygame.sprite.Sprite):
         if keys[pygame.K_d]: #Right
             self.rect.x += 2
 
-        #Fix auto sprint when 2 keys are pressed
-
     def sprint(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]: #Up 
             self.rect.y -= 2
-        if keys[pygame.K_s]:# Down
+        if keys[pygame.K_s]: #Down
            self.rect.y += 2
         if keys[pygame.K_a]: #Left
             self.rect.x -= 2
@@ -51,8 +49,6 @@ class Hero(pygame.sprite.Sprite):
             self.rect.x += 2
 
     def die(self):
-        #Add in health bar diminishing, screen pop up saying player died, etc
-        self.HP = 0
         print("You died!")
 
 class Bullet(pygame.sprite.Sprite):
@@ -127,6 +123,10 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y -= dist_y * speed
 
         #https://stackoverflow.com/questions/20044791/how-to-make-an-enemy-follow-the-player-in-pygame
+
+    def die(self):
+        print("Enemy died!")
+         
 
         
 
