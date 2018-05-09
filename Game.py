@@ -44,8 +44,6 @@ pygame.mixer.music.play(-1)                                                 #
 
 # ----------- list of global variables ------------- #
 shoot = True
-
-
 # ----------- end of variable list ---------------#
 
 
@@ -146,13 +144,29 @@ def Quit():
     Menu = False
 
 def NEXT_SCREEN_UP():
+    """this function will transfer the player to a new screen UP and reset their position in the correct area"""
     player.rect.y = SCREEN_HEIGHT - 46
-    
+
+def NEXT_SCREEN_RIGHT():
+    """this function will transfer the player to a new screen RIGHT and reset their position in the correct area"""
+    player.rect.x = 6
+
+def NEXT_SCREEN_LEFT():
+    """this function will transfer the player to a new screen LEFT and reset their position in the correct area"""
+    player.rect.x = SCREEN_WIDTH - 36
+
+def NEXT_SCREEN_DOWN():
+    """this function will transfer the player to a new screen UP and reset their position in the correct area"""
+    player.rect.y = 6
 # --------------------- End of functions list ----------------------- #
 
+
+
 # --------------------- this will be the main code for the game -------------------- #
-"""this is where the bulk of the game code will be located. the point of placing it 
-in a function is so that we can easily call it when needed"""
+"""
+this is where the bulk of the game code will be located. the point of placing it 
+in a function is so that we can easily call it when needed form the menu
+"""
 
 #sprite list
 all_sprites_list = pygame.sprite.Group()        #this is the master sprite list. All of the sprites are located her unpon creation
@@ -166,23 +180,40 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
-#door
-top_door = DOOR(150,5)                 
-top_door.rect.x = SCREEN_WIDTH/2 - 75
+#this is where all the "door" objects are created
+#top door
+top_door = DOOR(100,5)                 
+top_door.rect.x = SCREEN_WIDTH/2 - 50
 top_door.rect.y = 0
 
+#bottom door
+bot_door = DOOR(100,5)
+bot_door.rect.x = SCREEN_WIDTH/2 - 50
+bot_door.rect.y = SCREEN_HEIGHT - 5
 
-#add all of the sprites into a list
+#right door
+rt_door = DOOR(5,100)
+rt_door.rect.x = SCREEN_WIDTH - 5
+rt_door.rect.y = SCREEN_HEIGHT/2 - 50
+
+#left door
+lt_door = DOOR(5,100)
+lt_door.rect.x = 0
+lt_door.rect.y = SCREEN_HEIGHT/2 - 50
+
+#add all of the sprites into their respected lists 
 all_sprites_list.add(player)
-all_sprites_list.add(top_door)
 Hero_sprite_list.add(player)
-
+Door_sprites_list.add(bot_door)
+Door_sprites_list.add(top_door)
+Door_sprites_list.add(rt_door)
+Door_sprites_list.add(lt_door)
 
 def Game():
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
-    Game = True                 #while the variable is tru the game will run
+    Game = True                 #while the variable is true the game will run
     
     
 
@@ -193,9 +224,9 @@ def Game():
                 pygame.quit()                   #quit the etire code
             elif event.type == pygame.KEYDOWN:  #
                 if event.key==pygame.K_p:       #if the p key is pressed
-                    Game = False                #exit thegae and return to the main menu
+                    Game = False                #exit the game and return to the main menu
 
-        screen.fill(WHITE)                      #fil the screen white evertime the code runs
+        screen.fill(WHITE)                      #fill the screen white evertime the code runs
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
 
@@ -231,10 +262,20 @@ def Game():
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
             shoot = True                                                                    #the player can shoot again
 
-        #collision with the door
-        if player.rect.y < top_door.rect.y + 5 and player.rect.x > top_door.rect.x and player.rect.x + 30 < top_door.rect.x + 150:
+        #collision with the door(s)
+        if player.rect.y < top_door.rect.y + 5 and player.rect.x > top_door.rect.x and player.rect.x + 30 < top_door.rect.x + 100: #top door
             NEXT_SCREEN_UP()
 
+        if player.rect.y + 40 > bot_door.rect.y and player.rect.x > bot_door.rect.x and player.rect.x + 30 < top_door.rect.x + 100: #bottom door
+            NEXT_SCREEN_DOWN()
+
+        if player.rect.x + 30 > rt_door.rect.x and player.rect.y > rt_door.rect.y and player.rect.y + 40 < rt_door.rect.y + 100:#right door 
+            NEXT_SCREEN_RIGHT()
+
+        if player.rect.x < lt_door.rect.x and player.rect.y > rt_door.rect.y and player.rect.y + 40 < rt_door.rect.y + 100:#left door
+            NEXT_SCREEN_LEFT()
+
+        
 
         #update sprite list(s)
         all_sprites_list.update() 
@@ -269,6 +310,7 @@ def Game():
 
 
         all_sprites_list.draw(screen)
+        Door_sprites_list.draw(screen)
         
         pygame.display.flip()
         clock.tick(60)

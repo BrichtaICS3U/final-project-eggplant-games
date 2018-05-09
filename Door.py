@@ -1,4 +1,5 @@
 import pygame
+from hero import Hero
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -19,8 +20,6 @@ class DOOR(pygame.sprite.Sprite):
         pygame.draw.rect(self.image,BLACK,[0,0,width,height])
 
         self.rect = self.image.get_rect()
-
-
 
 
 
