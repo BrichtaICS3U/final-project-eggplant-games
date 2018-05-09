@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet
-
+from hero import Hero, Enemy, Bullet    #import the sprites that Abbey has made
+from Door import DOOR                   #import the srites taht Nick has made
 
 # define colours #
 WHITE = (255,255,255)       #White
@@ -12,7 +12,7 @@ GREEN = (0,255,0)           #test Green
 BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
-I_TEXT = (255,164,0)        #instructions text colour (subject to change)
+I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
 
@@ -23,21 +23,31 @@ S_bakckground = pygame.image.load("S_B.jpg")            #this is the background 
 PG_Background = pygame.image.load("Settings_B.jpg")     #this is the background for the pre game screen
 
 # screen dimensions and game clock #
-SCREEN_WIDTH = 1250
-SCREEN_HEIGHT = 800
-size = (SCREEN_WIDTH,SCREEN_HEIGHT)
-screen = pygame.display.set_mode(size)
-clock = pygame.time.Clock()
+SCREEN_WIDTH = 1250                     #screen width
+SCREEN_HEIGHT = 800                     #screen height
+size = (SCREEN_WIDTH,SCREEN_HEIGHT)     #the total dimensions of the screen
+screen = pygame.display.set_mode(size)  #create the display area
+clock = pygame.time.Clock()             #built in pygame clock
 
 
 # ----------- Music ----------- #
 Music = True
 
-pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
-pygame.mixer.music.load("Menu_Music.mp3")
-pygame.mixer.music.play(-1)
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)   #this is the music for the menu
+pygame.mixer.music.load("Menu_Music.mp3")                                   #
+pygame.mixer.music.play(-1)                                                 #            
     
 # ----------- end of music catagory ------------- #
+
+
+
+
+# ----------- list of global variables ------------- #
+shoot = True
+
+
+# ----------- end of variable list ---------------#
+
 
 
 
@@ -134,6 +144,9 @@ def Quit():
     """this function will cause the game to end and close the program"""
     global Menu
     Menu = False
+
+def NEXT_SCREEN_UP():
+    player.rect.y = SCREEN_HEIGHT - 46
     
 # --------------------- End of functions list ----------------------- #
 
@@ -142,9 +155,10 @@ def Quit():
 in a function is so that we can easily call it when needed"""
 
 #sprite list
-all_sprites_list = pygame.sprite.Group()
-Hero_Sprite_list = pygame.sprite.Group()
-Bullet_sprites_list = pygame.sprite.Group()
+all_sprites_list = pygame.sprite.Group()        #this is the master sprite list. All of the sprites are located her unpon creation
+Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. Only the hero sprite will be located here
+Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
+Door_sprites_list = pygame.sprite.Group()       #this is the Door sprite list. this is where all the doors will be located for the room transitions
 
 #player character
 player = Hero(30,40)
@@ -152,63 +166,78 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
-#add the player to the universal list
+#door
+top_door = DOOR(150,5)                 
+top_door.rect.x = SCREEN_WIDTH/2 - 75
+top_door.rect.y = 0
+
+
+#add all of the sprites into a list
 all_sprites_list.add(player)
+all_sprites_list.add(top_door)
+Hero_sprite_list.add(player)
+
 
 def Game():
-    global SCREEN_WIDTH
-    global SCREEN_HEIGHT
-    Game = True
-    lvl = GRAY
-    shoot = True
+    global SCREEN_WIDTH         #turn the screen width into a global variable for the game
+    global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
+    global shoot                #adds the shoot variable
+    Game = True                 #while the variable is tru the game will run
+    
+    
 
     
     while Game:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key==pygame.K_p:
-                    Game = False
+        for event in pygame.event.get():        #
+            if event.type == pygame.QUIT:       #if the red box at the top right is clicked
+                pygame.quit()                   #quit the etire code
+            elif event.type == pygame.KEYDOWN:  #
+                if event.key==pygame.K_p:       #if the p key is pressed
+                    Game = False                #exit thegae and return to the main menu
 
-        screen.fill(lvl)
+        screen.fill(WHITE)                      #fil the screen white evertime the code runs
 
-        keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
 
         #player movement
-        if keys[pygame.K_a]:
-            player.move()
-        elif keys[pygame.K_s]:
-            player.move()
-        elif keys[pygame.K_d]:
-            player.move()
-        elif keys[pygame.K_w]:
-            player.move()
+        if keys[pygame.K_a]:                    #if the A key is pressed
+            player.move()                           #the player will move to the Left at a speed of 2 pixels
+        elif keys[pygame.K_s]:                  #if the S key is pressed
+            player.move()                           #the player will move Down at a speed of 2 pixels
+        elif keys[pygame.K_d]:                  #if the D key is pressed
+            player.move()                           #the player will move to the Right at a speed of 2 pixels
+        elif keys[pygame.K_w]:                  #if the W key is pressed
+            player.move()                           #the player will move Up at a speed of 2 pixels
 
         #player sprinting
-        if keys[pygame.K_LSHIFT]:
-                if keys[pygame.K_a]:
-                    player.move()
-                elif keys[pygame.K_s]:
-                    player.move()
-                elif keys[pygame.K_d]:
-                    player.move()
-                elif keys[pygame.K_w]:
-                    player.move()
-                    
+        if keys[pygame.K_LSHIFT]:               #if left shift is pressed
+                if keys[pygame.K_a]:                #and if A is pressed
+                    player.move()                       #double the movement speed Left
+                elif keys[pygame.K_s]:              #and if S is pressed
+                    player.move()                       #double the movement speed Down
+                elif keys[pygame.K_d]:              #and if D is pressed
+                    player.move()                       #double the movement speed Right
+                elif keys[pygame.K_w]:              #and if W is pressed
+                    player.move()                       #double the movement speed up
+                        
         #player shooting
-        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:
-                bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))
-                shoot = False
-                all_sprites_list.add(bullet)
-                Bullet_sprites_list.add(bullet)
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:                            #if the mouse Button has been pressed and the player is allowed to shoot
+                bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
+                shoot = False                                                               #take away he ability to shoot so the game doesn't break
+                all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
+                Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
                 
         #this allows the player to shoot again when he/she relases the mouse button        
-        if event.type==pygame.MOUSEBUTTONUP:
-            shoot = True
+        if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
+            shoot = True                                                                    #the player can shoot again
+
+        #collision with the door
+        if player.rect.y < top_door.rect.y + 5 and player.rect.x > top_door.rect.x and player.rect.x + 30 < top_door.rect.x + 150:
+            NEXT_SCREEN_UP()
+
 
         #update sprite list(s)
-        all_sprites_list.update()
+        all_sprites_list.update() 
         Bullet_sprites_list.update()
 
         
@@ -256,7 +285,7 @@ while Menu:
                 Menu = False
             elif event.key==pygame.K_ESCAPE:
                 layer == 1
-                
+        
 # code for the main menu will be located here # 
     screen.fill(WHITE)
     
@@ -314,6 +343,8 @@ while Menu:
 
     elif layer == 4:
         #game intro
+
+               
         screen.blit(PG_Background ,(0,0))
         TEXT("Transcript #423-27b",SCREEN_WIDTH/2,50,70)
         TEXT("June 12, 18927",100,200,25,PG_TEXT)
@@ -326,7 +357,7 @@ while Menu:
         
 
         Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)#temporary, for test and faster performence purposes
-        Button("Continue",SCREEN_WIDTH/2 - 75,650,150,75,BC1,BC2,25,Game)
+        Button("Continue",SCREEN_WIDTH/2 - 75,700,150,50,BC1,BC2,25,Game)
             
 
 
