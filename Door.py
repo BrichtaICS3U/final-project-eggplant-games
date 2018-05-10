@@ -23,18 +23,12 @@ class DOOR(pygame.sprite.Sprite):
 
 
 
-    def NEXT_SCREEN_UP(self):
-        """this function will transfer the player to a new screen UP and reset their position in the correct area"""
-        player.rect.y = SCREEN_HEIGHT - 46
 
-    def NEXT_SCREEN_RIGHT(self):
-        """this function will transfer the player to a new screen RIGHT and reset their position in the correct area"""
-        player.rect.x = 6
 
-    def NEXT_SCREEN_LEFT(self):
-        """this function will transfer the player to a new screen LEFT and reset their position in the correct area"""
-        player.rect.x = SCREEN_WIDTH - 36
 
-    def NEXT_SCREEN_DOWN(self):
-        """this function will transfer the player to a new screen UP and reset their position in the correct area"""
-        player.rect.y = 6
+
+
+            
+            
+            
+            
