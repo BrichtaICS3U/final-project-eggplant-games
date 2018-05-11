@@ -194,11 +194,11 @@ lvls = []
 lvl1 = LVL(3)
 lvls.append(lvl1)
 
-#lvl 2-1
-lvl2 = LVL(7)
+#lvl 1-2
+lvl2 = LVL(9)
 lvls.append(lvl2)
 
-#lvl 1-2
+#lvl 2-1
 lvl3 = LVL(5)
 lvls.append(lvl3)
 
@@ -239,12 +239,15 @@ def Game():
             
         if Y == 2 and X == 1:
             lvl2.draw(screen)
+            pygame.draw.rect(screen,GREEN,[50,50,50,50])
 
         if Y == 1 and X == 2:
             lvl3.draw(screen)
+            pygame.draw.rect(screen,BLUE,[50,50,50,50])
 
         if Y == 2 and X == 2:
             lvl4.draw(screen)
+            pygame.draw.rect(screen,BLACK,[50,50,50,50])
             
         for lvl in lvls:
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
@@ -276,13 +279,15 @@ def Game():
                     player.move()                       #double the movement speed up
                         
         #player shooting
+
         if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:                            #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
                 Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
                 
-        #this allows the player to shoot again when he/she relases the mouse button        
+        #this allows the player to shoot again when he/she relases the mouse button
+        
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
             shoot = True                                                                    #the player can shoot again
 
@@ -412,7 +417,10 @@ while Menu:
         Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)#temporary, for test and faster performence purposes
         Button("Continue",SCREEN_WIDTH/2 - 75,700,150,50,BC1,BC2,25,Game)
             
-
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    Game()
 
     
     pygame.display.flip()
