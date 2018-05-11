@@ -108,12 +108,12 @@ class Enemy(pygame.sprite.Sprite):
         # get diagonal line between enemy and player
         distance = math.hypot(dist_x, dist_y)
 
-        if distance == 0:           #Enemy pushes player back on collision
-            player.rect.x -= 20
-            player.rect.y -= 20
-            dist_x = self.rect.x - player.rect.x
-            dist_y = self.rect.y - player.rect.y
-            distance = math.hypot(dist_x, dist_y)
+        #if distance == 0:           #Enemy pushes player back on collision
+            #player.rect.x -= 20
+            #player.rect.y -= 20
+            #dist_x = self.rect.x - player.rect.x
+            #dist_y = self.rect.y - player.rect.y
+            #distance = math.hypot(dist_x, dist_y)
 
         dist_x, dist_y = dist_x / distance, dist_y / distance
         

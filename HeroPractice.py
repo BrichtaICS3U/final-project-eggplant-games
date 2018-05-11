@@ -2,8 +2,19 @@ import pygame, random
 
 #Import classes
 from hero import Hero, Enemy, Bullet
+from Door import DOOR
 
 pygame.init()
+
+GREEN = (0, 255, 0)
+WHITE = (255, 255, 255)
+BLUE = (81, 222, 232)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+M_TEXT = (164,44,214)
+        
+SCREEN_WIDTH=1250
+SCREEN_HEIGHT=800
 
 def TEXT(TXT,x,y,TF):
     """this function exists to create headings for each menu screens"""
@@ -14,17 +25,23 @@ def TEXT(TXT,x,y,TF):
     textRectTitle.center = (x,y)
     screen.blit(textSurfaceTitle,textRectTitle)
 
-GREEN = (0, 255, 0)
-WHITE = (255, 255, 255)
-BLUE = (81, 222, 232)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-M_TEXT = (164,44,214)
-        
-SCREENWIDTH=1250
-SCREENHEIGHT=800
+def NEXT_SCREEN_UP():
+    """this function will transfer the player to a new screen UP and reset their position in the correct area"""
+    player.rect.y = SCREEN_HEIGHT - 46
+
+def NEXT_SCREEN_RIGHT():
+    """this function will transfer the player to a new screen RIGHT and reset their position in the correct area"""
+    player.rect.x = 6
+
+def NEXT_SCREEN_LEFT():
+    """this function will transfer the player to a new screen LEFT and reset their position in the correct area"""
+    player.rect.x = SCREEN_WIDTH - 36
+
+def NEXT_SCREEN_DOWN():
+    """this function will transfer the player to a new screen UP and reset their position in the correct area"""
+    player.rect.y = 6
  
-size = (SCREENWIDTH, SCREENHEIGHT)
+size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Irrelevant")
 shoot = True
@@ -35,6 +52,7 @@ all_sprites_list = pygame.sprite.Group()
 #Other sprite lists
 enemy_list = pygame.sprite.Group()
 bullet_list = pygame.sprite.Group()
+door_sprites_list = pygame.sprite.Group()
 
 #Create Hero, enemy, bullet
 player = Hero(30, 50)
@@ -46,10 +64,37 @@ enemy = Enemy(BLACK, 40, 40)
 enemy_list.add(enemy)
 
 bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
- 
+
+#this is where all the "door" objects are created
+#top door
+top_door = DOOR(100,5)                 
+top_door.rect.x = SCREEN_WIDTH/2 - 50
+top_door.rect.y = 0
+
+#bottom door
+bot_door = DOOR(100,5)
+bot_door.rect.x = SCREEN_WIDTH/2 - 50
+bot_door.rect.y = SCREEN_HEIGHT - 5
+
+#right door
+rt_door = DOOR(5,100)
+rt_door.rect.x = SCREEN_WIDTH - 5
+rt_door.rect.y = SCREEN_HEIGHT/2 - 50
+
+#left door
+lt_door = DOOR(5,100)
+lt_door.rect.x = 0
+lt_door.rect.y = SCREEN_HEIGHT/2 - 50
+
 # Add sprites to list of sprites
 all_sprites_list.add(player)
 all_sprites_list.add(enemy)
+door_sprites_list.add(bot_door)
+door_sprites_list.add(top_door)
+door_sprites_list.add(rt_door)
+door_sprites_list.add(lt_door)
+
+
 
 #Set shoot = False for later
 shoot = False
@@ -86,8 +131,9 @@ while carryOn:
             elif keys[pygame.K_s]:
                 player.sprint()
                     
-        #Enemy follow player
-        enemy.move_to_player(player)
+        #Enemy follow player (while living)
+        if enemy.HP > 0:
+            enemy.move_to_player(player)
                 
         #Player shooting
         if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:
@@ -128,6 +174,7 @@ while carryOn:
 
         # This draws white (alternatively other background colour) over
         # original health bars to simulate the bars disappearing
+
             #Player health bars
         if player.HP <= 80:
             pygame.draw.rect(screen, WHITE, [100, 30, 15, 25], 0)
@@ -154,12 +201,11 @@ while carryOn:
                     pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
-                    ##### FIND WAY TO REMOVE ENEMY FROM GAME ENTIRELY
-
+                    
         
         #wall restrictions
         #Right wall
-        if player.rect.x + 30 > SCREENWIDTH:
+        if player.rect.x + 30 > SCREEN_WIDTH:
             player.rect.x -= 2
             if keys[pygame.K_LSHIFT]:
                 player.rect.x -= 2
@@ -174,14 +220,27 @@ while carryOn:
             if keys[pygame.K_LSHIFT]:
                 player.rect.y += 2
         #Bottom wall
-        elif player.rect.y + 40 > SCREENHEIGHT:
+        elif player.rect.y + 40 > SCREEN_HEIGHT:
             player.rect.y -= 2
             if keys[pygame.K_LSHIFT]:
                 player.rect.y -= 2
 
+        #collision with the door(s)
+        if player.rect.y < top_door.rect.y + 5 and player.rect.x > top_door.rect.x and player.rect.x + 30 < top_door.rect.x + 100: #top door
+            NEXT_SCREEN_UP()
+
+        if player.rect.y + 40 > bot_door.rect.y and player.rect.x > bot_door.rect.x and player.rect.x + 30 < top_door.rect.x + 100: #bottom door
+            NEXT_SCREEN_DOWN()
+
+        if player.rect.x + 30 > rt_door.rect.x and player.rect.y > rt_door.rect.y and player.rect.y + 40 < rt_door.rect.y + 100:#right door 
+            NEXT_SCREEN_RIGHT()
+
+        if player.rect.x < lt_door.rect.x and player.rect.y > rt_door.rect.y and player.rect.y + 40 < rt_door.rect.y + 100:#left door
+            NEXT_SCREEN_LEFT()
         
         #Draw all the sprites
         all_sprites_list.draw(screen)
+        door_sprites_list.draw(screen)
  
         #Refresh Screen
         pygame.display.flip()
