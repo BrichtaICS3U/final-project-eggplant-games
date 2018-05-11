@@ -27,9 +27,12 @@ SCREENHEIGHT=800
 size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Irrelevant")
+shoot = True
 
 #List containing all sprites 
 all_sprites_list = pygame.sprite.Group()
+
+#Other sprite lists
 enemy_list = pygame.sprite.Group()
 bullet_list = pygame.sprite.Group()
 
@@ -48,7 +51,7 @@ bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
 all_sprites_list.add(player)
 all_sprites_list.add(enemy)
 
-#Set shoot = True for later
+#Set shoot = False for later
 shoot = False
 
 #Allowing the user to close the window...
@@ -86,15 +89,16 @@ while carryOn:
         #Enemy follow player
         enemy.move_to_player(player)
                 
-        #Shooting bullets
-        
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            #Fire a bullet (from player) if the user clicks the mouse button
-            bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
-            # Add the bullet to the lists
-            all_sprites_list.add(bullet)
-            bullet_list.add(bullet)
-            
+        #Player shooting
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:
+                bullet = Bullet(BLACK,5,5,player.rect.x ,player.rect.y)
+                shoot = False
+                all_sprites_list.add(bullet)
+                bullet_list.add(bullet)
+                
+        #this allows the player to shoot again when he/she releases the mouse button        
+        if event.type==pygame.MOUSEBUTTONUP:
+            shoot = True
                         
         #Game Logic
         all_sprites_list.update()
@@ -119,7 +123,7 @@ while carryOn:
             player.rect.y -= 50
 
         for collision in bullet_collision:
-            enemy.HP -= 20
+            enemy.HP -= 5
             print(enemy.HP)
 
         # This draws white (alternatively other background colour) over
@@ -146,10 +150,35 @@ while carryOn:
                     pygame.draw.rect(screen, WHITE, [enemy.rect.x+17, enemy.rect.y-10, 6, 5], 0)
                 if enemy.HP <= 20:
                     pygame.draw.rect(screen, WHITE, [enemy.rect.x+11, enemy.rect.y-10, 6, 5], 0)
-                if enemy.HP == 0:
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 6, 5], 0)
+                if enemy.HP <= 0:
+                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
                     all_sprites_list.remove(enemy)
+                    enemy_list.remove(enemy)
                     ##### FIND WAY TO REMOVE ENEMY FROM GAME ENTIRELY
+
+        
+        #wall restrictions
+        #Right wall
+        if player.rect.x + 30 > SCREENWIDTH:
+            player.rect.x -= 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.x -= 2
+        #Left wall
+        elif player.rect.x < 0:
+            player.rect.x += 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.x += 2
+        #top wall
+        elif player.rect.y < 0:
+            player.rect.y += 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.y += 2
+        #Bottom wall
+        elif player.rect.y + 40 > SCREENHEIGHT:
+            player.rect.y -= 2
+            if keys[pygame.K_LSHIFT]:
+                player.rect.y -= 2
+
         
         #Draw all the sprites
         all_sprites_list.draw(screen)
