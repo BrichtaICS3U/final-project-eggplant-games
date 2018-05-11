@@ -45,6 +45,7 @@ pygame.mixer.music.play(-1)                                                 #
 
 # ----------- list of global variables ------------- #
 shoot = True
+H = 1
 # ----------- end of variable list ---------------#
 
 
@@ -145,13 +146,15 @@ def Quit():
     Menu = False
     
 def Change_SCREEN():
-    global l_v_l
+    global H
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
         print("screen UP.")
+        H += 1
     elif player.rect.y > 750:
         player.rect.y = 6
         print("screen DOWN.")
+        H -= 1
     elif player.rect.x < 50:
         player.rect.x = SCREEN_WIDTH - 36
         print("screen LEFT.")
@@ -188,8 +191,8 @@ lvl1 = LVL(1)
 lvls.append(lvl1)
 
 #lvl 2
-#lvl2 = LVL(2)
-#lvls.append(lvl2)
+lvl2 = LVL(7)
+lvls.append(lvl2)
 
 #add all of the sprites into their respected lists 
 all_sprites_list.add(player)
@@ -197,7 +200,7 @@ Hero_sprite_list.add(player)
 
 
 def Game():
-    
+    global H
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
@@ -218,8 +221,13 @@ def Game():
         screen.fill(WHITE)
     
 ##########################################
+        if H == 1:
+            lvl1.draw(screen)
+            
+        if H == 2:
+            lvl2.draw(screen)
+            
         for lvl in lvls:
-            lvl.draw(screen)
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
             for door in Door_collision_list:
                 Change_SCREEN()
@@ -294,7 +302,7 @@ def Game():
 
 
         all_sprites_list.draw(screen)
-        lvl1.doors_list.draw(screen)
+        
         
         pygame.display.flip()
         clock.tick(60)
