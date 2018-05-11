@@ -60,13 +60,13 @@ class LVL():
             bot_door.rect.y = 800 - 5
             self.doors_list.add(bot_door)
 
-        if E == True:
+        if W == True:
             rt_door = DOOR(5,100)
             rt_door.rect.x = 1250 - 5
             rt_door.rect.y = 400 - 50
             self.doors_list.add(rt_door)
 
-        if W == True:
+        if E == True:
             lt_door = DOOR(5,100)
             lt_door.rect.x = 0
             lt_door.rect.y = 400 - 50
