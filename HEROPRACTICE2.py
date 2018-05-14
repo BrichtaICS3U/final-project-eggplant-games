@@ -36,7 +36,7 @@ Music = True
 
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)   #this is the music for the menu
 pygame.mixer.music.load("Menu_Music.mp3")                                   #
-pygame.mixer.music.play(-1)                                                 #            
+#pygame.mixer.music.play(-1)                                                 #            
     
 # ----------- end of music catagory ------------- #
 
@@ -189,9 +189,11 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
-#Enemy character
-#enemy = Enemy(BLACK, 40, 40)
-#enemy_list.add(enemy)
+#Enemy characters
+for i in range(2):
+    enemy = Enemy(BLACK, 40, 40)
+    enemy_list.add(enemy)
+    all_sprites_list.add(enemy)
 
 #Initial bullet
 bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
@@ -220,10 +222,6 @@ lvls.append(lvl4)
 #add all of the sprites into their respected lists 
 all_sprites_list.add(player)
 Hero_sprite_list.add(player)
-for enemy in enemies_list:
-    enemy_list.add(enemy)
-    all_sprites_list.add(enemy)
-
 
 
 def Game():
@@ -250,27 +248,37 @@ def Game():
             lvl1.draw(screen)
             pygame.draw.rect(screen,RED,[50,50,50,50])
             
+            
         if Y == 2 and X == 1:
             lvl2.draw(screen)
             pygame.draw.rect(screen,GREEN,[50,50,50,50])
 
+
         if Y == 1 and X == 2:
             lvl3.draw(screen)
             pygame.draw.rect(screen,BLUE,[50,50,50,50])
+        
 
         if Y == 2 and X == 2:
             lvl4.draw(screen)
             pygame.draw.rect(screen,BLACK,[50,50,50,50])
+        
             
         for lvl in lvls:
-            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
+            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)
             for door in Door_collision_list:
                 Change_SCREEN()
-                for enemy in enemy_list:
+                
+                for enemy in enemy_list:                #this code deletes the previous enemies off the screen
                     enemy.HP = 0
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
                     pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
+
+                for i in range(2):                      #this code adds new enemies to next screen
+                    enemy = Enemy(BLACK, 40, 40)
+                    enemy_list.add(enemy)
+                    all_sprites_list.add(enemy)
                 
 #########################################################            
 
@@ -298,7 +306,7 @@ def Game():
                     player.move()                       #double the movement speed up
 
         #Enemy follow player (while living)
-        for enemies in enemy_list:
+        for enemy in enemy_list:
             if enemy.HP > 0:
                 enemy.move_to_player(player)
                         
@@ -310,23 +318,26 @@ def Game():
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
                 Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
                 
-        #this allows the player to shoot again when he/she relases the mouse button
+        #this allows the player to shoot again when he/she releases the mouse button
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
             shoot = True                                                                    #the player can shoot again
                       
-        
         #update sprite list(s)
         all_sprites_list.update()
         Bullet_sprites_list.update()
         enemy_list.update()
 
         #collisions
-        collision_list = pygame.sprite.spritecollide(player, enemies_list, False)
+        collision_list = pygame.sprite.spritecollide(player, enemy_list, False)
         if b == True:
-            bullet_collision = pygame.sprite.spritecollide(bullet, enemies_list, False)
+            bullet_collision = pygame.sprite.spritecollide(bullet, enemy_list, False)
             for collision in bullet_collision:
-                enemy.HP -= 5
-                print(enemy.HP)
+                enemy.HP -= 5                       #single bullet decreases enemy HP by 5 (out of 100)
+                bullet.rect.x = 0                   #teleport bullet to top left of screen, because if not the bullet stays 'colliding'
+                bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
+                Bullet_sprites_list.remove(bullet)
+                all_sprites_list.remove(bullet)
+                
     
 
         #Drawing Health Bars
@@ -336,6 +347,7 @@ def Game():
         pygame.draw.rect(screen, GREEN, [80, 30, 15, 25], 0)
         pygame.draw.rect(screen, GREEN, [100, 30, 15, 25], 0)
         TEXT("Player Health", 60, 20, 15)
+        
         for enemy in enemy_list:
             pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #Enemy health bar
 
@@ -343,7 +355,7 @@ def Game():
         for collision in collision_list:
             player.HP -= 20
             print(player.HP)
-            player.rect.x -= 100  ###### Adjust later
+            player.rect.x -= 100            #Player bounces back on enemy collision
             player.rect.y -= 50
 
             

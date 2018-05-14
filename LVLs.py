@@ -76,15 +76,7 @@ class LVL():
              
 # ----------------------------- this is the end of the code that will add the doors
 
-# ------------------------------ creating enemies --------------------------------
-        self.enemies_list = pygame.sprite.Group()
-
-        for i in range(0, enemies):
-            self.enemies_list.add(Enemy(BLACK, 40, 40))
-
-# ---------------------------end of making enemies --------------------------------------
-
     def draw(self,screen):
         """this is the function that will draw everything once i tell it to in the code"""
         self.doors_list.draw(screen)
-        self.enemies_list.draw(screen)
+        
