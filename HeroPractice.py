@@ -109,35 +109,9 @@ lvl4 = LVL(10)
 lvls.append(lvl4)
 
 
-#this is where all the "door" objects are created
-#top door
-top_door = DOOR(100,5)                 
-top_door.rect.x = SCREEN_WIDTH/2 - 50
-top_door.rect.y = 0
-
-#bottom door
-bot_door = DOOR(100,5)
-bot_door.rect.x = SCREEN_WIDTH/2 - 50
-bot_door.rect.y = SCREEN_HEIGHT - 5
-
-#right door
-rt_door = DOOR(5,100)
-rt_door.rect.x = SCREEN_WIDTH - 5
-rt_door.rect.y = SCREEN_HEIGHT/2 - 50
-
-#left door
-lt_door = DOOR(5,100)
-lt_door.rect.x = 0
-lt_door.rect.y = SCREEN_HEIGHT/2 - 50
-
 # Add sprites to list of sprites
 all_sprites_list.add(player)
 all_sprites_list.add(enemy)
-door_sprites_list.add(bot_door)
-door_sprites_list.add(top_door)
-door_sprites_list.add(rt_door)
-door_sprites_list.add(lt_door)
-
 
 
 #Set shoot = False for later
@@ -151,6 +125,8 @@ while carryOn:
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 carryOn=False
+
+        screen.fill(WHITE)
 
         if Y == 1 and X == 1:
             lvl1.draw(screen)
@@ -217,7 +193,6 @@ while carryOn:
         bullet_collision = pygame.sprite.spritecollide(bullet, enemy_list, False)
         
         #Drawing on Screen
-        screen.fill(WHITE)
         pygame.draw.rect(screen, GREEN, [20, 30, 15, 25], 0) #Draw player health bars
         pygame.draw.rect(screen, GREEN, [40, 30, 15, 25], 0)
         pygame.draw.rect(screen, GREEN, [60, 30, 15, 25], 0)
@@ -290,22 +265,10 @@ while carryOn:
             if keys[pygame.K_LSHIFT]:
                 player.rect.y -= 2
 
-        #collision with the door(s)
-        if player.rect.y < top_door.rect.y + 5 and player.rect.x > top_door.rect.x and player.rect.x + 30 < top_door.rect.x + 100: #top door
-            NEXT_SCREEN_UP()
-
-        if player.rect.y + 40 > bot_door.rect.y and player.rect.x > bot_door.rect.x and player.rect.x + 30 < top_door.rect.x + 100: #bottom door
-            NEXT_SCREEN_DOWN()
-
-        if player.rect.x + 30 > rt_door.rect.x and player.rect.y > rt_door.rect.y and player.rect.y + 40 < rt_door.rect.y + 100:#right door 
-            NEXT_SCREEN_RIGHT()
-
-        if player.rect.x < lt_door.rect.x and player.rect.y > rt_door.rect.y and player.rect.y + 40 < rt_door.rect.y + 100:#left door
-            NEXT_SCREEN_LEFT()
         
         #Draw all the sprites
         all_sprites_list.draw(screen)
-        door_sprites_list.draw(screen)
+        
  
         #Refresh Screen
         pygame.display.flip()

@@ -11,7 +11,7 @@ BLUE  = (0,0,255)
 
 class LVL():
 
-    def __init__(self, doors = 0):
+    def __init__(self, doors = 0, enemies = 0):
 
 
 # --------------------- this dense area of code is used to create and add the doors to the object -------------------- #        
@@ -72,10 +72,19 @@ class LVL():
             rt_door.rect.x = 1250 - 5
             rt_door.rect.y = 400 - 50
             self.doors_list.add(rt_door)
+           
+             
 # ----------------------------- this is the end of the code that will add the doors
 
-            
+# ------------------------------ creating enemies --------------------------------
+        self.enemies_list = pygame.sprite.Group()
+
+        for i in range(0, enemies):
+            self.enemies_list.add(Enemy(BLACK, 40, 40))
+
+# ---------------------------end of making enemies --------------------------------------
 
     def draw(self,screen):
         """this is the function that will draw everything once i tell it to in the code"""
         self.doors_list.draw(screen)
+        self.enemies_list.draw(screen)
