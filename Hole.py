@@ -1,14 +1,16 @@
 import pygame
 
+WHITE = (255,255,255)
 BLACK = (0,0,0)
 
 class HOLE(pygame.sprite.Sprite):
 
 
     def __init__(self,width,height,colour=BLACK):
+        super().__init__()
 
         self.width = width
-        slf.height = height
+        self.height = height
         self.colour = colour
 
         self.image = pygame.Surface([width,height])

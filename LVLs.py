@@ -11,7 +11,7 @@ BLUE  = (0,0,255)
 
 class LVL():
 
-    def __init__(self, doors = 0):
+    def __init__(self, doors = 0, Holes = 0):
 
 
 # --------------------- this dense area of code is used to create and add the doors to the object -------------------- #        
@@ -72,11 +72,35 @@ class LVL():
             rt_door.rect.x = 1250 - 5
             rt_door.rect.y = 400 - 50
             self.doors_list.add(rt_door)
-# ----------------------------- this is the end of the code that will add the doors
+# ----------------------------- this is the end of the code that will add the doors ------------------------------ #
 
+# ----------------------------- this dense area of code is used to create holes ---------------------------------- #
+
+        self.hole_list = pygame.sprite.Group()
+        
+    #1-1 (the first number indicates the number of the hole in the section. the second number is the possibility)
+        if Holes == 1:
+            h1_1 = HOLE(80,100)
+            h1_1.rect.x = 425
+            h1_1.rect.y = 400
+            self.hole_list.add(h1_1)
+
+            h2_1 = HOLE(80,100)
+            h2_1.rect.x = 825
+            h2_1.rect.y = 400
+            self.hole_list.add(h2_1)
+
+            
+
+         
+            
+            
+            
+        
             
 
     def draw(self,screen):
         """this is the function that will draw everything once i tell it to in the code"""
         self.doors_list.draw(screen)
+        self.hole_list.draw(screen)
         

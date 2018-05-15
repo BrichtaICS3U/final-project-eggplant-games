@@ -78,8 +78,10 @@ def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
         if click[0] == 1 and action != None:                        #if the Button has a function assigned to it
             action()                                                #activate that function
     elif x < mouse[0] < x+w and y < mouse[1] < y+h and layer != 3:  #if the cursor is over the button but mouse 1 hasn't been pressed yet
-        pygame.draw.rect(screen,col2,(x,y,w,h))                     #redraw the Button but in a diffirent colour 
+        pygame.draw.rect(screen,BLACK,(x-5,y-5,w+10,h+10))
+        pygame.draw.rect(screen,col2,(x,y,w,h))                     #redraw the Button but in a diffirent colour
     elif x < mouse[0] < x+w and y < mouse[1] < y+h and layer == 3:  #this if statement is for only the Buttons located in the "Controls" section of the menu
+        pygame.draw.rect(screen,BLACK,(x-5,y-5,w+10,h+10))
         pygame.draw.rect(screen,col2,(x,y,w,h))                     #it redraws the button in its second colour. 
         
         CFont = pygame.font.Font("freesansbold.ttf",FS)     #as well as displays a definition of what that Button does in the game
@@ -88,7 +90,8 @@ def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
         CTextrect.center = (1000, y + (h/2))                #
         screen.blit(CText,CTextrect)                        #
         
-    else:                                                           #if nothing is interacting with the Button 
+    else:                                                           #if nothing is interacting with the Button
+        pygame.draw.rect(screen,BLACK,(x-5,y-5,w+10,h+10))
         pygame.draw.rect(screen,col1,(x,y,w,h))                     #simply draw it with its orginal perameters
 
     Bfont = pygame.font.Font("freesansbold.ttf",FS)                 #these few lines are the Button labels 
@@ -165,6 +168,14 @@ def Change_SCREEN():
         player.rect.x = 6
         print("screen RIGHT.")
         X += 1
+
+#def Touches_Hole():
+ 
+
+    
+            
+
+      
             
 # --------------------- End of functions list ----------------------- #
 
@@ -191,7 +202,7 @@ playerHealth = player.HP
 lvls = []
 
 #lvl 1-1
-lvl1 = LVL(3)
+lvl1 = LVL(3,1)
 lvls.append(lvl1)
 
 #lvl 1-2
@@ -231,8 +242,8 @@ def Game():
                     #exit the game and return to the main menu
 #fill the screen white evertime the code runs
         screen.fill(WHITE)
-    
-########################################## IMPORTANT DO NOT TOUCH PLZ (@_@)
+#                                                                       ___
+########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
         if Y == 1 and X == 1:
             lvl1.draw(screen)
             pygame.draw.rect(screen,RED,[50,50,50,50])
@@ -253,6 +264,10 @@ def Game():
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
             for door in Door_collision_list:
                 Change_SCREEN()
+                
+            Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
+            for hole in Hole_collision_list:
+                Touches_Hole()
 #########################################################            
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
