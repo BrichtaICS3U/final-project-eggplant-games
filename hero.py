@@ -79,6 +79,12 @@ class Bullet(pygame.sprite.Sprite):
         # move along vector towards the mouse click 
         self.rect.x -= self.dist_x * 3
         self.rect.y -= self.dist_y * 3
+
+        if self.rect.x > 1250 or self.rect.x < 0:
+            self.kill()
+        if self.rect.y > 800 or self.rect.y < 0:
+            self.kill()
+            
         
         
 class Enemy(pygame.sprite.Sprite):

@@ -11,7 +11,7 @@ BLUE  = (0,0,255)
 
 class LVL():
 
-    def __init__(self, doors = 0, enemies = 0):
+    def __init__(self, doors = 0):
 
 
 # --------------------- this dense area of code is used to create and add the doors to the object -------------------- #        

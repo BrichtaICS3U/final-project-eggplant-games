@@ -189,11 +189,10 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
-#Enemy characters
-for i in range(2):
-    enemy = Enemy(BLACK, 40, 40)
-    enemy_list.add(enemy)
-    all_sprites_list.add(enemy)
+#Initial enemy character
+enemy = Enemy(BLACK, 40, 40)        #adds a single enemy to first room
+enemy_list.add(enemy)
+all_sprites_list.add(enemy)
 
 #Initial bullet
 bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
@@ -203,19 +202,19 @@ lvls = []
 enemies_list = []
 
 #lvl 1-1
-lvl1 = LVL(3, 1)
+lvl1 = LVL(3)
 lvls.append(lvl1)
 
 #lvl 1-2
-lvl2 = LVL(9, 2)
+lvl2 = LVL(9)
 lvls.append(lvl2)
 
 #lvl 2-1
-lvl3 = LVL(5, 4)
+lvl3 = LVL(5)
 lvls.append(lvl3)
 
 #lvl 2-2
-lvl4 = LVL(10, 2)
+lvl4 = LVL(10)
 lvls.append(lvl4)
 
 
@@ -247,21 +246,26 @@ def Game():
         if Y == 1 and X == 1:
             lvl1.draw(screen)
             pygame.draw.rect(screen,RED,[50,50,50,50])
-            
+            e_screen = 2        #variable to control the number of enemies on screen
+                                #2 enemies in red room
             
         if Y == 2 and X == 1:
             lvl2.draw(screen)
             pygame.draw.rect(screen,GREEN,[50,50,50,50])
+            e_screen = 3        #3 enemies in green room
 
 
         if Y == 1 and X == 2:
             lvl3.draw(screen)
             pygame.draw.rect(screen,BLUE,[50,50,50,50])
+            e_screen = 2        #2 enemies in blue room
+            
         
 
         if Y == 2 and X == 2:
             lvl4.draw(screen)
             pygame.draw.rect(screen,BLACK,[50,50,50,50])
+            e_screen = 1        #1 enemy in black room
         
             
         for lvl in lvls:
@@ -275,9 +279,9 @@ def Game():
                     enemy_list.remove(enemy)
                     pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
 
-                for i in range(2):                      #this code adds new enemies to next screen
-                    enemy = Enemy(BLACK, 40, 40)
-                    enemy_list.add(enemy)
+                for i in range(e_screen):                      #this code adds new enemies to next screen
+                    enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
+                    enemy_list.add(enemy)                       #set earlier
                     all_sprites_list.add(enemy)
                 
 #########################################################            
@@ -328,16 +332,18 @@ def Game():
         enemy_list.update()
 
         #collisions
-        collision_list = pygame.sprite.spritecollide(player, enemy_list, False)
-        if b == True:
-            bullet_collision = pygame.sprite.spritecollide(bullet, enemy_list, False)
-            for collision in bullet_collision:
-                enemy.HP -= 5                       #single bullet decreases enemy HP by 5 (out of 100)
-                bullet.rect.x = 0                   #teleport bullet to top left of screen, because if not the bullet stays 'colliding'
-                bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
-                Bullet_sprites_list.remove(bullet)
-                all_sprites_list.remove(bullet)
-                
+        collision_list = pygame.sprite.spritecollide(player, enemy_list, False)     #collisions between enemy and player
+        
+        if b == True:                                   #global variable indicating that a bullet is present   
+            for enemy in enemy_list:
+                bullet_col = pygame.sprite.collide_rect(bullet, enemy)  #collisions between bullets and enemies
+                if bullet_col == True:
+                    enemy.HP -= 20                      #decrease enemy health by 20   
+                    bullet.rect.x = 0                   #teleport bullet to top left of screen, because if not the bullet stays 'colliding'
+                    bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
+                    Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
+                    all_sprites_list.remove(bullet)
+                   
     
 
         #Drawing Health Bars
@@ -358,8 +364,7 @@ def Game():
             player.rect.x -= 100            #Player bounces back on enemy collision
             player.rect.y -= 50
 
-            
-
+    
 
         # This draws white (alternatively other background colour) over
         # original health bars to simulate the bars disappearing
