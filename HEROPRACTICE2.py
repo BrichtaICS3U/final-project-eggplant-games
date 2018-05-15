@@ -239,6 +239,7 @@ def Game():
                 if event.key==pygame.K_p:       #if the p key is pressed
                     Game = False
                     #exit the game and return to the main menu
+                    
 #fill the screen white evertime the code runs
         screen.fill(WHITE)
     
@@ -331,7 +332,7 @@ def Game():
         Bullet_sprites_list.update()
         enemy_list.update()
 
-        #collisions
+#---------------- collisions--------------------------------------------------------------------------------------
         collision_list = pygame.sprite.spritecollide(player, enemy_list, False)     #collisions between enemy and player
         
         if b == True:                                   #global variable indicating that a bullet is present   
@@ -343,7 +344,11 @@ def Game():
                     bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
                     all_sprites_list.remove(bullet)
-                   
+
+            
+        """insert code for collisions between enemies here"""
+        
+# -------------------end of collisions --------------------------------------------------------------------------------                   
     
 
         #Drawing Health Bars
