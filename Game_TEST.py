@@ -55,6 +55,7 @@ X = 1
 # ---------- this will be catagory of functions to be used in the summative ----------- #
 
 def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
+    global event
     """
         this is a short function that acts as a button class (will likley be changed into a module)
         msg    --- the label that will appear on the button
@@ -169,8 +170,7 @@ def Change_SCREEN():
         print("screen RIGHT.")
         X += 1
 
-#def Touches_Hole():
- 
+        Button("Back",20,700,80,50,BC1,BC2,25,Pause_Menu)                     #this Button will return the user to the main menu
 
     
             
@@ -224,10 +224,12 @@ Hero_sprite_list.add(player)
 
 def Game():
     global Y
+    global event
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
     Game = True                 #while the variable is true the game will run
+    Menu = False
     
     
 
@@ -239,35 +241,38 @@ def Game():
             elif event.type == pygame.KEYDOWN:  #
                 if event.key==pygame.K_p:       #if the p key is pressed
                     Game = False
+                if event.key==pygame.K_ESCAPE:
+                    Pause_Menu()
+                    Game = False
                     #exit the game and return to the main menu
 #fill the screen white evertime the code runs
         screen.fill(WHITE)
 #                                                                       ___
-########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
+########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)< 
         if Y == 1 and X == 1:
             lvl1.draw(screen)
-            pygame.draw.rect(screen,RED,[50,50,50,50])
+        
             
         if Y == 2 and X == 1:
             lvl2.draw(screen)
-            pygame.draw.rect(screen,GREEN,[50,50,50,50])
+           
 
         if Y == 1 and X == 2:
             lvl3.draw(screen)
-            pygame.draw.rect(screen,BLUE,[50,50,50,50])
+      
 
         if Y == 2 and X == 2:
             lvl4.draw(screen)
-            pygame.draw.rect(screen,BLACK,[50,50,50,50])
+  
             
         for lvl in lvls:
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
             for door in Door_collision_list:
                 Change_SCREEN()
                 
-            Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
-            for hole in Hole_collision_list:
-                Touches_Hole()
+            #Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
+            #for hole in Hole_collision_list:
+                
 #########################################################            
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
@@ -347,6 +352,34 @@ def Game():
         clock.tick(60)
 # ------------------- end of main Game code ------------------ #
 
+# ------------------- this section will house the pause menu code --------------- #
+def Pause_Menu():
+    Pause = True
+    while Pause:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+               Game()
+
+        screen.fill(WHITE)
+        screen.blit(S_bakckground,(0,0))
+
+      
+        
+
+
+        pygame.display.flip()
+        clock.tick(60)
+
+
+
+        
+
+
+
+
+
+# ------------------- this is the end of the pause menu code -------------------- #
+
 layer = 1
 Menu = True  
 while Menu:
@@ -361,7 +394,7 @@ while Menu:
         
 # code for the main menu will be located here # 
     screen.fill(WHITE)
-    
+   
     if layer == 1:
         #title
         screen.blit(T_background,(0,0))                           #Main menu background
