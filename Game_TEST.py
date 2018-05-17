@@ -1,7 +1,6 @@
 import pygame
 pygame.init()
 from hero import Hero, Enemy, Bullet    #import the sprites that Abbey has made
-from Door import DOOR                   #import the sprites that Nick has made
 from LVLs import LVL                    #FML
 
 # define colours #
@@ -45,6 +44,7 @@ pygame.mixer.music.play(-1)                                                 #
 
 # ----------- list of global variables ------------- #
 shoot = True
+LayerP = 1
 Y = 1
 X = 1
 # ----------- end of variable list ---------------#
@@ -150,6 +150,16 @@ def Quit():
     global Menu
     Menu = False
     
+
+def P_settings():
+    global LayerP
+    LayerP += 1
+
+def P_menu():
+    global LayerP
+    LayerP -= 1
+
+  
 def Change_SCREEN():
     global Y
     global X
@@ -170,7 +180,10 @@ def Change_SCREEN():
         print("screen RIGHT.")
         X += 1
 
-        Button("Back",20,700,80,50,BC1,BC2,25,Pause_Menu)                     #this Button will return the user to the main menu
+def Hit_Wall():
+    print("wall")
+
+
 
     
             
@@ -229,18 +242,12 @@ def Game():
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
     Game = True                 #while the variable is true the game will run
-    Menu = False
-    
-    
-
-    
+       
     while Game:
         for event in pygame.event.get():        #
             if event.type == pygame.QUIT:       #if the red box at the top right is clicked
                 pygame.quit()                   #quit the etire code
             elif event.type == pygame.KEYDOWN:  #
-                if event.key==pygame.K_p:       #if the p key is pressed
-                    Game = False
                 if event.key==pygame.K_ESCAPE:
                     Pause_Menu()
                     Game = False
@@ -248,7 +255,8 @@ def Game():
 #fill the screen white evertime the code runs
         screen.fill(WHITE)
 #                                                                       ___
-########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)< 
+########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
+# this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
         if Y == 1 and X == 1:
             lvl1.draw(screen)
         
@@ -270,9 +278,12 @@ def Game():
             for door in Door_collision_list:
                 Change_SCREEN()
                 
-            #Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
-            #for hole in Hole_collision_list:
-                
+            Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
+            for hole in Hole_collision_list:
+                Hit_Wall()
+
+        lvl.hole_list.update()
+        lvl.doors_list.update()
 #########################################################            
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
@@ -352,34 +363,57 @@ def Game():
         clock.tick(60)
 # ------------------- end of main Game code ------------------ #
 
-# ------------------- this section will house the pause menu code --------------- #
+# ------------------- this section will house the pause menu code --------------- !!!!DONE!!!!
+
 def Pause_Menu():
+    global LayerP
     Pause = True
     while Pause:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-               Game()
+               pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Game()
 
         screen.fill(WHITE)
-        screen.blit(S_bakckground,(0,0))
 
-      
+        if LayerP == 1:
+            screen.blit(S_bakckground,(0,0))
+            pygame.draw.rect(screen,BC1,[SCREEN_WIDTH/6 * 2 + 88,188,224,324])
+            pygame.draw.rect(screen,BLACK,[SCREEN_WIDTH/6 * 2 + 100,200,200,300])
+            
+            Button("Settings",SCREEN_WIDTH/2 - 85,240,150,50,BC1,BC2,35,P_settings)
+            Button("Resume",SCREEN_WIDTH/2 - 85,320,150,50,BC1,BC2,35,Game)
+            Button("Quit",SCREEN_WIDTH/2 - 85,400,150,50,BC1,BC2,35,pygame.quit)
         
+
+        elif LayerP == 2:
+            screen.blit(S_bakckground,(0,0))
+            TEXT("Settings",180,50,70)                                          #settings Heading
+            TEXT("Music",SCREEN_WIDTH/2,175,50)                                 #Music Sub-Heading
+            TEXT("Difficulty",SCREEN_WIDTH/2,450,50)                            #Difficulty Sub-Heading
+
+            Button("ON",SCREEN_WIDTH/3,250,100,65,BC1,BC2,35,MENU_Music_ON)            #this Button toggles the music on 
+            Button("OFF",SCREEN_WIDTH/1.75 + 20 ,250,100,65,BC1,BC2,35,MENU_Music_OFF) #this Button toggles the music off
+
+            Button("Baby",SCREEN_WIDTH/6 ,525,220,65,BC1,BC2,35)         #this Button is used to toggle the easiest difficulty    
+            Button("Boring",525,525,220,65,BC1,BC2,35)                   #this Button is used to toggle the medium difficulty 
+            Button("Thrilling",842 ,525,220,65,BC1,BC2,35)               #this Button is used to toggle the hardest difficulty
+           
+            Button("Back",20,700,80,50,BC1,BC2,25,P_menu)
+
+
+
+
+
 
 
         pygame.display.flip()
         clock.tick(60)
+# ------------------- this is the end of the pause menu code -------------------- # !!!!DONE!!!!
 
-
-
-        
-
-
-
-
-
-# ------------------- this is the end of the pause menu code -------------------- #
-
+# ------------------- this will be the code that operates the beggining of the game ------------------- # !!!!DONE!!!!
 layer = 1
 Menu = True  
 while Menu:
@@ -473,6 +507,7 @@ while Menu:
     
     pygame.display.flip()
     clock.tick(60)
-    
+# -------------------------------- this is the end of the main menu code -------------------------- # !!!!DONE!!!!
+ 
 pygame.quit()
 
