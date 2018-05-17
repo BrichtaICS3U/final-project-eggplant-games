@@ -161,31 +161,36 @@ def P_menu():
 
   
 def Change_SCREEN():
+    """ the point of this function is to change the lvls that the player are in, it also delets the pas objects so the player has no way to glitch the game"""
     global Y
     global X
+    global lvls
+    lvls = []
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
-        print("screen UP.")
+        #print("screen UP.")
         Y += 1
     elif player.rect.y > 750:
         player.rect.y = 6
-        print("screen DOWN.")
+        #print("screen DOWN.")
         Y -= 1
     elif player.rect.x < 50:
         player.rect.x = SCREEN_WIDTH - 36
-        print("screen LEFT.")
+        #print("screen LEFT.")
         X -= 1
     elif player.rect.x > 1150:
         player.rect.x = 6
-        print("screen RIGHT.")
+        #print("screen RIGHT.")
         X += 1
 
-def Hit_Wall():
-    print("wall")
+def Hit_Wall_R():
+    player.rect.x -= 2
 
+def Hit_Wall_L():
+    player.rect.x += 2
 
-
-    
+def Hit_Wall_U():
+    player.rect.y -= 2
             
 
       
@@ -214,22 +219,6 @@ playerHealth = player.HP
 #list of lvls
 lvls = []
 
-#lvl 1-1
-lvl1 = LVL(3,1)
-lvls.append(lvl1)
-
-#lvl 1-2
-lvl2 = LVL(9)
-lvls.append(lvl2)
-
-#lvl 2-1
-lvl3 = LVL(5)
-lvls.append(lvl3)
-
-#lvl 2-2
-lvl4 = LVL(10)
-lvls.append(lvl4)
-
 #add all of the sprites into their respected lists 
 all_sprites_list.add(player)
 Hero_sprite_list.add(player)
@@ -252,38 +241,56 @@ def Game():
                     Pause_Menu()
                     Game = False
                     #exit the game and return to the main menu
+        keys = pygame.key.get_pressed()
 #fill the screen white evertime the code runs
         screen.fill(WHITE)
 #                                                                       ___
 ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
 # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
+
+#lvl 1-1
         if Y == 1 and X == 1:
+            lvl1 = LVL(3,1)
+            lvls.append(lvl1)
             lvl1.draw(screen)
         
-            
+#lvl 1-2            
         if Y == 2 and X == 1:
+            lvl2 = LVL(9)
+            lvls.append(lvl2)
             lvl2.draw(screen)
-           
 
+#lvl 2-1
         if Y == 1 and X == 2:
+            lvl3 = LVL(5)
+            lvls.append(lvl3)
             lvl3.draw(screen)
       
-
+#lvl 2-2
         if Y == 2 and X == 2:
+            lvl4 = LVL(10)
+            lvls.append(lvl4)
             lvl4.draw(screen)
   
-            
+#hit detection for doors            
         for lvl in lvls:
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
             for door in Door_collision_list:
                 Change_SCREEN()
-                
+
+#hit detection for objects or "HOLE"(s) or "WALLS" in the game                
             Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
             for hole in Hole_collision_list:
-                Hit_Wall()
+                
+                for HOLE in lvl.hole_list: 
+                    if player.rect.x + 30 > HOLE.rect.x and  player.rect.x + 30 < HOLE.rect.x + HOLE.width:
+                        Hit_Wall_R()
+                    elif player.rect.x < HOLE.rect.x + HOLE.width and player.rect.x  > HOLE.rect.x:
+                        Hit_Wall_L()
+                     
+                            
 
-        lvl.hole_list.update()
-        lvl.doors_list.update()
+       
 #########################################################            
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
