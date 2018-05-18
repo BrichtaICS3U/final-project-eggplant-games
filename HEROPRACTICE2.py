@@ -358,10 +358,26 @@ def Game():
             player.rect.x -= 100            #Player bounces back on enemy collision
             player.rect.y -= 50
 
-
             
-        player.health(screen)               # This draws white (alternatively other background colour) over
-                                          # original health bars to simulate the bars disappearing          
+
+
+        # This draws white (alternatively other background colour) over
+        # original health bars to simulate the bars disappearing
+            #Player health bars
+        if player.HP <= 80:
+            pygame.draw.rect(screen, WHITE, [100, 30, 15, 25], 0)
+            if player.HP <= 60:
+                pygame.draw.rect(screen, WHITE, [80, 30, 15, 25], 0)
+                if player.HP <= 40:
+                    pygame.draw.rect(screen, WHITE, [60, 30, 15, 25], 0)
+                if player.HP <= 20:
+                    pygame.draw.rect(screen, WHITE, [40, 30, 15, 25], 0)
+                if player.HP == 0:
+                    pygame.draw.rect(screen, WHITE, [20, 30, 15, 25], 0)
+                    player.die()
+                    carryOn = False
+                    pygame.quit()
+                    
                 #Enemy health bar
         for enemy in enemy_list:
             if enemy.HP <= 80:
