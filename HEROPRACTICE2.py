@@ -309,6 +309,15 @@ def Game():
                 elif keys[pygame.K_w]:              #and if W is pressed
                     player.move()                       #double the movement speed up
 
+        #player melee attack
+        if keys[pygame.K_e]:
+            if enemy.rect.x < player.rect.x:    #enemy is to the left of player
+                player.meleeLeft(enemy,screen)
+            elif enemy.rect.x > player.rect.x:  #enemy is to the right of player
+                player.meleeRight(enemy,screen)
+            elif enemy.rect.y < player.rect.y:  #enemy is above player
+                player.meleeUp(enemy, screen)
+
         #Enemy follow player (while living)
         for enemy in enemy_list:
             if enemy.HP > 0:
@@ -325,6 +334,7 @@ def Game():
         #this allows the player to shoot again when he/she releases the mouse button
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
             shoot = True                                                                    #the player can shoot again
+
                       
         #update sprite list(s)
         all_sprites_list.update()
