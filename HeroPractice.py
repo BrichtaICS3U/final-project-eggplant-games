@@ -9,7 +9,7 @@ def TEXT(TXT,x,y,TF):
     """this function exists to create headings for each menu screens"""
 
     fontTitle = pygame.font.Font('freesansbold.ttf', TF)
-    textSurfaceTitle = fontTitle.render(TXT, True,M_TEXT)
+    textSurfaceTitle = fontTitle.render(TXT, True,BLACK)
     textRectTitle = textSurfaceTitle.get_rect()
     textRectTitle.center = (x,y)
     screen.blit(textSurfaceTitle,textRectTitle)
@@ -119,6 +119,8 @@ while carryOn:
             player.rect.y -= 50
 
         for collision in bullet_collision:
+            bullet.remove(bullet_list)
+            bullet.remove(all_sprites_list)
             enemy.HP -= 20
             print(enemy.HP)
 
@@ -149,8 +151,8 @@ while carryOn:
                 if enemy.HP == 0:
                     pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 6, 5], 0)
                     all_sprites_list.remove(enemy)
-                    ##### FIND WAY TO REMOVE ENEMY FROM GAME ENTIRELY
-        
+                    enemy_list.remove(enemy)
+    
         #Draw all the sprites
         all_sprites_list.draw(screen)
  
