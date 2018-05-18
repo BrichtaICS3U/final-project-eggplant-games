@@ -3,6 +3,7 @@ import pygame, random, math
 BLUE = (125, 215, 245)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GREEN = (0,255,0)
  
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
@@ -48,14 +49,29 @@ class Hero(pygame.sprite.Sprite):
         if keys[pygame.K_d]: #Right
             self.rect.x += 2
 
+        
+    def health(self, screen):      #this code draws white bars over health bars                      
+        if self.HP <= 80:               
+                pygame.draw.rect(screen, WHITE, [100, 30, 15, 25], 0)
+                if self.HP <= 60:
+                    pygame.draw.rect(screen, WHITE, [80, 30, 15, 25], 0)
+                    if self.HP <= 40:
+                        pygame.draw.rect(screen, WHITE, [60, 30, 15, 25], 0)
+                        if self.HP <= 20:
+                            pygame.draw.rect(screen, WHITE, [40, 30, 15, 25], 0)
+                            if self.HP <= 0:
+                                pygame.draw.rect(screen, WHITE, [20, 30, 15, 25], 0)
+                                self.die()
+                                carryOn = False
+                                pygame.quit()
+
     def die(self):
         print("You died!")
 
 class Bullet(pygame.sprite.Sprite):
     
-    def __init__(self, colour, width, height, x_pos, y_pos, speed=2):
+    def __init__(self, colour, width, height, x_pos, y_pos):
         super().__init__()
-        self.speed = speed
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
@@ -76,7 +92,7 @@ class Bullet(pygame.sprite.Sprite):
         self.dist_x, self.dist_y = self.dist_x / distance, self.dist_y / distance
     
     def update(self):      
-        # move along vector towards the mouse click 
+        # move along vector towards the mouse click at speed of 3 pixels
         self.rect.x -= self.dist_x * 3
         self.rect.y -= self.dist_y * 3
         
@@ -118,6 +134,20 @@ class Enemy(pygame.sprite.Sprite):
 
     def die(self):
         print("Enemy died!")
+
+
+class HealthBar():
+
+    def __init__(self, screen):
+        
+        pygame.draw.rect(screen, GREEN, [20, 30, 15, 25], 0) #player health bars
+        pygame.draw.rect(screen, GREEN, [40, 30, 15, 25], 0)
+        pygame.draw.rect(screen, GREEN, [60, 30, 15, 25], 0)
+        pygame.draw.rect(screen, GREEN, [80, 30, 15, 25], 0)
+        pygame.draw.rect(screen, GREEN, [100, 30, 15, 25], 0)
+        
+    
+    
          
 
         

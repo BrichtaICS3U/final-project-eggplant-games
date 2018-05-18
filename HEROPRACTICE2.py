@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet    #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar    #import the sprites that Abbey has made
 from Door import DOOR                   #import the sprites that Nick has made
 from LVLs import LVL                    #FML
 
@@ -246,26 +246,25 @@ def Game():
 ########################################## IMPORTANT DO NOT TOUCH PLZ (@_@)
         if Y == 1 and X == 1:
             lvl1.draw(screen)
-            pygame.draw.rect(screen,RED,[50,50,50,50])
+            pygame.draw.rect(screen,RED,[75,75,75,75])
             e_screen = 2        #variable to control the number of enemies on screen
                                 #2 enemies in red room
             
         if Y == 2 and X == 1:
             lvl2.draw(screen)
-            pygame.draw.rect(screen,GREEN,[50,50,50,50])
+            pygame.draw.rect(screen,GREEN,[75,75,75,75])
             e_screen = 3        #3 enemies in green room
 
 
         if Y == 1 and X == 2:
             lvl3.draw(screen)
-            pygame.draw.rect(screen,BLUE,[50,50,50,50])
+            pygame.draw.rect(screen,BLUE,[75,75,75,75])
             e_screen = 2        #2 enemies in blue room
             
-        
 
         if Y == 2 and X == 2:
             lvl4.draw(screen)
-            pygame.draw.rect(screen,BLACK,[50,50,50,50])
+            pygame.draw.rect(screen,BLACK,[75,75,75,75])
             e_screen = 1        #1 enemy in black room
         
             
@@ -332,6 +331,13 @@ def Game():
         Bullet_sprites_list.update()
         enemy_list.update()
 
+#--------------- drawing ----------------------------------------------------------------------------------
+        HealthBar(screen)                   #this draws the initial 5 health bars on screen
+        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
+        
+        for enemy in enemy_list:
+            pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #this draws enemy health bars
+
 #---------------- collisions--------------------------------------------------------------------------------------
         collision_list = pygame.sprite.spritecollide(player, enemy_list, False)     #collisions between enemy and player
         
@@ -347,49 +353,23 @@ def Game():
 
             
         """insert code for collisions between enemies here"""
+
+        for collision in collision_list:
+            player.HP -= 20
+            print(player.HP)
+            player.rect.x -= 100        #Player bounces back on enemy collision
+            player.rect.y -= 50
         
 # -------------------end of collisions --------------------------------------------------------------------------------                   
     
 
-        #Drawing Health Bars
-        pygame.draw.rect(screen, GREEN, [20, 30, 15, 25], 0) #player health bars
-        pygame.draw.rect(screen, GREEN, [40, 30, 15, 25], 0)
-        pygame.draw.rect(screen, GREEN, [60, 30, 15, 25], 0)
-        pygame.draw.rect(screen, GREEN, [80, 30, 15, 25], 0)
-        pygame.draw.rect(screen, GREEN, [100, 30, 15, 25], 0)
-        TEXT("Player Health", 60, 20, 15)
-        
-        for enemy in enemy_list:
-            pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #Enemy health bar
+        #UPDATING HEALTH BARS (player and enemies)
+            #this code draws white over original health bars
+            #to make it seem like they are disappearing
 
-        #Updating health bars
-        for collision in collision_list:
-            player.HP -= 20
-            print(player.HP)
-            player.rect.x -= 100            #Player bounces back on enemy collision
-            player.rect.y -= 50
-
-    
-
-        # This draws white (alternatively other background colour) over
-        # original health bars to simulate the bars disappearing
-            #Player health bars
-        if player.HP <= 80:
-            pygame.draw.rect(screen, WHITE, [100, 30, 15, 25], 0)
-            if player.HP <= 60:
-                pygame.draw.rect(screen, WHITE, [80, 30, 15, 25], 0)
-                if player.HP <= 40:
-                    pygame.draw.rect(screen, WHITE, [60, 30, 15, 25], 0)
-                if player.HP <= 20:
-                    pygame.draw.rect(screen, WHITE, [40, 30, 15, 25], 0)
-                if player.HP == 0:
-                    pygame.draw.rect(screen, WHITE, [20, 30, 15, 25], 0)
-                    player.die()
-                    carryOn = False
-                    pygame.quit()
-                    
-                #Enemy health bar
-        for enemy in enemy_list:
+        player.health(screen)       #player health bar updates
+                
+        for enemy in enemy_list:    #enemy health bar updates
             if enemy.HP <= 80:
                 pygame.draw.rect(screen, WHITE, [enemy.rect.x+29, enemy.rect.y-10, 6, 5], 0)
                 if enemy.HP <= 60:
@@ -404,7 +384,6 @@ def Game():
                                 enemy_list.remove(enemy)
 
 
-        
         #wall restrictions
         #Right wall
         if player.rect.x + 30 > SCREEN_WIDTH:
