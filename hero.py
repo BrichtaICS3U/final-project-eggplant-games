@@ -81,11 +81,9 @@ class Hero(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
     
-<<<<<<< HEAD
+
     def __init__(self, colour, width, height, x_pos, y_pos):
-=======
-    def __init__(self, colour, width, height, x_pos, y_pos, speed=5):
->>>>>>> master
+ 
         super().__init__()
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)

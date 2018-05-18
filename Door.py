@@ -22,16 +22,3 @@ class DOOR(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
-
-<<<<<<< HEAD
-=======
-
-
-
-
-
-            
-            
-            
-            
->>>>>>> master

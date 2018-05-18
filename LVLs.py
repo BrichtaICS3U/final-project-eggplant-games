@@ -11,11 +11,8 @@ BLUE  = (0,0,255)
 
 class LVL():
 
-<<<<<<< HEAD
-    def __init__(self, doors = 0):
-=======
     def __init__(self, doors = 0, Holes = 0):
->>>>>>> master
+
 
 
 # --------------------- this dense area of code is used to create and add the doors to the object -------------------- #        
@@ -76,11 +73,7 @@ class LVL():
             rt_door.rect.x = 1250 - 5
             rt_door.rect.y = 400 - 50
             self.doors_list.add(rt_door)
-<<<<<<< HEAD
-           
-             
-# ----------------------------- this is the end of the code that will add the doors
-=======
+
 # ----------------------------- this is the end of the code that will add the doors ------------------------------ #
 
 # ----------------------------- this dense area of code is used to create holes ---------------------------------- #
@@ -108,13 +101,11 @@ class LVL():
             
         
             
->>>>>>> master
+
 
     def draw(self,screen):
         """this is the function that will draw everything once i tell it to in the code"""
         self.doors_list.draw(screen)
-<<<<<<< HEAD
-=======
         self.hole_list.draw(screen)
->>>>>>> master
+
         
