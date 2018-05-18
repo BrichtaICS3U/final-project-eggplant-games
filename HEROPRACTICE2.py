@@ -1,8 +1,9 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar    #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar   #import the sprites that Abbey has made
 from Door import DOOR                   #import the sprites that Nick has made
 from LVLs import LVL                    #FML
+import math
 
 # define colours #
 WHITE = (255,255,255)       #White
@@ -166,7 +167,7 @@ def Change_SCREEN():
         player.rect.x = 6
         print("screen RIGHT.")
         X += 1
-            
+
 # --------------------- End of functions list ----------------------- #
 
 
@@ -286,17 +287,25 @@ def Game():
                 
 #########################################################            
 
-        keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
+        keys = pygame.key.get_pressed()             #built in pygame function to detect is keys are pressed
 
-        #player movement
-        if keys[pygame.K_a]:                    #if the A key is pressed
+        #player movement / melee
+        if keys[pygame.K_a]:                        #if the A key is pressed
             player.move()                           #the player will move to the Left at a speed of 2 pixels
-        elif keys[pygame.K_s]:                  #if the S key is pressed
+            if keys[pygame.K_e]:
+                player.meleeLeft(enemy, screen)     #player melee attacks to the left
+        elif keys[pygame.K_s]:                      #if the S key is pressed
             player.move()                           #the player will move Down at a speed of 2 pixels
-        elif keys[pygame.K_d]:                  #if the D key is pressed
+            if keys[pygame.K_e]:
+                player.meleeDown(enemy, screen)     #player melee attacks downward
+        elif keys[pygame.K_d]:                      #if the D key is pressed
             player.move()                           #the player will move to the Right at a speed of 2 pixels
-        elif keys[pygame.K_w]:                  #if the W key is pressed
+            if keys[pygame.K_e]:
+                player.meleeRight(enemy, screen)    #player melee attacks to the right
+        elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
+            if keys[pygame.K_e]:
+                player.meleeUp(enemy, screen)       #player melee attacks upwards
 
         #player sprinting
         if keys[pygame.K_LSHIFT]:               #if left shift is pressed
@@ -309,14 +318,6 @@ def Game():
                 elif keys[pygame.K_w]:              #and if W is pressed
                     player.move()                       #double the movement speed up
 
-        #player melee attack
-        if keys[pygame.K_e]:
-            if enemy.rect.x < player.rect.x:    #enemy is to the left of player
-                player.meleeLeft(enemy,screen)
-            elif enemy.rect.x > player.rect.x:  #enemy is to the right of player
-                player.meleeRight(enemy,screen)
-            elif enemy.rect.y < player.rect.y:  #enemy is above player
-                player.meleeUp(enemy, screen)
 
         #Enemy follow player (while living)
         for enemy in enemy_list:
@@ -361,14 +362,15 @@ def Game():
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
                     all_sprites_list.remove(bullet)
 
-            
-        """insert code for collisions between enemies here"""
-
         for collision in collision_list:
             player.HP -= 20
             print(player.HP)
             player.rect.x -= 100        #Player bounces back on enemy collision
             player.rect.y -= 50
+
+        """insert code for collision between sword and enemies here"""
+
+        """insert code for collisions between enemies here"""
         
 # -------------------end of collisions --------------------------------------------------------------------------------                   
     

@@ -5,6 +5,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0,255,0)
 GREY = (100, 100, 100)
+
  
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
@@ -51,15 +52,15 @@ class Hero(pygame.sprite.Sprite):
             self.rect.x += 2
 
     def meleeLeft(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x-25, self.rect.y+15, 25, 5], 0)
+        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x-25, self.rect.y+15, 25, 5], 0)
     def meleeRight(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x+25, self.rect.y+15, 25, 5], 0)
+        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x+25, self.rect.y+15, 25, 5], 0)
     def meleeUp(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+10, 5, -25], 0)
+        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+10, 5, -25], 0)
     def meleeDown(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+20, 5, 25], 0)
-            
-
+        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+30, 5, 25], 0)
+        ####UPDATE TO MAKE SWORD APPEAR BETTER
+    
         
     def health(self, screen):      #this code draws white bars over health bars                      
         if self.HP <= 80:               
