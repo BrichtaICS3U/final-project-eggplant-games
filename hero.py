@@ -51,6 +51,21 @@ class Hero(pygame.sprite.Sprite):
     def die(self):
         print("You died!")
 
+    def health(self,screen):
+        if self.HP <= 80:
+            pygame.draw.rect(screen, WHITE, [100, 30, 15, 25], 0)
+            if self.HP <= 60:
+                pygame.draw.rect(screen, WHITE, [80, 30, 15, 25], 0)
+                if self.HP <= 40:
+                    pygame.draw.rect(screen, WHITE, [60, 30, 15, 25], 0)
+                if self.HP <= 20:
+                    pygame.draw.rect(screen, WHITE, [40, 30, 15, 25], 0)
+                if self.HP == 0:
+                    pygame.draw.rect(screen, WHITE, [20, 30, 15, 25], 0)
+                    self.die()
+                    carryOn = False
+                    pygame.quit()
+
 class Bullet(pygame.sprite.Sprite):
     
     def __init__(self, colour, width, height, x_pos, y_pos, speed=2):
@@ -118,6 +133,18 @@ class Enemy(pygame.sprite.Sprite):
 
     def die(self):
         print("Enemy died!")
+
+    def health(self, screen):
+        if self.HP <= 80:
+                pygame.draw.rect(screen, WHITE, [self.rect.x+29, self.rect.y-10, 6, 5], 0)
+                if self.HP <= 60:
+                    pygame.draw.rect(screen, WHITE, [self.rect.x+23, self.rect.y-10, 6, 5], 0)
+                    if self.HP <= 40:
+                        pygame.draw.rect(screen, WHITE, [self.rect.x+17, self.rect.y-10, 6, 5], 0)
+                        if self.HP <= 20:
+                            pygame.draw.rect(screen, WHITE, [self.rect.x+11, self.rect.y-10, 6, 5], 0)
+                            
+    
          
 
         
