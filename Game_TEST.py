@@ -218,6 +218,14 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
+#Initial enemy character
+enemy = Enemy(BLACK, 40, 40)        #adds a single enemy to first room
+enemy_list.add(enemy)
+all_sprites_list.add(enemy)
+
+#Initial bullet
+bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
+
 #list of lvls
 lvls = []
 
