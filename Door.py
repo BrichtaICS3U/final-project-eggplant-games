@@ -23,3 +23,15 @@ class DOOR(pygame.sprite.Sprite):
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+            
+            
+            
+            
+>>>>>>> master
