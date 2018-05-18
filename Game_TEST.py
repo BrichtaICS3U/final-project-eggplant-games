@@ -1,7 +1,6 @@
 import pygame
 pygame.init()
 from hero import Hero, Enemy, Bullet    #import the sprites that Abbey has made
-from Door import DOOR                   #import the sprites that Nick has made
 from LVLs import LVL                    #FML
 
 # define colours #
@@ -45,6 +44,9 @@ pygame.mixer.music.play(-1)                                                 #
 
 # ----------- list of global variables ------------- #
 shoot = True
+LayerP = 1
+Y = 1
+X = 1
 # ----------- end of variable list ---------------#
 
 
@@ -53,6 +55,7 @@ shoot = True
 # ---------- this will be catagory of functions to be used in the summative ----------- #
 
 def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
+    global event
     """
         this is a short function that acts as a button class (will likley be changed into a module)
         msg    --- the label that will appear on the button
@@ -76,8 +79,10 @@ def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
         if click[0] == 1 and action != None:                        #if the Button has a function assigned to it
             action()                                                #activate that function
     elif x < mouse[0] < x+w and y < mouse[1] < y+h and layer != 3:  #if the cursor is over the button but mouse 1 hasn't been pressed yet
-        pygame.draw.rect(screen,col2,(x,y,w,h))                     #redraw the Button but in a diffirent colour 
+        pygame.draw.rect(screen,BLACK,(x-5,y-5,w+10,h+10))
+        pygame.draw.rect(screen,col2,(x,y,w,h))                     #redraw the Button but in a diffirent colour
     elif x < mouse[0] < x+w and y < mouse[1] < y+h and layer == 3:  #this if statement is for only the Buttons located in the "Controls" section of the menu
+        pygame.draw.rect(screen,BLACK,(x-5,y-5,w+10,h+10))
         pygame.draw.rect(screen,col2,(x,y,w,h))                     #it redraws the button in its second colour. 
         
         CFont = pygame.font.Font("freesansbold.ttf",FS)     #as well as displays a definition of what that Button does in the game
@@ -86,7 +91,8 @@ def Button(msg,x,y,w,h,col1,col2,FS,action = None,CT = None):
         CTextrect.center = (1000, y + (h/2))                #
         screen.blit(CText,CTextrect)                        #
         
-    else:                                                           #if nothing is interacting with the Button 
+    else:                                                           #if nothing is interacting with the Button
+        pygame.draw.rect(screen,BLACK,(x-5,y-5,w+10,h+10))
         pygame.draw.rect(screen,col1,(x,y,w,h))                     #simply draw it with its orginal perameters
 
     Bfont = pygame.font.Font("freesansbold.ttf",FS)                 #these few lines are the Button labels 
@@ -144,19 +150,50 @@ def Quit():
     global Menu
     Menu = False
     
+
+def P_settings():
+    global LayerP
+    LayerP += 1
+
+def P_menu():
+    global LayerP
+    LayerP -= 1
+
+  
 def Change_SCREEN():
-        if player.rect.y < 50:
-            player.rect.y = SCREEN_HEIGHT - 46
-            print("screen UP.")
-        elif player.rect.y > 750:
-            player.rect.y = 6
-            print("screen DOWN.")
-        elif player.rect.x < 50:
-            player.rect.x = SCREEN_WIDTH - 36
-            print("screen LEFT.")
-        elif player.rect.x > 1150:
-            player.rect.x = 6
-            print("screen RIGHT.")
+    """ the point of this function is to change the lvls that the player are in, it also delets the pas objects so the player has no way to glitch the game"""
+    global Y
+    global X
+    global lvls
+    lvls = []
+    if player.rect.y < 50:
+        player.rect.y = SCREEN_HEIGHT - 46
+        #print("screen UP.")
+        Y += 1
+    elif player.rect.y > 750:
+        player.rect.y = 6
+        #print("screen DOWN.")
+        Y -= 1
+    elif player.rect.x < 50:
+        player.rect.x = SCREEN_WIDTH - 36
+        #print("screen LEFT.")
+        X -= 1
+    elif player.rect.x > 1150:
+        player.rect.x = 6
+        #print("screen RIGHT.")
+        X += 1
+
+def Hit_Wall_R():
+    player.rect.x -= 2
+
+def Hit_Wall_L():
+    player.rect.x += 2
+
+def Hit_Wall_U():
+    player.rect.y -= 2
+            
+
+      
             
 # --------------------- End of functions list ----------------------- #
 
@@ -172,7 +209,6 @@ in a function is so that we can easily call it when needed form the menu
 all_sprites_list = pygame.sprite.Group()        #this is the master sprite list. All of the sprites are located her unpon creation
 Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. Only the hero sprite will be located here
 Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
-Door_sprites_list = pygame.sprite.Group()       #this is the Door sprite list. this is where all the doors will be located for the room transitions
 
 #player character
 player = Hero(30,40)
@@ -180,53 +216,82 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
-#this is where all the "door" objects are created
-#top door
-top_door = DOOR(100,5)                 
-top_door.rect.x = SCREEN_WIDTH/2 - 50
-top_door.rect.y = 0
-
-#bottom door
-bot_door = DOOR(100,5)
-bot_door.rect.x = SCREEN_WIDTH/2 - 50
-bot_door.rect.y = SCREEN_HEIGHT - 5
-
-#right door
-rt_door = DOOR(5,100)
-rt_door.rect.x = SCREEN_WIDTH - 5
-rt_door.rect.y = SCREEN_HEIGHT/2 - 50
-
-#left door
-lt_door = DOOR(5,100)
-lt_door.rect.x = 0
-lt_door.rect.y = SCREEN_HEIGHT/2 - 50
+#list of lvls
+lvls = []
 
 #add all of the sprites into their respected lists 
 all_sprites_list.add(player)
 Hero_sprite_list.add(player)
-Door_sprites_list.add(bot_door)
-Door_sprites_list.add(top_door)
-Door_sprites_list.add(rt_door)
-Door_sprites_list.add(lt_door)
+
 
 def Game():
+    global Y
+    global event
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
     Game = True                 #while the variable is true the game will run
-    
-    
-
-    
+       
     while Game:
         for event in pygame.event.get():        #
             if event.type == pygame.QUIT:       #if the red box at the top right is clicked
                 pygame.quit()                   #quit the etire code
             elif event.type == pygame.KEYDOWN:  #
-                if event.key==pygame.K_p:       #if the p key is pressed
-                    Game = False                #exit the game and return to the main menu
+                if event.key==pygame.K_ESCAPE:
+                    Pause_Menu()
+                    Game = False
+                    #exit the game and return to the main menu
+        keys = pygame.key.get_pressed()
+#fill the screen white evertime the code runs
+        screen.fill(WHITE)
+#                                                                       ___
+########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
+# this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
 
-        screen.fill(WHITE)                      #fill the screen white evertime the code runs
+#lvl 1-1
+        if Y == 1 and X == 1:
+            lvl1 = LVL(3,1)
+            lvls.append(lvl1)
+            lvl1.draw(screen)
+        
+#lvl 1-2            
+        if Y == 2 and X == 1:
+            lvl2 = LVL(9)
+            lvls.append(lvl2)
+            lvl2.draw(screen)
+
+#lvl 2-1
+        if Y == 1 and X == 2:
+            lvl3 = LVL(5)
+            lvls.append(lvl3)
+            lvl3.draw(screen)
+      
+#lvl 2-2
+        if Y == 2 and X == 2:
+            lvl4 = LVL(10)
+            lvls.append(lvl4)
+            lvl4.draw(screen)
+  
+#hit detection for doors            
+        for lvl in lvls:
+            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
+            for door in Door_collision_list:
+                Change_SCREEN()
+
+#hit detection for objects or "HOLE"(s) or "WALLS" in the game                
+            Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
+            for hole in Hole_collision_list:
+                
+                for HOLE in lvl.hole_list: 
+                    if player.rect.x + 30 > HOLE.rect.x and  player.rect.x + 30 < HOLE.rect.x + HOLE.width:
+                        Hit_Wall_R()
+                    elif player.rect.x < HOLE.rect.x + HOLE.width and player.rect.x  > HOLE.rect.x:
+                        Hit_Wall_L()
+                     
+                            
+
+       
+#########################################################            
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
 
@@ -252,21 +317,19 @@ def Game():
                     player.move()                       #double the movement speed up
                         
         #player shooting
+
         if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:                            #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
                 Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
                 
-        #this allows the player to shoot again when he/she relases the mouse button        
+        #this allows the player to shoot again when he/she relases the mouse button
+        
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
             shoot = True                                                                    #the player can shoot again
 
-        #collision with the door(s)
-        Door_collision_list = pygame.sprite.spritecollide(player,Door_sprites_list,False)       
-        for door in Door_collision_list:
-            Change_SCREEN()
-            
+           
         
         #update sprite list(s)
         all_sprites_list.update() 
@@ -301,12 +364,63 @@ def Game():
 
 
         all_sprites_list.draw(screen)
-        Door_sprites_list.draw(screen)
+        
         
         pygame.display.flip()
         clock.tick(60)
 # ------------------- end of main Game code ------------------ #
 
+# ------------------- this section will house the pause menu code --------------- !!!!DONE!!!!
+
+def Pause_Menu():
+    global LayerP
+    Pause = True
+    while Pause:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+               pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Game()
+
+        screen.fill(WHITE)
+
+        if LayerP == 1:
+            screen.blit(S_bakckground,(0,0))
+            pygame.draw.rect(screen,BC1,[SCREEN_WIDTH/6 * 2 + 88,188,224,324])
+            pygame.draw.rect(screen,BLACK,[SCREEN_WIDTH/6 * 2 + 100,200,200,300])
+            
+            Button("Settings",SCREEN_WIDTH/2 - 85,240,150,50,BC1,BC2,35,P_settings)
+            Button("Resume",SCREEN_WIDTH/2 - 85,320,150,50,BC1,BC2,35,Game)
+            Button("Quit",SCREEN_WIDTH/2 - 85,400,150,50,BC1,BC2,35,pygame.quit)
+        
+
+        elif LayerP == 2:
+            screen.blit(S_bakckground,(0,0))
+            TEXT("Settings",180,50,70)                                          #settings Heading
+            TEXT("Music",SCREEN_WIDTH/2,175,50)                                 #Music Sub-Heading
+            TEXT("Difficulty",SCREEN_WIDTH/2,450,50)                            #Difficulty Sub-Heading
+
+            Button("ON",SCREEN_WIDTH/3,250,100,65,BC1,BC2,35,MENU_Music_ON)            #this Button toggles the music on 
+            Button("OFF",SCREEN_WIDTH/1.75 + 20 ,250,100,65,BC1,BC2,35,MENU_Music_OFF) #this Button toggles the music off
+
+            Button("Baby",SCREEN_WIDTH/6 ,525,220,65,BC1,BC2,35)         #this Button is used to toggle the easiest difficulty    
+            Button("Boring",525,525,220,65,BC1,BC2,35)                   #this Button is used to toggle the medium difficulty 
+            Button("Thrilling",842 ,525,220,65,BC1,BC2,35)               #this Button is used to toggle the hardest difficulty
+           
+            Button("Back",20,700,80,50,BC1,BC2,25,P_menu)
+
+
+
+
+
+
+
+        pygame.display.flip()
+        clock.tick(60)
+# ------------------- this is the end of the pause menu code -------------------- # !!!!DONE!!!!
+
+# ------------------- this will be the code that operates the beggining of the game ------------------- # !!!!DONE!!!!
 layer = 1
 Menu = True  
 while Menu:
@@ -321,7 +435,7 @@ while Menu:
         
 # code for the main menu will be located here # 
     screen.fill(WHITE)
-    
+   
     if layer == 1:
         #title
         screen.blit(T_background,(0,0))                           #Main menu background
@@ -392,11 +506,15 @@ while Menu:
         Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)#temporary, for test and faster performence purposes
         Button("Continue",SCREEN_WIDTH/2 - 75,700,150,50,BC1,BC2,25,Game)
             
-
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    Game()
 
     
     pygame.display.flip()
     clock.tick(60)
-    
+# -------------------------------- this is the end of the main menu code -------------------------- # !!!!DONE!!!!
+ 
 pygame.quit()
 

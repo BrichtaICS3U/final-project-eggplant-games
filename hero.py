@@ -53,7 +53,7 @@ class Hero(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
     
-    def __init__(self, colour, width, height, x_pos, y_pos, speed=2):
+    def __init__(self, colour, width, height, x_pos, y_pos, speed=5):
         super().__init__()
         self.speed = speed
         self.image = pygame.Surface([width, height])

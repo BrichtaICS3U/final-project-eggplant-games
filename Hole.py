@@ -1,17 +1,17 @@
 import pygame
-from hero import Hero
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 
-class DOOR(pygame.sprite.Sprite):
+class HOLE(pygame.sprite.Sprite):
 
-    def __init__(self,width,height,colour = BLACK):
+
+    def __init__(self,width,height,colour=BLACK):
         super().__init__()
-        
-        self.colour = colour
-        self.height = height
+
         self.width = width
+        self.height = height
+        self.colour = colour
 
         self.image = pygame.Surface([width,height])
         self.image.fill(WHITE)
@@ -21,14 +21,4 @@ class DOOR(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-
-
-
-
-
-
-
-            
-            
-            
-            
+        
