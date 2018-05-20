@@ -22,6 +22,7 @@ class LVL():
         S = False
         E = False
         W = False
+        END = False
         
         if doors == 1:
             N = True
@@ -49,6 +50,8 @@ class LVL():
         elif doors == 10:
             S = True
             E = True
+        elif doors == 2571:
+            END = True
                     
         if N == True:
             top_door = DOOR(100,5)                 
@@ -62,17 +65,23 @@ class LVL():
             bot_door.rect.y = 800 - 5
             self.doors_list.add(bot_door)
 
-        if E == True:
+        if W == True:
             lt_door = DOOR(5,100)
             lt_door.rect.x = 0
             lt_door.rect.y = 400 - 50
             self.doors_list.add(lt_door)
 
-        if W == True:
+        if E == True:
             rt_door = DOOR(5,100)
             rt_door.rect.x = 1250 - 5
             rt_door.rect.y = 400 - 50
             self.doors_list.add(rt_door)
+
+        if END == True:
+            E_door = DOOR(50,50)
+            E_door.rect.x = 600
+            E_door.rect.y = 400
+            self.doors_list.add(E_door)
 
 # ----------------------------- this is the end of the code that will add the doors ------------------------------ #
 

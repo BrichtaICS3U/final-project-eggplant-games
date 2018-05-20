@@ -183,6 +183,8 @@ def Change_SCREEN():
         player.rect.x = 6
         #print("screen RIGHT.")
         X += 1
+    elif Y == 2:
+        pygame.quit()
 
 def Hit_Wall_R():
     player.rect.x -= 2
@@ -192,6 +194,9 @@ def Hit_Wall_L():
 
 def Hit_Wall_U():
     player.rect.y -= 2
+
+def Hit_Wall_D():
+    player.rect.y += 2
             
 
       
@@ -261,17 +266,11 @@ def Game():
 
 #lvl 1-1
         if Y == 1 and X == 1:
-            lvl1 = LVL(3,1)
+            lvl1 = LVL(1,1)
             lvls.append(lvl1)
             lvl1.draw(screen)
             e_screen = 2
         
-#lvl 1-2            
-        if Y == 2 and X == 1:
-            lvl2 = LVL(9)
-            lvls.append(lvl2)
-            lvl2.draw(screen)
-            e_screen = 2
 
 #lvl 2-1
         if Y == 1 and X == 2:
@@ -279,13 +278,37 @@ def Game():
             lvls.append(lvl3)
             lvl3.draw(screen)
             e_screen = 3
-      
+
+#lvl 3-1
+        if Y == 1 and X == 3:
+            lvl5 = LVL(3)
+            lvls.append(lvl5)
+            lvl5.draw(screen)
+            e_screen = 2
+
+#lvl 1-2            
+        if Y == 2 and X == 1:
+            lvl2 = LVL(10)
+            lvls.append(lvl2)
+            lvl2.draw(screen)
+            e_screen = 2
+            
 #lvl 2-2
         if Y == 2 and X == 2:
-            lvl4 = LVL(10)
+            lvl4 = LVL(9)
             lvls.append(lvl4)
             lvl4.draw(screen)
             e_screen = 1
+
+#lvl 3-2
+        if Y == 2 and X == 3:
+            lvl6 = LVL(2571)
+            lvls.append(lvl6)
+            lvl6.draw(screen)
+            e_screen = 2
+            
+    
+
   
 #hit detection for doors            
         for lvl in lvls:
@@ -311,8 +334,9 @@ def Game():
                 for HOLE in lvl.hole_list: 
                     if player.rect.x + 30 > HOLE.rect.x and  player.rect.x + 30 < HOLE.rect.x + HOLE.width:
                         Hit_Wall_R()
-                    elif player.rect.x < HOLE.rect.x + HOLE.width and player.rect.x  > HOLE.rect.x:
+                    if player.rect.x < HOLE.rect.x + HOLE.width and player.rect.x  > HOLE.rect.x:
                         Hit_Wall_L()
+                    #if player.rect.y < HOLE.rect.y and player.rect.y + 
                      
                             
 
@@ -389,7 +413,7 @@ def Game():
             for enemy in enemy_list:
                 bullet_col = pygame.sprite.collide_rect(bullet, enemy)  #collisions between bullets and enemies
                 if bullet_col == True:
-                    enemy.HP -= 20                      #decrease enemy health by 20   
+                    enemy.HP -= 50                      #decrease enemy health by 20   
                     bullet.rect.x = 0                   #teleport bullet to top left of screen, because if not the bullet stays 'colliding'
                     bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
