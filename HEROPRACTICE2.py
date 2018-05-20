@@ -297,19 +297,19 @@ def Game():
         if keys[pygame.K_a]:                        #if the A key is pressed
             player.move()                           #the player will move to the Left at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player_sword.left(player, screen)     #player melee attacks to the left            
+                player_sword.left(player, screen)   #player melee attacks to the left            
         elif keys[pygame.K_s]:                      #if the S key is pressed
             player.move()                           #the player will move Down at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player_sword.down(player, screen)     #player melee attacks downward
+                player_sword.down(player, screen)   #player melee attacks downward
         elif keys[pygame.K_d]:                      #if the D key is pressed
             player.move()                           #the player will move to the Right at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player_sword.right(player, screen)    #player melee attacks to the right
+                player_sword.right(player, screen)  #player melee attacks to the right
         elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player_sword.up(player, screen)       #player melee attacks upwards
+                player_sword.up(player, screen)     #player melee attacks upwards
 
         #player sprinting
         if keys[pygame.K_LSHIFT]:               #if left shift is pressed

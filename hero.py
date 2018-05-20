@@ -174,11 +174,8 @@ class Enemy(pygame.sprite.Sprite):
                         pygame.draw.rect(screen, WHITE, [self.rect.x+11, self.rect.y-10, 6, 5], 0)
                         if self.HP <= 0:
                             pygame.draw.rect(screen, WHITE, [self.rect.x+5, self.rect.y-10, 10, 5], 0)
-                            
-        
-        
 
-
+                                 
 class HealthBar():
 
     def __init__(self, screen):
