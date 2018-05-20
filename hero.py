@@ -50,17 +50,7 @@ class Hero(pygame.sprite.Sprite):
             self.rect.x -= 2
         if keys[pygame.K_d]: #Right
             self.rect.x += 2
-
-    def meleeLeft(self, enemy, screen):
-        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x-25, self.rect.y+15, 25, 5], 0)
-    def meleeRight(self, enemy, screen):
-        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x+25, self.rect.y+15, 25, 5], 0)
-    def meleeUp(self, enemy, screen):
-        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+10, 5, -25], 0)
-    def meleeDown(self, enemy, screen):
-        self.sword = pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+30, 5, 25], 0)
-        ####UPDATE TO MAKE SWORD APPEAR BETTER
-    
+ 
         
     def health(self, screen):      #this code draws white bars over health bars                      
         if self.HP <= 80:               
@@ -79,6 +69,32 @@ class Hero(pygame.sprite.Sprite):
 
     def die(self):
         print("You died!")
+
+class Sword(pygame.sprite.Sprite):
+
+    def __init__(self, width, height):
+        super().__init__()
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+ 
+        pygame.draw.rect(self.image, GREY, [-10, -10, width, height])
+        
+        self.rect = self.image.get_rect()
+
+    def up(self, player, screen):
+        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y-25, 5, 25], 0)
+
+    def down(self, player, screen):
+        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y+40, 5, 25], 0)
+
+    def right(self, player, screen):
+        pygame.draw.rect(screen, GREY, [player.rect.x+30, player.rect.y+17.5, 25, 5], 0)
+     
+    def left(self, player, screen):
+        pygame.draw.rect(screen, GREY, [player.rect.x-25, player.rect.y+17.5, 25, 5], 0)       
+        
 
 class Bullet(pygame.sprite.Sprite):
     
@@ -106,7 +122,7 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):      
         # move along vector towards the mouse click at speed of 3 pixels
         self.rect.x -= self.dist_x * 3
-        self.rect.y -= self.dist_y * 3
+        self.rect.y -= self.dist_y * 3        
         
         
 class Enemy(pygame.sprite.Sprite):
@@ -146,6 +162,21 @@ class Enemy(pygame.sprite.Sprite):
 
     def die(self):
         print("Enemy died!")
+
+    def health(self, screen):
+        if self.HP <= 80:
+            pygame.draw.rect(screen, WHITE, [self.rect.x+29, self.rect.y-10, 6, 5], 0)
+            if self.HP <= 60:
+                pygame.draw.rect(screen, WHITE, [self.rect.x+23, self.rect.y-10, 6, 5], 0)
+                if self.HP <= 40:
+                    pygame.draw.rect(screen, WHITE, [self.rect.x+17, self.rect.y-10, 6, 5], 0)
+                    if self.HP <= 20:
+                        pygame.draw.rect(screen, WHITE, [self.rect.x+11, self.rect.y-10, 6, 5], 0)
+                        if self.HP <= 0:
+                            pygame.draw.rect(screen, WHITE, [self.rect.x+5, self.rect.y-10, 10, 5], 0)
+                            
+        
+        
 
 
 class HealthBar():

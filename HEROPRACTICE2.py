@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar   #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar, Sword   #import the sprites that Abbey has made
 from Door import DOOR                   #import the sprites that Nick has made
 from LVLs import LVL                    #FML
 import math
@@ -198,6 +198,10 @@ all_sprites_list.add(enemy)
 #Initial bullet
 bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
 
+#Initial sword
+player_sword = Sword(1,1)
+all_sprites_list.add(player_sword)
+
 #list of lvls
 lvls = []
 enemies_list = []
@@ -293,19 +297,19 @@ def Game():
         if keys[pygame.K_a]:                        #if the A key is pressed
             player.move()                           #the player will move to the Left at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player.meleeLeft(enemy, screen)     #player melee attacks to the left
+                player_sword.left(player, screen)     #player melee attacks to the left            
         elif keys[pygame.K_s]:                      #if the S key is pressed
             player.move()                           #the player will move Down at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player.meleeDown(enemy, screen)     #player melee attacks downward
+                player_sword.down(player, screen)     #player melee attacks downward
         elif keys[pygame.K_d]:                      #if the D key is pressed
             player.move()                           #the player will move to the Right at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player.meleeRight(enemy, screen)    #player melee attacks to the right
+                player_sword.right(player, screen)    #player melee attacks to the right
         elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player.meleeUp(enemy, screen)       #player melee attacks upwards
+                player_sword.up(player, screen)       #player melee attacks upwards
 
         #player sprinting
         if keys[pygame.K_LSHIFT]:               #if left shift is pressed
@@ -350,7 +354,18 @@ def Game():
             pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #this draws enemy health bars
 
 #---------------- collisions--------------------------------------------------------------------------------------
-        collision_list = pygame.sprite.spritecollide(player, enemy_list, False)     #collisions between enemy and player
+
+        for enemy in enemy_list:    
+            main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
+            if main_col == True:
+                if keys[pygame.K_e]:            #if the player is holding E, cue melee attack
+                    enemy.HP -= 10              #decrease enemy health by 10
+                    enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
+                    enemy.rect.y -= 100         #aka player who is holding 'sword'
+                else:
+                    player.HP -= 20
+                    player.rect.x -= 100        #Player bounces back on enemy collision
+                    player.rect.y -= 50
         
         if b == True:                                   #global variable indicating that a bullet is present   
             for enemy in enemy_list:
@@ -362,14 +377,7 @@ def Game():
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
                     all_sprites_list.remove(bullet)
 
-        for collision in collision_list:
-            player.HP -= 20
-            print(player.HP)
-            player.rect.x -= 100        #Player bounces back on enemy collision
-            player.rect.y -= 50
-
-        """insert code for collision between sword and enemies here"""
-
+        
         """insert code for collisions between enemies here"""
         
 # -------------------end of collisions --------------------------------------------------------------------------------                   
@@ -382,19 +390,11 @@ def Game():
         player.health(screen)       #player health bar updates
                 
         for enemy in enemy_list:    #enemy health bar updates
-            if enemy.HP <= 80:
-                pygame.draw.rect(screen, WHITE, [enemy.rect.x+29, enemy.rect.y-10, 6, 5], 0)
-                if enemy.HP <= 60:
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+23, enemy.rect.y-10, 6, 5], 0)
-                    if enemy.HP <= 40:
-                        pygame.draw.rect(screen, WHITE, [enemy.rect.x+17, enemy.rect.y-10, 6, 5], 0)
-                        if enemy.HP <= 20:
-                            pygame.draw.rect(screen, WHITE, [enemy.rect.x+11, enemy.rect.y-10, 6, 5], 0)
-                            if enemy.HP <= 0:
-                                pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
-                                all_sprites_list.remove(enemy)
-                                enemy_list.remove(enemy)
-
+            enemy.health(screen)
+            if enemy.HP <= 0:
+                all_sprites_list.remove(enemy)
+                enemy_list.remove(enemy)
+                
 
         #wall restrictions
         #Right wall
