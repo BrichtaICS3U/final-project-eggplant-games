@@ -211,13 +211,13 @@ this is where the bulk of the game code will be located. the point of placing it
 in a function is so that we can easily call it when needed form the menu
 """
 
-#sprite list
+#sprite list(s)
 all_sprites_list = pygame.sprite.Group()        #this is the master sprite list. All of the sprites are located her unpon creation
 Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. Only the hero sprite will be located here
 Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
 enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
 
-#player character
+#player character)
 player = Hero(30,40)
 player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
@@ -332,11 +332,14 @@ def Game():
             for hole in Hole_collision_list:
                 
                 for HOLE in lvl.hole_list: 
-                    if player.rect.x + 30 > HOLE.rect.x and  player.rect.x + 30 < HOLE.rect.x + HOLE.width:
+                    if player.rect.x + 30 > HOLE.rect.x and  player.rect.x + 30 < HOLE.rect.x + HOLE.width and player.rect.y > HOLE.rect.y - 40:
                         Hit_Wall_R()
-                    if player.rect.x < HOLE.rect.x + HOLE.width and player.rect.x  > HOLE.rect.x:
+                    if player.rect.x < HOLE.rect.x + HOLE.width and player.rect.x  > HOLE.rect.x and player.rect.y > HOLE.rect.y - 40:
                         Hit_Wall_L()
-                    #if player.rect.y < HOLE.rect.y and player.rect.y + 
+                    if player.rect.y + 40 > HOLE.rect.y and player.rect.y < HOLE.rect.y + 2 and player.rect.x + 30 > HOLE.rect.x and player.rect.x + 30 < HOLE.rect.x + HOLE.width + HOLE.width - 2:
+                        Hit_Wall_U()
+                    if player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y > HOLE.rect.y + HOLE.height - 3 and player.rect.x + 30 > HOLE.rect.x and player.rect.x + 30 < HOLE.rect.x + HOLE.width +  HOLE.width - 2:
+                        Hit_Wall_D()                    
                      
                             
 
@@ -399,7 +402,13 @@ def Game():
         Bullet_sprites_list.update()
         enemy_list.update()
 
+
+
 #--------------- drawing ----------------------------------------------------------------------------------
+    #if there is a problem with drawing sprites, this line may need to be moved to the end of the game function
+        all_sprites_list.draw(screen)
+
+        pygame.draw.rect(screen,BLACK,[0,0,150,75])
         HealthBar(screen)                   #this draws the initial 5 health bars on screen
         TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
         
@@ -475,11 +484,8 @@ def Game():
                 player.rect.y -= 2
 
 
-        
-        
+    
 
-
-        all_sprites_list.draw(screen)
         
         
         pygame.display.flip()
