@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet    #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar    #import the sprites that Abbey has made
 from Door import DOOR                   #import the sprites that Nick has made
 from LVLs import LVL                    #FML
 
@@ -36,7 +36,7 @@ Music = True
 
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)   #this is the music for the menu
 pygame.mixer.music.load("Menu_Music.mp3")                                   #
-pygame.mixer.music.play(-1)                                                 #            
+#pygame.mixer.music.play(-1)                                                 #            
     
 # ----------- end of music catagory ------------- #
 
@@ -45,6 +45,9 @@ pygame.mixer.music.play(-1)                                                 #
 
 # ----------- list of global variables ------------- #
 shoot = True
+b = False
+Y = 1
+X = 1
 # ----------- end of variable list ---------------#
 
 
@@ -145,18 +148,24 @@ def Quit():
     Menu = False
     
 def Change_SCREEN():
-        if player.rect.y < 50:
-            player.rect.y = SCREEN_HEIGHT - 46
-            print("screen UP.")
-        elif player.rect.y > 750:
-            player.rect.y = 6
-            print("screen DOWN.")
-        elif player.rect.x < 50:
-            player.rect.x = SCREEN_WIDTH - 36
-            print("screen LEFT.")
-        elif player.rect.x > 1150:
-            player.rect.x = 6
-            print("screen RIGHT.")
+    global Y
+    global X
+    if player.rect.y < 50:
+        player.rect.y = SCREEN_HEIGHT - 46
+        print("screen UP.")
+        Y += 1
+    elif player.rect.y > 750:
+        player.rect.y = 6
+        print("screen DOWN.")
+        Y -= 1
+    elif player.rect.x < 50:
+        player.rect.x = SCREEN_WIDTH - 36
+        print("screen LEFT.")
+        X -= 1
+    elif player.rect.x > 1150:
+        player.rect.x = 6
+        print("screen RIGHT.")
+        X += 1
             
 # --------------------- End of functions list ----------------------- #
 
@@ -172,7 +181,7 @@ in a function is so that we can easily call it when needed form the menu
 all_sprites_list = pygame.sprite.Group()        #this is the master sprite list. All of the sprites are located her unpon creation
 Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. Only the hero sprite will be located here
 Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
-Door_sprites_list = pygame.sprite.Group()       #this is the Door sprite list. this is where all the doors will be located for the room transitions
+enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
 
 #player character
 player = Hero(30,40)
@@ -180,43 +189,47 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
-#this is where all the "door" objects are created
-#top door
-top_door = DOOR(100,5)                 
-top_door.rect.x = SCREEN_WIDTH/2 - 50
-top_door.rect.y = 0
+#Initial enemy character
+enemy = Enemy(BLACK, 40, 40)        #adds a single enemy to first room
+enemy_list.add(enemy)
+all_sprites_list.add(enemy)
 
-#bottom door
-bot_door = DOOR(100,5)
-bot_door.rect.x = SCREEN_WIDTH/2 - 50
-bot_door.rect.y = SCREEN_HEIGHT - 5
+#Initial bullet
+bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
 
-#right door
-rt_door = DOOR(5,100)
-rt_door.rect.x = SCREEN_WIDTH - 5
-rt_door.rect.y = SCREEN_HEIGHT/2 - 50
+#list of lvls
+lvls = []
+enemies_list = []
 
-#left door
-lt_door = DOOR(5,100)
-lt_door.rect.x = 0
-lt_door.rect.y = SCREEN_HEIGHT/2 - 50
+#lvl 1-1
+lvl1 = LVL(3)
+lvls.append(lvl1)
+
+#lvl 1-2
+lvl2 = LVL(9)
+lvls.append(lvl2)
+
+#lvl 2-1
+lvl3 = LVL(5)
+lvls.append(lvl3)
+
+#lvl 2-2
+lvl4 = LVL(10)
+lvls.append(lvl4)
+
 
 #add all of the sprites into their respected lists 
 all_sprites_list.add(player)
 Hero_sprite_list.add(player)
-Door_sprites_list.add(bot_door)
-Door_sprites_list.add(top_door)
-Door_sprites_list.add(rt_door)
-Door_sprites_list.add(lt_door)
+
 
 def Game():
+    global Y
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
+    global b                    #adds bullet collision variable
     Game = True                 #while the variable is true the game will run
-    
-    
-
     
     while Game:
         for event in pygame.event.get():        #
@@ -224,9 +237,54 @@ def Game():
                 pygame.quit()                   #quit the etire code
             elif event.type == pygame.KEYDOWN:  #
                 if event.key==pygame.K_p:       #if the p key is pressed
-                    Game = False                #exit the game and return to the main menu
+                    Game = False
+                    #exit the game and return to the main menu
+                    
+#fill the screen white evertime the code runs
+        screen.fill(WHITE)
+    
+########################################## IMPORTANT DO NOT TOUCH PLZ (@_@)
+        if Y == 1 and X == 1:
+            lvl1.draw(screen)
+            pygame.draw.rect(screen,RED,[75,75,75,75])
+            e_screen = 2        #variable to control the number of enemies on screen
+                                #2 enemies in red room
+            
+        if Y == 2 and X == 1:
+            lvl2.draw(screen)
+            pygame.draw.rect(screen,GREEN,[75,75,75,75])
+            e_screen = 3        #3 enemies in green room
 
-        screen.fill(WHITE)                      #fill the screen white evertime the code runs
+
+        if Y == 1 and X == 2:
+            lvl3.draw(screen)
+            pygame.draw.rect(screen,BLUE,[75,75,75,75])
+            e_screen = 2        #2 enemies in blue room
+            
+
+        if Y == 2 and X == 2:
+            lvl4.draw(screen)
+            pygame.draw.rect(screen,BLACK,[75,75,75,75])
+            e_screen = 1        #1 enemy in black room
+        
+            
+        for lvl in lvls:
+            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)
+            for door in Door_collision_list:
+                Change_SCREEN()
+                
+                for enemy in enemy_list:                #this code deletes the previous enemies off the screen
+                    enemy.HP = 0
+                    all_sprites_list.remove(enemy)
+                    enemy_list.remove(enemy)
+                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
+
+                for i in range(e_screen):                      #this code adds new enemies to next screen
+                    enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
+                    enemy_list.add(enemy)                       #set earlier
+                    all_sprites_list.add(enemy)
+                
+#########################################################            
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
 
@@ -250,29 +308,92 @@ def Game():
                     player.move()                       #double the movement speed Right
                 elif keys[pygame.K_w]:              #and if W is pressed
                     player.move()                       #double the movement speed up
+
+        #player melee attack
+        if keys[pygame.K_e]:
+            if enemy.rect.x < player.rect.x:    #enemy is to the left of player
+                player.meleeLeft(enemy,screen)
+            elif enemy.rect.x > player.rect.x:  #enemy is to the right of player
+                player.meleeRight(enemy,screen)
+            elif enemy.rect.y < player.rect.y:  #enemy is above player
+                player.meleeUp(enemy, screen)
+
+        #Enemy follow player (while living)
+        for enemy in enemy_list:
+            if enemy.HP > 0:
+                enemy.move_to_player(player)
                         
         #player shooting
         if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:                            #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
+                b = True
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
                 Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
                 
-        #this allows the player to shoot again when he/she relases the mouse button        
+        #this allows the player to shoot again when he/she releases the mouse button
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
             shoot = True                                                                    #the player can shoot again
 
-        #collision with the door(s)
-        Door_collision_list = pygame.sprite.spritecollide(player,Door_sprites_list,False)       
-        for door in Door_collision_list:
-            Change_SCREEN()
-            
-        
+                      
         #update sprite list(s)
-        all_sprites_list.update() 
+        all_sprites_list.update()
         Bullet_sprites_list.update()
+        enemy_list.update()
 
+#--------------- drawing ----------------------------------------------------------------------------------
+        HealthBar(screen)                   #this draws the initial 5 health bars on screen
+        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
         
+        for enemy in enemy_list:
+            pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #this draws enemy health bars
+
+#---------------- collisions--------------------------------------------------------------------------------------
+        collision_list = pygame.sprite.spritecollide(player, enemy_list, False)     #collisions between enemy and player
+        
+        if b == True:                                   #global variable indicating that a bullet is present   
+            for enemy in enemy_list:
+                bullet_col = pygame.sprite.collide_rect(bullet, enemy)  #collisions between bullets and enemies
+                if bullet_col == True:
+                    enemy.HP -= 20                      #decrease enemy health by 20   
+                    bullet.rect.x = 0                   #teleport bullet to top left of screen, because if not the bullet stays 'colliding'
+                    bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
+                    Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
+                    all_sprites_list.remove(bullet)
+
+            
+        """insert code for collisions between enemies here"""
+
+        for collision in collision_list:
+            player.HP -= 20
+            print(player.HP)
+            player.rect.x -= 100        #Player bounces back on enemy collision
+            player.rect.y -= 50
+        
+# -------------------end of collisions --------------------------------------------------------------------------------                   
+    
+
+        #UPDATING HEALTH BARS (player and enemies)
+            #this code draws white over original health bars
+            #to make it seem like they are disappearing
+
+        player.health(screen)       #player health bar updates
+                
+        for enemy in enemy_list:    #enemy health bar updates
+            if enemy.HP <= 80:
+                pygame.draw.rect(screen, WHITE, [enemy.rect.x+29, enemy.rect.y-10, 6, 5], 0)
+                if enemy.HP <= 60:
+                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+23, enemy.rect.y-10, 6, 5], 0)
+                    if enemy.HP <= 40:
+                        pygame.draw.rect(screen, WHITE, [enemy.rect.x+17, enemy.rect.y-10, 6, 5], 0)
+                        if enemy.HP <= 20:
+                            pygame.draw.rect(screen, WHITE, [enemy.rect.x+11, enemy.rect.y-10, 6, 5], 0)
+                            if enemy.HP <= 0:
+                                pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
+                                all_sprites_list.remove(enemy)
+                                enemy_list.remove(enemy)
+
+
         #wall restrictions
         #Right wall
         if player.rect.x + 30 > SCREEN_WIDTH:
@@ -296,107 +417,13 @@ def Game():
                 player.rect.y -= 2
 
 
-        
-        
-
-
+        #Draw all sprites
         all_sprites_list.draw(screen)
-        Door_sprites_list.draw(screen)
+        
         
         pygame.display.flip()
         clock.tick(60)
 # ------------------- end of main Game code ------------------ #
 
-layer = 1
-Menu = True  
-while Menu:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            Menu = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key==pygame.K_x:
-                Menu = False
-            elif event.key==pygame.K_ESCAPE:
-                layer == 1
-        
-# code for the main menu will be located here # 
-    screen.fill(WHITE)
-    
-    if layer == 1:
-        #title
-        screen.blit(T_background,(0,0))                           #Main menu background
-        TEXT("Ctrl and Destroy",300,50,70)                        #Game title
-
-        Button("Start", 20,200,210,80,BC1,BC2,35,Game_intro)      #this Button leads to the game intro, and then into the game
-        Button("Controls",20,340,210,80,BC1,BC2,35,Controls)      #this Button leads to the Controls menu, which quickly teaches the player the controls
-        Button("Settings",20,480,210,80,BC1,BC2,35,Settings)      #this Button leads to the Settings menu, which allows the player to either turn off the music or select a specific game difficulty 
-        Button("Quit",20,620,210,80,BC1,BC2,35,Quit)              #this Button simply quits the game
-        
-    elif layer == 2:
-        #Settings
-        screen.blit(S_bakckground,(0,0))
-        TEXT("Settings",180,50,70)                                          #settings Heading
-        TEXT("Music",SCREEN_WIDTH/2,175,50)                                 #Music Sub-Heading
-        TEXT("Difficulty",SCREEN_WIDTH/2,450,50)                            #Difficulty Sub-Heading
-
-        Button("ON",SCREEN_WIDTH/3,250,100,65,BC1,BC2,35,MENU_Music_ON)            #this Button toggles the music on 
-        Button("OFF",SCREEN_WIDTH/1.75 + 20 ,250,100,65,BC1,BC2,35,MENU_Music_OFF) #this Button toggles the music off
-
-        Button("Baby",SCREEN_WIDTH/6 ,525,220,65,BC1,BC2,35,None)         #this Button is used to toggle the easiest difficulty    
-        Button("Boring",525,525,220,65,BC1,BC2,35,None)                   #this Button is used to toggle the medium difficulty 
-        Button("Thrilling",842 ,525,220,65,BC1,BC2,35,None)               #this Button is used to toggle the hardest difficulty
-        
-        Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)                     #this Button will return the user to the main menu
-
-    elif layer == 3:
-        #Controls
-        screen.blit(C_background,(0,0))                           #Controls Background
-        TEXT("Game Controls",300,50,70)                           #Controls Heading
-        
-        #move controls
-        Button("W",120,100,50,50,BC1,BC2,35,None,"Move UP")       #hovering over this button will tell the player how to move up
-        Button("S",120,170,50,50,BC1,BC2,35,None,"Move DOWN")     #hovering over this button will tell the player how to move down
-        Button("A",50,170,50,50,BC1,BC2,35,None,"Move LEFT")      #hovering over this button will tell the player how to move left
-        Button("D",190,170,50,50,BC1,BC2,35,None,"Move RIGHT")    #hovering over this button will tell the player how to move Right
-
-        #melee atk control
-        Button("E",120,300,50,50,BC1,BC2,35,None,"Melee Atk")     #hovering over this button will tell the player how to Attack 
-
-        #shoot controls
-        #have to manualy create arrows using a sprite engine
-        Button("",120,430,50,50,BC1,BC2,35,None,"Shoot UP")       #hovering over this button will tell the player how to shoot up  
-        Button("",120,500,50,50,BC1,BC2,35,None,"Shoot DOWN")     #hovering over this button will tell the player how to shoot down
-        Button("",50,500,50,50,BC1,BC2,35,None,"Shoot LEFT")      #hovering over this button will tell the player how to shoot left
-        Button("",190,500,50,50,BC1,BC2,35,None,"Shoot RIGHT")    #hovering over this button will tell the player how to shoot right
-
-        #pause menu bind
-        Button("ESC",100,630,90,50,BC1,BC2,35,None,"Toggle Menu") #hovering over this button will tell the player how to toggle the main menu
-        
-        Button("Back",20,700,80,50,BC1,BC2,25,M_Menu,None)        #this Button will return the user to the main menu
-
-    elif layer == 4:
-        #game intro
-
-               
-        screen.blit(PG_Background ,(0,0))
-        TEXT("Transcript #423-27b",SCREEN_WIDTH/2,50,70)
-        TEXT("June 12, 18927",100,200,25,PG_TEXT)
-        TEXT("Since the catastrophe caused by the Xepher plant in 18905, the planet has undergone transformations rendering it into a wasteland.", SCREEN_WIDTH/2,240,18,PG_TEXT)
-        TEXT("The catastrophe caused a  massive increase in radiation levels on the surface. As well as deadly natural phenomenons.", SCREEN_WIDTH/2,280,18,PG_TEXT)
-        TEXT("Trillions were killed in a matter of hours.", SCREEN_WIDTH/2,320,18,PG_TEXT)
-        
-        TEXT('Those who survived have migrated into the hollows of the earths crust and have taken to the name "Nesters"',SCREEN_WIDTH/2,380,18,PG_TEXT)
-        TEXT("Due to extensive exposure to radiation most Nesters are far too frail to fight the monsters that lurk under the crust.",SCREEN_WIDTH/2,420,18,PG_TEXT)
-        
-
-        Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)#temporary, for test and faster performence purposes
-        Button("Continue",SCREEN_WIDTH/2 - 75,700,150,50,BC1,BC2,25,Game)
-            
-
-
-    
-    pygame.display.flip()
-    clock.tick(60)
-    
+Game()    
 pygame.quit()
-
