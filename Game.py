@@ -48,6 +48,7 @@ LayerP = 1
 b = False
 Y = 1
 X = 1
+
 # ----------- end of variable list ---------------#
 
 
@@ -169,19 +170,19 @@ def Change_SCREEN():
     lvls = []
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
-        #print("screen UP.")
+        print("screen UP.")
         Y += 1
     elif player.rect.y > 750:
         player.rect.y = 6
-        #print("screen DOWN.")
+        print("screen DOWN.")
         Y -= 1
     elif player.rect.x < 50:
         player.rect.x = SCREEN_WIDTH - 36
-        #print("screen LEFT.")
+        print("screen LEFT.")
         X -= 1
     elif player.rect.x > 1150:
         player.rect.x = 6
-        #print("screen RIGHT.")
+        print("screen RIGHT.")
         X += 1
     elif Y == 2:
         pygame.quit()
@@ -332,16 +333,14 @@ def Game():
             for hole in Hole_collision_list:
                 
                 for HOLE in lvl.hole_list: 
-                    if player.rect.x + 30 > HOLE.rect.x and  player.rect.x + 30 < HOLE.rect.x + HOLE.width and player.rect.y > HOLE.rect.y - 40:
+                    if player.rect.x + 30 >= HOLE.rect.x -2 and player.rect.x < HOLE.rect.x - 26:#Left
                         Hit_Wall_R()
-                    if player.rect.x < HOLE.rect.x + HOLE.width and player.rect.x  > HOLE.rect.x and player.rect.y > HOLE.rect.y - 40:
+                    elif player.rect.x <= HOLE.rect.x + HOLE.width and player.rect.x + 30 > HOLE.rect.x + HOLE.width + 26:#Right
                         Hit_Wall_L()
-                    if player.rect.y + 40 > HOLE.rect.y and player.rect.y < HOLE.rect.y + 2 and player.rect.x + 30 > HOLE.rect.x and player.rect.x + 30 < HOLE.rect.x + HOLE.width + HOLE.width - 2:
+                    elif player.rect.y + 40 > HOLE.rect.y and player.rect.y < HOLE.rect.y - 36:#Top
                         Hit_Wall_U()
-                    if player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y > HOLE.rect.y + HOLE.height - 3 and player.rect.x + 30 > HOLE.rect.x and player.rect.x + 30 < HOLE.rect.x + HOLE.width +  HOLE.width - 2:
-                        Hit_Wall_D()                    
-                     
-                            
+                    elif player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y + 40 > HOLE.rect.y + HOLE.height + 36:#Bottom
+                        Hit_Wall_D()
 
        
 #########################################################            
@@ -410,7 +409,7 @@ def Game():
 
         pygame.draw.rect(screen,BLACK,[0,0,150,75])
         HealthBar(screen)                   #this draws the initial 5 health bars on screen
-        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
+
         
         for enemy in enemy_list:
             pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #this draws enemy health bars

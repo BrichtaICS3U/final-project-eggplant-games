@@ -96,9 +96,9 @@ class LVL():
             h1_1.rect.y = 400
             self.hole_list.add(h1_1)
 
-            h2_1 = HOLE(80,100)
-            h2_1.rect.x = 825
-            h2_1.rect.y = 400
+            h2_1 = HOLE(1250,100)
+            h2_1.rect.x = 0
+            h2_1.rect.y = 700
             self.hole_list.add(h2_1)
 
 

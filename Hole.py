@@ -3,6 +3,7 @@ import pygame
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
+BLUE  =  (0,0,255)
 
 class HOLE(pygame.sprite.Sprite):
 
@@ -19,7 +20,7 @@ class HOLE(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
-        pygame.draw.rect(self.image,BLACK,[0,0,width,height])
+        pygame.draw.rect(self.image,BLUE,[0,0,width,height])
 
         self.rect = self.image.get_rect()
 
