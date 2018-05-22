@@ -84,8 +84,8 @@ class Sword(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def up(self, player, screen):
-        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y-25, 5, 25], 0)
-
+        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y-25, 5, 25], 0) #draw sword from center of player
+        
     def down(self, player, screen):
         pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y+40, 5, 25], 0)
 
@@ -174,7 +174,7 @@ class Enemy(pygame.sprite.Sprite):
                         pygame.draw.rect(screen, WHITE, [self.rect.x+11, self.rect.y-10, 6, 5], 0)
                         if self.HP <= 0:
                             pygame.draw.rect(screen, WHITE, [self.rect.x+5, self.rect.y-10, 10, 5], 0)
-
+                            #pygame.draw.rect(screen, GREEN, [self.rect.x, self.rect.y, 10, 10], 0)
                                  
 class HealthBar():
 
@@ -185,9 +185,19 @@ class HealthBar():
         pygame.draw.rect(screen, GREEN, [60, 30, 15, 25], 0)
         pygame.draw.rect(screen, GREEN, [80, 30, 15, 25], 0)
         pygame.draw.rect(screen, GREEN, [100, 30, 15, 25], 0)
+
+class AmmoBar():
+
+    def __init__(self, screen):
         
-    
-    
+        pygame.draw.ellipse(screen, BLACK, [20, 90, 15, 25], 0) #draws player ammo
+        pygame.draw.ellipse(screen, BLACK, [40, 90, 15, 25], 0)
+        pygame.draw.ellipse(screen, BLACK, [60, 90, 15, 25], 0)
+        pygame.draw.ellipse(screen, BLACK, [80, 90, 15, 25], 0)
+        pygame.draw.ellipse(screen, BLACK, [100, 90, 15, 25], 0)
+
+    #def update(screen):
+      
          
 
         
