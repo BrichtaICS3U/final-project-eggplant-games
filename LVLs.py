@@ -50,6 +50,23 @@ class LVL():
         elif doors == 10:
             S = True
             E = True
+        elif doors == 20:
+            W = True
+            S = True
+            N = True
+        elif doors == 30:
+            W = True
+            S = True
+            E = True
+        elif doors == 40:
+            W = True
+            E = True
+            N = True
+        elif doors == 100:
+            N = True
+            S = True
+            W = True
+            E = True
         elif doors == 2571:
             END = True
                     
@@ -91,17 +108,14 @@ class LVL():
         
     #1-1 (the first number indicates the number of the hole in the section. the second number is the possibility)
         if Holes == 1:
-            h1_1 = HOLE(80,100)
-            h1_1.rect.x = 425
+            h1_1 = HOLE(100,50)
+            h1_1.rect.x = 400
             h1_1.rect.y = 400
+            h1_1.Draw_test()
             self.hole_list.add(h1_1)
+            self.hole_list.update()
 
-            h2_1 = HOLE(1250,100)
-            h2_1.rect.x = 0
-            h2_1.rect.y = 700
-            self.hole_list.add(h2_1)
-
-
+            
             
 
          

@@ -15,6 +15,7 @@ BC2   = (104,14,75)         #Button coloutr 2
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
+DIRT    = (252, 216, 168)
 
 #background(s)
 T_background = pygame.image.load("Menu_Background.png") #this is the background for the title screen
@@ -48,6 +49,7 @@ LayerP = 1
 b = False
 Y = 1
 X = 1
+F_C = DIRT
 
 # ----------- end of variable list ---------------#
 
@@ -170,46 +172,50 @@ def Change_SCREEN():
     lvls = []
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
-        print("screen UP.")
+        #print("screen UP.")
         Y += 1
     elif player.rect.y > 750:
         player.rect.y = 6
-        print("screen DOWN.")
+        #print("screen DOWN.")
         Y -= 1
     elif player.rect.x < 50:
         player.rect.x = SCREEN_WIDTH - 36
-        print("screen LEFT.")
+        #print("screen LEFT.")
         X -= 1
     elif player.rect.x > 1150:
         player.rect.x = 6
-        print("screen RIGHT.")
+        #print("screen RIGHT.")
         X += 1
     elif Y == 2:
         pygame.quit()
 
 def Hit_Wall_R():
     keys = pygame.key.get_pressed()
-    player.rect.x -= 2
     if keys[pygame.K_LSHIFT]:
         player.rect.x -= 2
+    player.rect.x -= 2
+    
 
 def Hit_Wall_L():
     keys = pygame.key.get_pressed()
-    player.rect.x += 2
     if keys[pygame.K_LSHIFT]:
         player.rect.x += 2
+    player.rect.x += 2
+    
         
 def Hit_Wall_U():
     keys = pygame.key.get_pressed()
-    player.rect.y -= 2
     if keys[pygame.K_LSHIFT]:
         player.rect.y -= 2
+    player.rect.y -= 2
+    
         
 def Hit_Wall_D():
     keys = pygame.key.get_pressed()
-    player.rect.y += 2
     if keys[pygame.K_LSHIFT]:
-        player.rect.y += 2            
+        player.rect.y += 2
+    player.rect.y += 2
+                
 
       
             
@@ -258,6 +264,7 @@ def Game():
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
     global b
+    global F_C
     Game = True                 #while the variable is true the game will run
        
     while Game:
@@ -269,59 +276,217 @@ def Game():
                     Pause_Menu()
                     Game = False
                     #exit the game and return to the main menu
+
         keys = pygame.key.get_pressed()
-#fill the screen white evertime the code runs
-        screen.fill(WHITE)
+
+        screen.fill(F_C)
+
+        if Y < 4:
+            F_C = DIRT
+        if Y >= 4:
+            F_C = GRAY
 #                                                                       ___
 ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
 # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
 
-#lvl 1-1
+# Forest/outside dungeon ---- Tutorial #
+#lvl 1
         if Y == 1 and X == 1:
             lvl1 = LVL(1,1)
             lvls.append(lvl1)
             lvl1.draw(screen)
-            e_screen = 2
+            e_screen = 0
+            
         
 
-#lvl 2-1
-        if Y == 1 and X == 2:
-            lvl3 = LVL(5)
+#lvl 2
+        if Y == 2 and X == 1:
+            lvl3 = LVL(8)
             lvls.append(lvl3)
             lvl3.draw(screen)
-            e_screen = 3
+            e_screen = 0
+            
 
-#lvl 3-1
-        if Y == 1 and X == 3:
-            lvl5 = LVL(3)
+#lvl 3
+        if Y == 3 and X == 1:
+            lvl5 = LVL(100)
             lvls.append(lvl5)
             lvl5.draw(screen)
-            e_screen = 2
+            e_screen = 0
+            
 
-#lvl 1-2            
-        if Y == 2 and X == 1:
-            lvl2 = LVL(10)
+#lvl 4            
+        if Y == 3 and X == 2:
+            lvl2 = LVL(2)
             lvls.append(lvl2)
             lvl2.draw(screen)
-            e_screen = 2
+            e_screen = 0
             
-#lvl 2-2
-        if Y == 2 and X == 2:
-            lvl4 = LVL(9)
+            
+#lvl 5
+        if Y == 3 and X == 0:
+            lvl4 = LVL(6)
             lvls.append(lvl4)
             lvl4.draw(screen)
-            e_screen = 1
+            e_screen = 0
+           
 
-#lvl 3-2
-        if Y == 2 and X == 3:
-            lvl6 = LVL(2571)
+#lvl 6
+        if Y == 3 and X == -1:
+            lvl6 = LVL(10)
             lvls.append(lvl6)
             lvl6.draw(screen)
-            e_screen = 2
-            
-    
+            e_screen = 0
 
-  
+#lvl 7
+        if Y == 2 and X == -1:
+            lvl7 = LVL(1)
+            lvls.append(lvl7)
+            lvl7.draw(screen)
+            e_screen = 0
+            
+# Enterance/Sewers ----- lvl 1 #
+#lvl 8
+        if Y == 4 and X == 1:
+            lvl8 = LVL(8)
+            lvls.append(lvl8)
+            lvl8.draw(screen)
+            e_screen = 0
+
+#lvl 9
+        if Y == 5 and X == 1:
+            lvl9 = LVL(8)
+            lvls.append(lvl9)
+            lvl9.draw(screen)
+            e_screen = 0
+
+#lvl 10 //first floor / hub for floor (reference point)//
+        if Y == 6 and X == 1:
+            lvl10 = LVL(100)
+            lvls.append(lvl10)
+            lvl10.draw(screen)
+            e_screen = 0
+
+#lvl 11
+        if Y == 6 and X == 2:
+            lvl11 = LVL(6)
+            lvls.append(lvl11)
+            lvl11.draw(screen)
+            e_screen = 0
+
+#lvl 12 //Roundabout entrance//
+        if Y == 6 and X == 3:
+            lvl12 = LVL(20)
+            lvls.append(lvl12)
+            lvl12.draw(screen)
+            e_screen = 0
+
+#lvl 13
+        if Y == 7 and X == 3:
+            lvl13 = LVL(10)
+            lvls.append(lvl13)
+            lvl13.draw(screen)
+            e_screen = 0
+
+#lvl 14
+        if Y == 7 and X == 4:
+            lvl14 = LVL(6)
+            lvls.append(lvl14)
+            lvl14.draw(screen)
+            e_screen = 0
+
+#lvl 15
+        if Y == 7 and X == 5:
+            lvl15 = LVL(9)
+            lvls.append(lvl15)
+            lvl15.draw(screen)
+            e_screen = 0
+
+#lvl 16
+        if Y == 6 and X == 5:
+            lvl16 = LVL(8)
+            lvls.append(lvl16)
+            lvl16.draw(screen)
+            e_screen = 0
+
+#lvl 17
+        if Y == 5 and X == 5:
+            lvl17 = LVL(3)
+            lvls.append(lvl17)
+            lvl17.draw(screen)
+            e_screen = 0
+
+#lvl 18
+        if Y == 5 and X == 4:
+            lvl18 = LVL(6)
+            lvls.append(lvl18)
+            lvl18.draw(screen)
+            e_screen = 0
+
+#lvl 19 //end of sewer roundabout//
+        if Y == 5 and X == 3:
+            lvl19 = LVL(5)
+            lvls.append(lvl19)
+            lvl19.draw(screen)
+            e_screen = 0
+
+    
+#lvl 21 // start of left part of sewers//
+        if Y == 6 and X == 0:
+            lvl21 = LVL(6)
+            lvls.append(lvl21)
+            lvl21.draw(screen)
+            e_screen = 0
+
+#lvl 22
+        if Y == 6 and X == -1:
+            lvl22 = LVL(30)
+            lvls.append(lvl22)
+            lvl22.draw(screen)
+            e_screen = 0
+
+#lvl 23
+        if Y == 5 and X == -1:
+            lvl23 = LVL(1)
+            lvls.append(lvl23)
+            lvl23.draw(screen)
+            e_screen = 0
+
+#lvl 24
+        if Y == 6 and X == -2:
+            lvl24 = LVL(40)
+            lvls.append(lvl24)
+            lvl24.draw(screen)
+            e_screen = 0            
+
+#lvl 25
+        if Y == 6 and X == -3:
+            lvl25 = LVL(4)
+            lvls.append(lvl25)
+            lvl25.draw(screen)
+            e_screen = 0    
+
+#lvl 26
+        if Y == 7 and X == -2:
+            lvl26 = LVL(8)
+            lvls.append(lvl26)
+            lvl26.draw(screen)
+            e_screen = 0
+
+#lvl 27
+        if Y == 8 and X == -2:
+            lvl27 = LVL(9)
+            lvls.append(lvl27)
+            lvl27.draw(screen)
+            e_screen = 0
+
+#lvl 28
+        if Y == 8 and X == -3:
+            lvl28 = LVL(4)
+            lvls.append(lvl28)
+            lvl28.draw(screen)
+            e_screen = 0
+            
 #hit detection for doors            
         for lvl in lvls:
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
