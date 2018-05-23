@@ -188,17 +188,28 @@ def Change_SCREEN():
         pygame.quit()
 
 def Hit_Wall_R():
+    keys = pygame.key.get_pressed()
     player.rect.x -= 2
+    if keys[pygame.K_LSHIFT]:
+        player.rect.x -= 2
 
 def Hit_Wall_L():
+    keys = pygame.key.get_pressed()
     player.rect.x += 2
-
+    if keys[pygame.K_LSHIFT]:
+        player.rect.x += 2
+        
 def Hit_Wall_U():
+    keys = pygame.key.get_pressed()
     player.rect.y -= 2
-
+    if keys[pygame.K_LSHIFT]:
+        player.rect.y -= 2
+        
 def Hit_Wall_D():
+    keys = pygame.key.get_pressed()
     player.rect.y += 2
-            
+    if keys[pygame.K_LSHIFT]:
+        player.rect.y += 2            
 
       
             
