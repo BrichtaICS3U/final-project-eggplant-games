@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar  #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar     #import the sprites that Abbey has made
 from Door import DOOR                   #import the sprites that Nick has made
 from LVLs import LVL                    #FML
 import math
@@ -203,12 +203,6 @@ bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
 player_sword = Sword(1,1)
 all_sprites_list.add(player_sword)
 
-#ammo list
-ammo_count = []                     #this list will store how much ammo the player has
-for i in range(5):
-    ammo_count.append(i)
-    print(len(ammo_count))
-
 #list of lvls
 lvls = []
 
@@ -335,13 +329,16 @@ def Game():
                 enemy.move_to_player(player)
                         
         #player shooting
-        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and len(ammo_count) > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
                 b = True
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
                 Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
-                del ammo_count[-1]                                                          #removes a 'bullet' from ammo_count
+                #del ammo_count[:1]                                                          #removes a 'bullet' from ammo_count
+                #print(ammo_count)
+                player.ammo -= 1
+                print(player.ammo)
                 
         #this allows the player to shoot again when he/she releases the mouse button
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
@@ -352,15 +349,6 @@ def Game():
         all_sprites_list.update()
         Bullet_sprites_list.update()
         enemy_list.update()
-
-#--------------- drawing ----------------------------------------------------------------------------------
-        HealthBar(screen)                   #this draws the initial 5 health bars on screen
-        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
-        AmmoBar(screen)
-        TEXT("Player Ammo", 60, 80, 15)
-        
-        for enemy in enemy_list:
-            pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #this draws enemy health bars
 
 #---------------- collisions--------------------------------------------------------------------------------------
 
@@ -392,32 +380,23 @@ def Game():
         
 # -------------------end of collisions --------------------------------------------------------------------------------                   
     
-
-        #UPDATING HEALTH BARS (player and enemies)
-            #this code draws white over original health bars
-            #to make it seem like they are disappearing
-
-        player.health(screen)       #player health bar updates
+        HealthBar(screen, player)           #this draws and updates the player health bar(s)
+        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
+        AmmoBar(screen, player)             #draws and updates the player ammo bar
+        TEXT("Player Ammo", 60, 80, 15)
                 
-        for enemy in enemy_list:    #enemy health bar updates
+        for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
             if enemy.HP <= 0:
                 all_sprites_list.remove(enemy)
                 enemy_list.remove(enemy)
-
-        if len(ammo_count) < 5:
-            pygame.draw.ellipse(screen, WHITE, [100, 90, 15, 25], 0)
-            if len(ammo_count) < 4:
-                pygame.draw.ellipse(screen, WHITE, [80, 90, 15, 25], 0)
-                if len(ammo_count) < 3:
-                    pygame.draw.ellipse(screen, WHITE, [60, 90, 15, 25], 0)
-                    if len(ammo_count) < 2:
-                        pygame.draw.ellipse(screen, WHITE, [40, 90, 15, 25], 0)
-                        if len(ammo_count) == 0:
-                            pygame.draw.ellipse(screen, BLACK, [20, 90, 15, 25], 0)                        
+                ####TENTATIVE DO NOT KEEP###
+                if player.HP < 100:         #regenerates health for player after killing an enemy
+                    player.HP += 20
+                if player.ammo < 5:
+                    player.ammo += 1        #gives extra bullet to player after killing an enemy          
                         
                 
-
         #wall restrictions
         #Right wall
         if player.rect.x + 30 > SCREEN_WIDTH:
