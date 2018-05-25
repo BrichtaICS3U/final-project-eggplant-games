@@ -282,7 +282,6 @@ def Game():
                     enemy.HP = 0
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
 
                 for i in range(e_screen):                      #this code adds new enemies to next screen
                     enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
@@ -335,10 +334,8 @@ def Game():
                 b = True
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
                 Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
-                #del ammo_count[:1]                                                          #removes a 'bullet' from ammo_count
-                #print(ammo_count)
-                player.ammo -= 1
-                print(player.ammo)
+                player.ammo -= 1                                                            #removes a 'bullet' from ammo count
+                
                 
         #this allows the player to shoot again when he/she releases the mouse button
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
@@ -356,11 +353,11 @@ def Game():
             main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
             if main_col == True:
                 if keys[pygame.K_e]:            #if the player is holding E, cue melee attack
-                    enemy.HP -= 10              #decrease enemy health by 10
+                    enemy.HP -= 25              #decrease enemy health by 10
                     enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
                     enemy.rect.y -= 100         #aka player who is holding 'sword'
                 else:
-                    player.HP -= 20
+                    player.HP -= 10
                     player.rect.x -= 100        #Player bounces back on enemy collision
                     player.rect.y -= 50
         
@@ -368,7 +365,7 @@ def Game():
             for enemy in enemy_list:
                 bullet_col = pygame.sprite.collide_rect(bullet, enemy)  #collisions between bullets and enemies
                 if bullet_col == True:
-                    enemy.HP -= 20                      #decrease enemy health by 20   
+                    enemy.HP -= 50                      #decrease enemy health by 20   
                     bullet.rect.x = 0                   #teleport bullet to top left of screen, because if not the bullet stays 'colliding'
                     bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
@@ -384,13 +381,18 @@ def Game():
         TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
         AmmoBar(screen, player)             #draws and updates the player ammo bar
         TEXT("Player Ammo", 60, 80, 15)
+        TEXT("Money", 40, 140, 15)
+        money_string = "${}".format(player.money)
+        TEXT(money_string, 40, 160, 15)
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
             if enemy.HP <= 0:
                 all_sprites_list.remove(enemy)
                 enemy_list.remove(enemy)
-                ####TENTATIVE DO NOT KEEP###
+                player.ammodrop(screen) ############FIX THIS
+                ####TENTATIVE DO NOT KEEP######
+                player.money += 10          #gives player 10$
                 if player.HP < 100:         #regenerates health for player after killing an enemy
                     player.HP += 20
                 if player.ammo < 5:
