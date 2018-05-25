@@ -9,10 +9,12 @@ RED   = (255,0,0)
 GREEN = (0,255,0)
 BLUE  = (0,0,255)
 
+draw = True
+
 class LVL():
 
     def __init__(self, doors = 0, Holes = 0):
-
+        global draw
 
 
 # --------------------- this dense area of code is used to create and add the doors to the object -------------------- #        
@@ -108,12 +110,11 @@ class LVL():
         
     #1-1 (the first number indicates the number of the hole in the section. the second number is the possibility)
         if Holes == 1:
-            h1_1 = HOLE(100,50)
-            h1_1.rect.x = 400
-            h1_1.rect.y = 400
-            h1_1.Draw_test()
+            h1_1 = HOLE(575,300,BLUE)
+            h1_1.rect.x = 0
+            h1_1.rect.y = 0
             self.hole_list.add(h1_1)
-            self.hole_list.update()
+            
 
             
             
