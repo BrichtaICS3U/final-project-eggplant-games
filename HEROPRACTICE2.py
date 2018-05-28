@@ -1,8 +1,9 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar    #import the sprites that Abbey has made
-from Door import DOOR                   #import the sprites that Nick has made
-from LVLs import LVL                    #FML
+from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar     #import the sprites that Abbey has made
+from Door import DOOR                                               #import the sprites that Nick has made
+from LVLs import LVL                                                #FML
+import math
 
 # define colours #
 WHITE = (255,255,255)       #White
@@ -166,7 +167,7 @@ def Change_SCREEN():
         player.rect.x = 6
         print("screen RIGHT.")
         X += 1
-            
+
 # --------------------- End of functions list ----------------------- #
 
 
@@ -183,6 +184,7 @@ Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. O
 Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
 enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
 
+
 #player character
 player = Hero(30,40)
 player.rect.x = SCREEN_WIDTH/2
@@ -197,9 +199,12 @@ all_sprites_list.add(enemy)
 #Initial bullet
 bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
 
+#Initial sword
+player_sword = Sword(1,1)
+all_sprites_list.add(player_sword)
+
 #list of lvls
 lvls = []
-enemies_list = []
 
 #lvl 1-1
 lvl1 = LVL(3)
@@ -277,7 +282,6 @@ def Game():
                     enemy.HP = 0
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
 
                 for i in range(e_screen):                      #this code adds new enemies to next screen
                     enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
@@ -286,17 +290,25 @@ def Game():
                 
 #########################################################            
 
-        keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
+        keys = pygame.key.get_pressed()             #built in pygame function to detect is keys are pressed
 
-        #player movement
-        if keys[pygame.K_a]:                    #if the A key is pressed
+        #player movement / melee
+        if keys[pygame.K_a]:                        #if the A key is pressed
             player.move()                           #the player will move to the Left at a speed of 2 pixels
-        elif keys[pygame.K_s]:                  #if the S key is pressed
+            if keys[pygame.K_e]:
+                player_sword.left(player, screen)   #player melee attacks to the left            
+        elif keys[pygame.K_s]:                      #if the S key is pressed
             player.move()                           #the player will move Down at a speed of 2 pixels
-        elif keys[pygame.K_d]:                  #if the D key is pressed
+            if keys[pygame.K_e]:
+                player_sword.down(player, screen)   #player melee attacks downward
+        elif keys[pygame.K_d]:                      #if the D key is pressed
             player.move()                           #the player will move to the Right at a speed of 2 pixels
-        elif keys[pygame.K_w]:                  #if the W key is pressed
+            if keys[pygame.K_e]:
+                player_sword.right(player, screen)  #player melee attacks to the right
+        elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
+            if keys[pygame.K_e]:
+                player_sword.up(player, screen)     #player melee attacks upwards
 
         #player sprinting
         if keys[pygame.K_LSHIFT]:               #if left shift is pressed
@@ -309,14 +321,6 @@ def Game():
                 elif keys[pygame.K_w]:              #and if W is pressed
                     player.move()                       #double the movement speed up
 
-        #player melee attack
-        if keys[pygame.K_e]:
-            if enemy.rect.x < player.rect.x:    #enemy is to the left of player
-                player.meleeLeft(enemy,screen)
-            elif enemy.rect.x > player.rect.x:  #enemy is to the right of player
-                player.meleeRight(enemy,screen)
-            elif enemy.rect.y < player.rect.y:  #enemy is above player
-                player.meleeUp(enemy, screen)
 
         #Enemy follow player (while living)
         for enemy in enemy_list:
@@ -324,12 +328,14 @@ def Game():
                 enemy.move_to_player(player)
                         
         #player shooting
-        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:                            #if the mouse Button has been pressed and the player is allowed to shoot
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
                 b = True
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list   
                 Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
+                player.ammo -= 1                                                            #removes a 'bullet' from ammo count
+                
                 
         #this allows the player to shoot again when he/she releases the mouse button
         if event.type==pygame.MOUSEBUTTONUP:                                                #when the mouse button is releasd
@@ -341,59 +347,58 @@ def Game():
         Bullet_sprites_list.update()
         enemy_list.update()
 
-#--------------- drawing ----------------------------------------------------------------------------------
-        HealthBar(screen)                   #this draws the initial 5 health bars on screen
-        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
-        
-        for enemy in enemy_list:
-            pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #this draws enemy health bars
-
 #---------------- collisions--------------------------------------------------------------------------------------
-        collision_list = pygame.sprite.spritecollide(player, enemy_list, False)     #collisions between enemy and player
+
+        for enemy in enemy_list:    
+            main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
+            if main_col == True:
+                if keys[pygame.K_e]:            #if the player is holding E, cue melee attack
+                    enemy.HP -= 25              #decrease enemy health by 10
+                    enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
+                    enemy.rect.y -= 100         #aka player who is holding 'sword'
+                else:
+                    player.HP -= 10
+                    player.rect.x -= 100        #Player bounces back on enemy collision
+                    player.rect.y -= 50
         
         if b == True:                                   #global variable indicating that a bullet is present   
             for enemy in enemy_list:
                 bullet_col = pygame.sprite.collide_rect(bullet, enemy)  #collisions between bullets and enemies
                 if bullet_col == True:
-                    enemy.HP -= 20                      #decrease enemy health by 20   
+                    enemy.HP -= 50                      #decrease enemy health by 20   
                     bullet.rect.x = 0                   #teleport bullet to top left of screen, because if not the bullet stays 'colliding'
                     bullet.rect.y = 0                   #with the enemy and it becomes a one shot kill (not what we want!)
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
                     all_sprites_list.remove(bullet)
 
-            
+        
         """insert code for collisions between enemies here"""
-
-        for collision in collision_list:
-            player.HP -= 20
-            print(player.HP)
-            player.rect.x -= 100        #Player bounces back on enemy collision
-            player.rect.y -= 50
+    
         
 # -------------------end of collisions --------------------------------------------------------------------------------                   
     
-
-        #UPDATING HEALTH BARS (player and enemies)
-            #this code draws white over original health bars
-            #to make it seem like they are disappearing
-
-        player.health(screen)       #player health bar updates
+        HealthBar(screen, player)           #this draws and updates the player health bar(s)
+        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
+        AmmoBar(screen, player)             #draws and updates the player ammo bar
+        TEXT("Player Ammo", 60, 80, 15)
+        TEXT("Money", 40, 140, 15)
+        money_string = "$ {}".format(player.money)
+        TEXT(money_string, 40, 160, 15)
                 
-        for enemy in enemy_list:    #enemy health bar updates
-            if enemy.HP <= 80:
-                pygame.draw.rect(screen, WHITE, [enemy.rect.x+29, enemy.rect.y-10, 6, 5], 0)
-                if enemy.HP <= 60:
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+23, enemy.rect.y-10, 6, 5], 0)
-                    if enemy.HP <= 40:
-                        pygame.draw.rect(screen, WHITE, [enemy.rect.x+17, enemy.rect.y-10, 6, 5], 0)
-                        if enemy.HP <= 20:
-                            pygame.draw.rect(screen, WHITE, [enemy.rect.x+11, enemy.rect.y-10, 6, 5], 0)
-                            if enemy.HP <= 0:
-                                pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
-                                all_sprites_list.remove(enemy)
-                                enemy_list.remove(enemy)
-
-
+        for enemy in enemy_list:    #enemy health bar drawing/updates
+            enemy.health(screen)
+            if enemy.HP <= 0:
+                all_sprites_list.remove(enemy)
+                enemy_list.remove(enemy)
+                player.ammodrop(screen) ############FIX THIS
+                ####TENTATIVE DO NOT KEEP######
+                player.money += 10          #gives player 10$
+                if player.HP < 100:         #regenerates health for player after killing an enemy
+                    player.HP += 20
+                if player.ammo < 5:
+                    player.ammo += 1        #gives extra bullet to player after killing an enemy          
+                        
+                
         #wall restrictions
         #Right wall
         if player.rect.x + 30 > SCREEN_WIDTH:
