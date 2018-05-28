@@ -80,6 +80,7 @@ class LVL():
             top_door.rect.x = 625 - 50
             top_door.rect.y = 0
             self.doors_list.add(top_door)
+            print("dang")
 
         if S == True:
             bot_door = DOOR(100,5)
@@ -140,13 +141,6 @@ class LVL():
 
         self.hole_list = pygame.sprite.Group()
         
-    #1-1 (the first number indicates the number of the hole in the section. the second number is the possibility)
-        if Holes == 1:
-            h1_1 = HOLE(575,300,BLUE)
-            h1_1.rect.x = 0
-            h1_1.rect.y = 0
-            self.hole_list.add(h1_1)
-            
 
             
             
