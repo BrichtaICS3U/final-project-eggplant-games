@@ -5,15 +5,21 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0,255,0)
 GREY = (100, 100, 100)
+
 RED = (255,0,0)
+
+
+
  
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, HP=100):
+    def __init__(self, width, height, HP=100, ammo=5, money=0):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.HP = HP
+        self.ammo = ammo
+        self.money = money
         
         # Pass in the color of the hero, x and y position, width and height.
         # Set the background color and set it to be transparent
@@ -51,34 +57,37 @@ class Hero(pygame.sprite.Sprite):
         if keys[pygame.K_d]: #Right
             self.rect.x += 2
 
-    def meleeLeft(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x-25, self.rect.y+15, 25, 5], 0)
-    def meleeRight(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x+25, self.rect.y+15, 25, 5], 0)
-    def meleeUp(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+10, 5, -25], 0)
-    def meleeDown(self, enemy, screen):
-        pygame.draw.rect(screen, GREY, [self.rect.x+10, self.rect.y+20, 5, 25], 0)
-            
-
+    def ammodrop(self, screen):
+        pygame.draw.rect(screen, GREEN, [200, 200, 30, 30], 0)
         
-    def health(self, screen):      #this code draws white bars over health bars                      
-        if self.HP <= 80:               
-                pygame.draw.rect(screen, WHITE, [100, 30, 15, 25], 0)
-                if self.HP <= 60:
-                    pygame.draw.rect(screen, WHITE, [80, 30, 15, 25], 0)
-                    if self.HP <= 40:
-                        pygame.draw.rect(screen, WHITE, [60, 30, 15, 25], 0)
-                        if self.HP <= 20:
-                            pygame.draw.rect(screen, WHITE, [40, 30, 15, 25], 0)
-                            if self.HP <= 0:
-                                pygame.draw.rect(screen, WHITE, [20, 30, 15, 25], 0)
-                                self.die()
-                                carryOn = False
-                                pygame.quit()
-
     def die(self):
         print("You died!")
+
+class Sword(pygame.sprite.Sprite):
+
+    def __init__(self, width, height):
+        super().__init__()
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+ 
+        pygame.draw.rect(self.image, GREY, [-10, -10, width, height])
+        
+        self.rect = self.image.get_rect()
+
+    def up(self, player, screen):
+        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y-25, 5, 25], 0) #draw sword from center of player
+        
+    def down(self, player, screen):
+        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y+40, 5, 25], 0)
+
+    def right(self, player, screen):
+        pygame.draw.rect(screen, GREY, [player.rect.x+30, player.rect.y+17.5, 25, 5], 0)
+     
+    def left(self, player, screen):
+        pygame.draw.rect(screen, GREY, [player.rect.x-25, player.rect.y+17.5, 25, 5], 0)       
+        
 
 class Bullet(pygame.sprite.Sprite):
     
@@ -108,7 +117,7 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):      
         # move along vector towards the mouse click at speed of 3 pixels
         self.rect.x -= self.dist_x * 3
-        self.rect.y -= self.dist_y * 3
+        self.rect.y -= self.dist_y * 3        
         
         
 class Enemy(pygame.sprite.Sprite):
@@ -149,19 +158,87 @@ class Enemy(pygame.sprite.Sprite):
     def die(self):
         print("Enemy died!")
 
+    def health(self, screen):
+        if self.HP >= 10:
+            pygame.draw.rect(screen, RED, [self.rect.x+5, self.rect.y-10, 3, 5], 0)
+            if self.HP >= 20:
+                pygame.draw.rect(screen, RED, [self.rect.x+8, self.rect.y-10, 3, 5], 0)
+                if self.HP >= 30:
+                    pygame.draw.rect(screen, RED, [self.rect.x+11, self.rect.y-10, 3, 5], 0)
+                    if self.HP >= 40:
+                        pygame.draw.rect(screen, RED, [self.rect.x+14, self.rect.y-10, 3, 5], 0)
+                        if self.HP >= 50:
+                            pygame.draw.rect(screen, RED, [self.rect.x+17, self.rect.y-10, 3, 5], 0)
+                            if self.HP >= 60:
+                                pygame.draw.rect(screen, RED, [self.rect.x+20, self.rect.y-10, 3, 5], 0)
+                                if self.HP >= 70:
+                                    pygame.draw.rect(screen, RED, [self.rect.x+23, self.rect.y-10, 3, 5], 0)
+                                    if self.HP >= 80:
+                                        pygame.draw.rect(screen, RED, [self.rect.x+26, self.rect.y-10, 3, 5], 0)
+                                        if self.HP >= 90:
+                                            pygame.draw.rect(screen, RED, [self.rect.x+29, self.rect.y-10, 3, 5], 0)
+                                            if self.HP == 100:
+                                                pygame.draw.rect(screen, RED, [self.rect.x+32, self.rect.y-10, 3, 5], 0)
 
+
+    #def dropammo(self, screen):
+        #if self.HP <= 0:
+            #pygame.draw.rect(screen, GREEN, [200, 200, 30, 30], 0)
+                                 
 class HealthBar():
 
-    def __init__(self, screen):
+    def __init__(self, screen, player):
+
+        if player.HP == 0:
+            player.die()
+            pygame.quit()
+
+        elif player.HP >= 10:
+            pygame.draw.rect(screen, GREEN, [20, 30, 15, 12.5], 0)
+            if player.HP >= 20:
+                pygame.draw.rect(screen, GREEN, [20, 42.5, 15, 12.5], 0)
+                if player.HP >= 30:
+                    pygame.draw.rect(screen, GREEN, [40, 30, 15, 12.5], 0)
+                    if player.HP >= 40:
+                        pygame.draw.rect(screen, GREEN, [40, 42.5, 15, 12.5], 0)
+                        if player.HP >= 50:
+                            pygame.draw.rect(screen, GREEN, [60, 30, 15, 12.5], 0)
+                            if player.HP >= 60:
+                                pygame.draw.rect(screen, GREEN, [60, 42.5, 15, 12.5], 0)
+                                if player.HP >= 70:
+                                    pygame.draw.rect(screen, GREEN, [80, 30, 15, 12.5], 0)
+                                    if player.HP >= 80:
+                                        pygame.draw.rect(screen, GREEN, [80, 42.5, 15, 12.5], 0)
+                                        if player.HP >= 90:
+                                            pygame.draw.rect(screen, GREEN, [100, 30, 15, 12.5], 0)
+                                            if player.HP == 100:
+                                                pygame.draw.rect(screen, GREEN, [100, 42.5, 15, 12.5], 0)
+
+class AmmoBar():
+
+    def __init__(self, screen, player):
+
+        if player.ammo > 0:
+            pygame.draw.ellipse(screen, BLACK, [20, 90, 15, 25], 0) #draws player ammo
+            if player.ammo > 1:
+                pygame.draw.ellipse(screen, BLACK, [40, 90, 15, 25], 0)
+                if player.ammo > 2:
+                    pygame.draw.ellipse(screen, BLACK, [60, 90, 15, 25], 0)
+                    if player.ammo > 3:
+                        pygame.draw.ellipse(screen, BLACK, [80, 90, 15, 25], 0)
+                        if player.ammo > 4:
+                            pygame.draw.ellipse(screen, BLACK, [100, 90, 15, 25], 0)
+
+
         
-        pygame.draw.rect(screen, GREEN, [20, 30, 15, 25], 0) #player health bars
-        pygame.draw.rect(screen, GREEN, [40, 30, 15, 25], 0)
-        pygame.draw.rect(screen, GREEN, [60, 30, 15, 25], 0)
-        pygame.draw.rect(screen, GREEN, [80, 30, 15, 25], 0)
-        pygame.draw.rect(screen, GREEN, [100, 30, 15, 25], 0)
+
+
+    
+
+    
+
         
-    
-    
+      
          
 
         
