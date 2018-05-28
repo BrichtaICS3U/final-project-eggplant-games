@@ -292,7 +292,7 @@ def Game():
 # Forest/outside dungeon ---- Tutorial #
 #lvl 1
         if Y == 1 and X == 1:
-            lvl1 = LVL(1,1)
+            lvl1 = LVL(1)
             lvls.append(lvl1)
             lvl1.draw(screen)
             e_screen = 0
