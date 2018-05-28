@@ -53,9 +53,6 @@ class Hero(pygame.sprite.Sprite):
             self.rect.x -= 2
         if keys[pygame.K_d]: #Right
             self.rect.x += 2
-
-    def ammodrop(self, screen):
-        pygame.draw.rect(screen, GREEN, [200, 200, 30, 30], 0)
         
     def die(self):
         print("You died!")
@@ -175,10 +172,19 @@ class Enemy(pygame.sprite.Sprite):
                                             if self.HP == 100:
                                                 pygame.draw.rect(screen, RED, [self.rect.x+32, self.rect.y-10, 3, 5], 0)
 
+class Drops(pygame.sprite.Sprite):
 
-    #def dropammo(self, screen):
-        #if self.HP <= 0:
-            #pygame.draw.rect(screen, GREEN, [200, 200, 30, 30], 0)
+    def __init__(self, width, height, enemy):
+        super().__init__()
+        self.image = pygame.Surface([width, height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+
+        pygame.draw.rect(self.image, GREY, [0, 0, width, height])
+        self.rect = self.image.get_rect()
+        self.rect.x = enemy.rect.x
+        self.rect.y = enemy.rect.y
+    
                                  
 class HealthBar():
 

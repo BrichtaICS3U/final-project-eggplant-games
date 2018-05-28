@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar     #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar, Drops     #import the sprites that Abbey has made
 from Door import DOOR                                               #import the sprites that Nick has made
 from LVLs import LVL                                                #FML
 import math
@@ -183,7 +183,7 @@ all_sprites_list = pygame.sprite.Group()        #this is the master sprite list.
 Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. Only the hero sprite will be located here
 Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
 enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
-
+drops_list = pygame.sprite.Group()              #enemy drops list
 
 #player character
 player = Hero(30,40)
@@ -282,7 +282,11 @@ def Game():
                     enemy.HP = 0
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
-
+                
+                for en_drop in drops_list:
+                    drops_list.remove(en_drop)
+                    all_sprites_list.remove(en_drop)
+                
                 for i in range(e_screen):                      #this code adds new enemies to next screen
                     enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
                     enemy_list.add(enemy)                       #set earlier
@@ -371,7 +375,13 @@ def Game():
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
                     all_sprites_list.remove(bullet)
 
-        
+        for en_drop in drops_list:                                  
+            drop_col = pygame.sprite.collide_rect(player, en_drop)
+            if drop_col == True:                        #if player collides with dropped item
+                player.ammo += 1                        #player gets +1 ammo
+                drops_list.remove(en_drop)              #drop is removed from lists
+                all_sprites_list.remove(en_drop)        #and subsequently, screen
+            
         """insert code for collisions between enemies here"""
     
         
@@ -388,17 +398,18 @@ def Game():
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
             if enemy.HP <= 0:
+                en_drop = Drops(20, 20, enemy)
+                all_sprites_list.add(en_drop)
+                drops_list.add(en_drop)
+                print('Drop')
                 all_sprites_list.remove(enemy)
                 enemy_list.remove(enemy)
-                player.ammodrop(screen) ############FIX THIS
                 ####TENTATIVE DO NOT KEEP######
                 player.money += 10          #gives player 10$
                 if player.HP < 100:         #regenerates health for player after killing an enemy
-                    player.HP += 20
-                if player.ammo < 5:
-                    player.ammo += 1        #gives extra bullet to player after killing an enemy          
-                        
-                
+                    player.HP += 20        
+
+               
         #wall restrictions
         #Right wall
         if player.rect.x + 30 > SCREEN_WIDTH:
@@ -420,8 +431,7 @@ def Game():
             player.rect.y -= 2
             if keys[pygame.K_LSHIFT]:
                 player.rect.y -= 2
-
-
+        
         #Draw all sprites
         all_sprites_list.draw(screen)
         
