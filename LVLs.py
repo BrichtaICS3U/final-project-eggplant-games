@@ -80,7 +80,7 @@ class LVL():
             top_door.rect.x = 625 - 50
             top_door.rect.y = 0
             self.doors_list.add(top_door)
-            print("dang")
+           
 
         if S == True:
             bot_door = DOOR(100,5)

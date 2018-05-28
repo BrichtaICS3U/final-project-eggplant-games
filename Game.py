@@ -53,7 +53,7 @@ b = False
 Y = 1
 X = 1
 F_C = DIRT
-
+Generate = True
 # ----------- end of variable list ---------------#
 
 
@@ -172,7 +172,10 @@ def Change_SCREEN():
     global Y
     global X
     global lvls
-    #lvls = []
+    global Generate
+    lvls = []
+    Generate = True
+   
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
         #print("screen UP.")
@@ -189,7 +192,7 @@ def Change_SCREEN():
         player.rect.x = 6
         #print("screen RIGHT.")
         X += 1
-   
+    
 
 def Hit_Wall_R():
     keys = pygame.key.get_pressed()
@@ -261,158 +264,13 @@ lvls = []
 all_sprites_list.add(player)
 Hero_sprite_list.add(player)
 
-#                                                                       ___
-########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
-# this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
-
-# Forest/outside dungeon ---- Tutorial #
-#lvl 1
-lvl1 = LVL(1)
-lvls.append(lvl1)
-e_screen = 1
-            
-#lvl 2
-lvl2 = LVL(8)
-lvls.append(lvl2)
-e_screen = 1
-
-#lvl 3
-lvl3 = LVL(100,0,1)
-lvls.append(lvl3)
-e_screen = 1
-            
-
-#lvl 4            
-lvl4 = LVL(2)
-lvls.append(lvl4)
-e_screen = 1
-            
-            
-#lvl 5
-lvl5 = LVL(6)
-lvls.append(lvl5)
-e_screen = 1
-           
-#lvl 6    
-lvl6 = LVL(10)
-lvls.append(lvl6)
-e_screen = 1
-
-#lvl 7
-        
-lvl7 = LVL(1,0,0,1)
-lvls.append(lvl7)
-e_screen = 1
-            
-# Enterance/Sewers ----- lvl 1 #
-#lvl 8
-lvl8 = LVL(8)
-lvls.append(lvl8)
-e_screen = 0
-
-#lvl 9
-lvl9 = LVL(8)
-lvls.append(lvl9)
-e_screen = 0
-
-#lvl 10 //first floor / hub for floor (reference point)//
-lvl10 = LVL(100)
-lvls.append(lvl10)
-e_screen = 0
-
-#lvl 11
-lvl11 = LVL(6)
-lvls.append(lvl11)
-e_screen = 0
-
-#lvl 12 //Roundabout entrance//
-lvl12 = LVL(20)
-lvls.append(lvl12)
-e_screen = 0
-
-#lvl 13
-lvl13 = LVL(10)
-lvls.append(lvl13)
-e_screen = 0
-
-#lvl 14
-lvl14 = LVL(6)
-lvls.append(lvl14)
-e_screen = 0
-
-#lvl 15
-lvl15 = LVL(9)
-lvls.append(lvl15)
-e_screen = 0
-
-#lvl 16
-lvl16 = LVL(8)
-lvls.append(lvl16)
-e_screen = 0
-
-#lvl 17
-lvl17 = LVL(3)
-lvls.append(lvl17)
-e_screen = 0
-
-#lvl 18
-lvl18 = LVL(6)
-lvls.append(lvl18)
-e_screen = 0
-
-#lvl 19 //end of sewer roundabout//
-lvl19 = LVL(5)
-lvls.append(lvl19)
-e_screen = 0
-
-    
-#lvl 21 // start of left part of sewers//
-lvl21 = LVL(6)
-lvls.append(lvl21)
-e_screen = 0
-
-#lvl 22
-lvl22 = LVL(30)
-lvls.append(lvl22)
-e_screen = 0
-
-#lvl 23
-lvl23 = LVL(1)
-lvls.append(lvl23)
-e_screen = 0
-
-#lvl 24
-lvl24 = LVL(40)
-lvls.append(lvl24)
-e_screen = 0            
-
-#lvl 25
-lvl25 = LVL(4)
-lvls.append(lvl25)
-e_screen = 0    
-
-#lvl 26
-lvl26 = LVL(8)
-lvls.append(lvl26)
-e_screen = 0
-
-#lvl 27
-lvl27 = LVL(9)
-lvls.append(lvl27)
-e_screen = 0
-
-#lvl 28
-lvl28 = LVL(4)
-lvls.append(lvl28)
-e_screen = 0
-
-
-
-            
-
-
 
 def Game():
+            
+
+
+
+
     global Y
     global event
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
@@ -420,6 +278,7 @@ def Game():
     global shoot                #adds the shoot variable
     global b
     global F_C
+    global Generate
     Game = True                 #while the variable is true the game will run
        
     while Game:
@@ -443,9 +302,210 @@ def Game():
 #                                                                       ___
 ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
 # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
-    
-        
+
+        if Generate == True:
+            #                                                                       ___
+            ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
+            # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
+
+            # Forest/outside dungeon ---- Tutorial #
+            #lvl 1
+            if Y == 1 and X == 1:
+                lvl1 = LVL(1,1)
+                lvls.append(lvl1)
+                e_screen = 1
+                print("lvl1")
+                    
+            #lvl 2
+            elif Y == 2 and X == 1:
+                lvl2 = LVL(8)
+                lvls.append(lvl2)
+                e_screen = 1
+                print("lvl2")
+
+            #lvl 3
+            elif Y == 3 and X == 1:
+                lvl3 = LVL(100,0,1)
+                lvls.append(lvl3)
+                e_screen = 1
+                print("lvl3")
             
+
+            #lvl 4            
+            elif Y == 3 and X == 2:
+                lvl4 = LVL(2)
+                lvls.append(lvl4)
+                e_screen = 1
+                print("lvl4")
+            
+            
+            #lvl 5
+            elif Y == 3 and X == 0:
+                lvl5 = LVL(6)
+                lvls.append(lvl5)
+                e_screen = 1
+                print("lvl5")
+                
+           
+            #lvl 6
+            elif Y == 3 and X == -1:
+                lvl6 = LVL(10)
+                lvls.append(lvl6)
+                e_screen = 1
+                print("lvl6")
+
+            #lvl 7
+            elif Y == 2 and X == -1:
+                lvl7 = LVL(1,0,0,1)
+                lvls.append(lvl7)
+                e_screen = 1
+                print("lvl7")
+            
+            # Enterance/Sewers ----- lvl 1 #
+            #lvl 8
+            elif Y == 4 and X == 1:
+                lvl8 = LVL(8)
+                lvls.append(lvl8)
+                e_screen = 0
+                print("lvl8")
+
+            #lvl 9
+            elif Y == 5 and X == 1:
+                lvl9 = LVL(8)
+                lvls.append(lvl9)
+                e_screen = 0
+                print("lvl9")
+
+            #lvl 10 //first floor / hub for floor (reference point)//
+            elif Y == 6 and X == 1:
+                lvl10 = LVL(100)
+                lvls.append(lvl10)
+                e_screen = 0
+                print("lvl10")
+
+            #lvl 11
+            elif Y == 6 and X == 2:
+                lvl11 = LVL(6)
+                lvls.append(lvl11)
+                e_screen = 0
+                print("lvl11")
+
+            #lvl 12 //Roundabout entrance//
+            elif Y == 6 and X == 3:
+                lvl12 = LVL(20)
+                lvls.append(lvl12)
+                e_screen = 0
+                print("lvl12")
+
+            #lvl 13
+            elif Y == 7 and X == 3:
+                lvl13 = LVL(10)
+                lvls.append(lvl13)
+                e_screen = 0
+                print("lvl13")
+
+            #lvl 14
+            elif Y == 7 and X == 4:
+                lvl14 = LVL(6)
+                lvls.append(lvl14)
+                e_screen = 0
+                print("lvl14")
+
+           #lvl 15
+            elif Y == 7 and X == 5:
+                lvl15 = LVL(9)
+                lvls.append(lvl15)
+                e_screen = 0
+                print("lvl15")
+
+            #lvl 16
+            elif Y == 6 and X == 5:
+                lvl16 = LVL(8)
+                lvls.append(lvl16)
+                e_screen = 0
+                print("lvl16")
+
+            #lvl 17
+            elif Y == 5 and X == 5:
+                lvl17 = LVL(3)
+                lvls.append(lvl17)
+                e_screen = 0
+                print("lvl17")
+
+            #lvl 18
+            elif Y == 5 and X == 4:
+                lvl18 = LVL(6)
+                lvls.append(lvl18)
+                e_screen = 0
+                print("lvl18")
+
+            #lvl 19 //end of sewer roundabout//
+            elif Y == 5 and X == 3:
+                lvl19 = LVL(5)
+                lvls.append(lvl19)
+                e_screen = 0
+                print("lvl19")
+    
+    
+            #lvl 21 // start of left part of sewers//
+            elif Y == 6 and X == 0:
+                lvl21 = LVL(6)
+                lvls.append(lvl21)
+                e_screen = 0
+                print("lvl21")
+
+            #lvl 22
+            elif Y == 6 and X == -1:
+                lvl22 = LVL(30)
+                lvls.append(lvl22)
+                e_screen = 0
+                print("lvl22")
+
+            #lvl 23
+            elif Y == 5 and X == -1:
+                lvl23 = LVL(1)
+                lvls.append(lvl23)
+                e_screen = 0
+                print("lvl23")
+
+            #lvl 24
+            elif Y == 6 and X == -2:
+                lvl24 = LVL(40)
+                lvls.append(lvl24)
+                e_screen = 0
+                print("lvl24")
+
+            #lvl 25
+            elif Y == 6 and X == -3:
+                lvl25 = LVL(4)
+                lvls.append(lvl25)
+                e_screen = 0
+                print("lvl25")
+
+            #lvl 26
+            elif Y == 7 and X == -2:
+                lvl26 = LVL(8)
+                lvls.append(lvl26)
+                e_screen = 0
+                print("lvl26")
+
+            #lvl 27
+            elif Y == 8 and X == -2:
+                lvl27 = LVL(9)
+                lvls.append(lvl27)
+                e_screen = 0
+                print("lvl27")
+
+            #lvl 28
+            elif Y == 8 and X == -3:
+                lvl28 = LVL(4)
+                lvls.append(lvl28)
+                e_screen = 0
+                print("lvl28")
+            
+            Generate = False
+           
+    
 #hit detection for doors            
         for lvl in lvls:
 
@@ -469,28 +529,42 @@ def Game():
                 lvl9.draw(screen)
             elif Y == 6 and X == 1:
                 lvl10.draw(screen)
-            elif Y == 7 and X == 1:
+            elif Y == 6 and X == 2:
                 lvl11.draw(screen)
-            elif Y == 7 and X == 2:
+            elif Y == 6 and X == 3:
                 lvl12.draw(screen)
             elif Y == 7 and X == 3:
                 lvl13.draw(screen)
-            elif Y == 8 and X == 3:
+            elif Y == 7 and X == 4:
                 lvl14.draw(screen)
-            elif Y == 8 and X == 4:
-                lvl15.draw(screen)
-            elif Y == 8 and X == 5:
-                lvl16.draw(screen)
             elif Y == 7 and X == 5:
-                lvl17.draw(screen)
+                lvl15.draw(screen)
             elif Y == 6 and X == 5:
+                lvl16.draw(screen)
+            elif Y == 5 and X == 5:
+                lvl17.draw(screen)
+            elif Y == 5 and X == 4:
                 lvl18.draw(screen)
-            elif Y == 6 and X == 4:
+            elif Y == 5 and X == 3:
                 lvl19.draw(screen)
-            elif Y == 6 and X == 3:
-                lvl20.draw(screen)
-            elif Y == 7 and X == 3:
+            elif Y == 6 and X == 0:
                 lvl21.draw(screen)
+            elif Y == 6 and X == -1:
+                lvl22.draw(screen)
+            elif Y == 5 and X == -1:
+                lvl23.draw(screen)
+            elif Y == 6 and X == -2:
+                lvl24.draw(screen)
+            elif Y == 6 and X == -3:
+                lvl25.draw(screen)
+            elif Y == 7 and X == -2:
+                lvl26.draw(screen)
+            elif Y == 8 and X == -2:
+                lvl27.draw(screen)
+            elif Y == 8 and X == -3:
+                lvl28.draw(screen)
+          
+            
             
 
 
@@ -569,7 +643,7 @@ def Game():
 
                         
         #player shooting
-        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:                            #if the mouse Button has been pressed and the player is allowed to shoot
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list
