@@ -2,6 +2,9 @@ import pygame
 pygame.init()
 from hero import Hero, Enemy, Bullet, HealthBar    #import the sprites that Abbey has made
 from LVLs import LVL                    #FML
+from Door import DOOR, KEY
+
+
 
 # define colours #
 WHITE = (255,255,255)       #White
@@ -217,7 +220,6 @@ def Hit_Wall_D():
     player.rect.y += 2
                 
 
-      
             
 # --------------------- End of functions list ----------------------- #
 
@@ -292,7 +294,7 @@ def Game():
 # Forest/outside dungeon ---- Tutorial #
 #lvl 1
         if Y == 1 and X == 1:
-            lvl1 = LVL(1,1)
+            lvl1 = LVL(1,1,0,1)
             lvls.append(lvl1)
             lvl1.draw(screen)
             e_screen = 0
@@ -304,15 +306,15 @@ def Game():
             lvl3 = LVL(8)
             lvls.append(lvl3)
             lvl3.draw(screen)
-            e_screen = 0
+            e_screen = 1
             
 
 #lvl 3
         if Y == 3 and X == 1:
-            lvl5 = LVL(100)
+            lvl5 = LVL(100,0,1)
             lvls.append(lvl5)
             lvl5.draw(screen)
-            e_screen = 0
+            e_screen = 1
             
 
 #lvl 4            
@@ -320,7 +322,7 @@ def Game():
             lvl2 = LVL(2)
             lvls.append(lvl2)
             lvl2.draw(screen)
-            e_screen = 0
+            e_screen = 1
             
             
 #lvl 5
@@ -328,7 +330,7 @@ def Game():
             lvl4 = LVL(6)
             lvls.append(lvl4)
             lvl4.draw(screen)
-            e_screen = 0
+            e_screen = 1
            
 
 #lvl 6
@@ -336,14 +338,14 @@ def Game():
             lvl6 = LVL(10)
             lvls.append(lvl6)
             lvl6.draw(screen)
-            e_screen = 0
+            e_screen = 1
 
 #lvl 7
         if Y == 2 and X == -1:
-            lvl7 = LVL(1)
+            lvl7 = LVL(1,0,0,1)
             lvls.append(lvl7)
             lvl7.draw(screen)
-            e_screen = 0
+            e_screen = 1
             
 # Enterance/Sewers ----- lvl 1 #
 #lvl 8
@@ -492,6 +494,7 @@ def Game():
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
             for door in Door_collision_list:
                 Change_SCREEN()
+                
 
                 for enemy in enemy_list:                #this code deletes the previous enemies off the screen
                     enemy.HP = 0
@@ -518,6 +521,13 @@ def Game():
                     elif player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y + 40 > HOLE.rect.y + HOLE.height + 36:#Bottom
                         Hit_Wall_D()
 
+
+#this little bit is for the hit detection between players and keys                    
+            Key_collision_list = pygame.sprite.spritecollide(player,lvl.Key_list,False)
+            for key in Key_collision_list:
+                for Key in lvl.Key_list:
+                    pygame.draw.rect(screen,F_C,[Key.rect.x,Key.rect.y,Key.width,Key.height])
+                    
        
 #########################################################            
 
