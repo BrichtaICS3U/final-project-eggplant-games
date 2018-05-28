@@ -1,8 +1,8 @@
 import pygame
 pygame.init()
 from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar     #import the sprites that Abbey has made
-from Door import DOOR                   #import the sprites that Nick has made
-from LVLs import LVL                    #FML
+from Door import DOOR                                               #import the sprites that Nick has made
+from LVLs import LVL                                                #FML
 import math
 
 # define colours #
@@ -382,7 +382,7 @@ def Game():
         AmmoBar(screen, player)             #draws and updates the player ammo bar
         TEXT("Player Ammo", 60, 80, 15)
         TEXT("Money", 40, 140, 15)
-        money_string = "${}".format(player.money)
+        money_string = "$ {}".format(player.money)
         TEXT(money_string, 40, 160, 15)
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
