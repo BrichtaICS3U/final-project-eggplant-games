@@ -55,7 +55,7 @@ X = 1
 F_C = DIRT
 Generate = True
 B_D_L = True
-UNLOCK = True
+UNLOCK_BLUE = True
 # ----------- end of variable list ---------------#
 
 
@@ -175,11 +175,9 @@ def Change_SCREEN():
     global X
     global lvls
     global Generate
-    global UNLOCK
     
     lvls = []
     Generate = True
-    UNLOCK = True
     
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
@@ -289,7 +287,7 @@ def Game():
     global F_C
     global Generate
     global B_D_L
-    global UNLOCK
+    global UNLOCK_BLUE
     Game = True                 #while the variable is true the game will run
        
     while Game:
@@ -299,8 +297,7 @@ def Game():
             elif event.type == pygame.KEYDOWN:  #
                 if event.key==pygame.K_ESCAPE:
                     Pause_Menu()
-                    Game = False
-                    #exit the game and return to the main menu
+                    Game = False                #exit the game and return to the main menu
 
         keys = pygame.key.get_pressed()
 
@@ -384,78 +381,72 @@ def Game():
                 e_screen = 0
                 print("lvl8")
 
-            #lvl 9
-            elif Y == 5 and X == 1:
-                lvl9 = LVL(8)
-                lvls.append(lvl9)
-                e_screen = 0
-                print("lvl9")
-
+        
             #lvl 10 //first floor / hub for floor (reference point)//
-            elif Y == 6 and X == 1:
+            elif Y == 5 and X == 1:
                 lvl10 = LVL(100)
                 lvls.append(lvl10)
                 e_screen = 0
                 print("lvl10")
 
             #lvl 11
-            elif Y == 6 and X == 2:
+            elif Y == 5 and X == 2:
                 lvl11 = LVL(6)
                 lvls.append(lvl11)
                 e_screen = 0
                 print("lvl11")
 
             #lvl 12 //Roundabout entrance//
-            elif Y == 6 and X == 3:
+            elif Y == 5 and X == 3:
                 lvl12 = LVL(20)
                 lvls.append(lvl12)
                 e_screen = 0
                 print("lvl12")
 
             #lvl 13
-            elif Y == 7 and X == 3:
+            elif Y == 6 and X == 3:
                 lvl13 = LVL(10)
                 lvls.append(lvl13)
                 e_screen = 0
                 print("lvl13")
 
             #lvl 14
-            elif Y == 7 and X == 4:
+            elif Y == 6 and X == 4:
                 lvl14 = LVL(6)
                 lvls.append(lvl14)
                 e_screen = 0
                 print("lvl14")
 
            #lvl 15
-            elif Y == 7 and X == 5:
+            elif Y == 6 and X == 5:
                 lvl15 = LVL(9)
                 lvls.append(lvl15)
                 e_screen = 0
                 print("lvl15")
 
             #lvl 16
-            elif Y == 6 and X == 5:
+            elif Y == 5 and X == 5:
                 lvl16 = LVL(8)
                 lvls.append(lvl16)
                 e_screen = 0
                 print("lvl16")
 
             #lvl 17
-            elif Y == 5 and X == 5:
+            elif Y == 4 and X == 5:
                 lvl17 = LVL(3)
                 lvls.append(lvl17)
                 e_screen = 0
                 print("lvl17")
 
             #lvl 18
-            elif Y == 5 and X == 4:
+            elif Y == 4 and X == 4:
                 lvl18 = LVL(6)
                 lvls.append(lvl18)
                 e_screen = 0
                 print("lvl18")
 
             #lvl 19 //end of sewer roundabout//
-            elif Y == 5 and X == 3:
+            elif Y == 4 and X == 3:
                 lvl19 = LVL(5)
                 lvls.append(lvl19)
                 e_screen = 0
@@ -463,56 +454,56 @@ def Game():
     
     
             #lvl 21 // start of left part of sewers//
-            elif Y == 6 and X == 0:
+            elif Y == 5 and X == 0:
                 lvl21 = LVL(6)
                 lvls.append(lvl21)
                 e_screen = 0
                 print("lvl21")
 
             #lvl 22
-            elif Y == 6 and X == -1:
+            elif Y == 5 and X == -1:
                 lvl22 = LVL(30)
                 lvls.append(lvl22)
                 e_screen = 0
                 print("lvl22")
 
             #lvl 23
-            elif Y == 5 and X == -1:
+            elif Y == 4 and X == -1:
                 lvl23 = LVL(1)
                 lvls.append(lvl23)
                 e_screen = 0
                 print("lvl23")
 
             #lvl 24
-            elif Y == 6 and X == -2:
+            elif Y == 5 and X == -2:
                 lvl24 = LVL(40)
                 lvls.append(lvl24)
                 e_screen = 0
                 print("lvl24")
 
             #lvl 25
-            elif Y == 6 and X == -3:
+            elif Y == 5 and X == -3:
                 lvl25 = LVL(4)
                 lvls.append(lvl25)
                 e_screen = 0
                 print("lvl25")
 
             #lvl 26
-            elif Y == 7 and X == -2:
+            elif Y == 6 and X == -2:
                 lvl26 = LVL(8)
                 lvls.append(lvl26)
                 e_screen = 0
                 print("lvl26")
 
             #lvl 27
-            elif Y == 8 and X == -2:
+            elif Y == 7 and X == -2:
                 lvl27 = LVL(9)
                 lvls.append(lvl27)
                 e_screen = 0
                 print("lvl27")
 
             #lvl 28
-            elif Y == 8 and X == -3:
+            elif Y == 7 and X == -3:
                 lvl28 = LVL(4)
                 lvls.append(lvl28)
                 e_screen = 0
@@ -524,7 +515,7 @@ def Game():
 #hit detection for doors            
         for lvl in lvls:
 
-            if Y == 1 and X == 1:
+            if Y == 1 and X == 1:#plz dunt dark marks cyuz i t luk bad ;-;
                 lvl1.draw(screen)
             elif Y == 2 and X == 1:
                 lvl2.draw(screen)
@@ -541,42 +532,40 @@ def Game():
             elif Y == 4 and X == 1:
                 lvl8.draw(screen)
             elif Y == 5 and X == 1:
-                lvl9.draw(screen)
-            elif Y == 6 and X == 1:
                 lvl10.draw(screen)
-            elif Y == 6 and X == 2:
+            elif Y == 5 and X == 2:
                 lvl11.draw(screen)
-            elif Y == 6 and X == 3:
-                lvl12.draw(screen)
-            elif Y == 7 and X == 3:
-                lvl13.draw(screen)
-            elif Y == 7 and X == 4:
-                lvl14.draw(screen)
-            elif Y == 7 and X == 5:
-                lvl15.draw(screen)
-            elif Y == 6 and X == 5:
-                lvl16.draw(screen)
-            elif Y == 5 and X == 5:
-                lvl17.draw(screen)
-            elif Y == 5 and X == 4:
-                lvl18.draw(screen)
             elif Y == 5 and X == 3:
+                lvl12.draw(screen)
+            elif Y == 6 and X == 3:
+                lvl13.draw(screen)
+            elif Y == 6 and X == 4:
+                lvl14.draw(screen)
+            elif Y == 6 and X == 5:
+                lvl15.draw(screen)
+            elif Y == 5 and X == 5:
+                lvl16.draw(screen)
+            elif Y == 4 and X == 5:
+                lvl17.draw(screen)
+            elif Y == 4 and X == 4:
+                lvl18.draw(screen)
+            elif Y == 4 and X == 3:
                 lvl19.draw(screen)
-            elif Y == 6 and X == 0:
+            elif Y == 5 and X == 0:
                 lvl21.draw(screen)
-            elif Y == 6 and X == -1:
-                lvl22.draw(screen)
             elif Y == 5 and X == -1:
+                lvl22.draw(screen)
+            elif Y == 4 and X == -1:
                 lvl23.draw(screen)
-            elif Y == 6 and X == -2:
+            elif Y == 5 and X == -2:
                 lvl24.draw(screen)
-            elif Y == 6 and X == -3:
+            elif Y == 5 and X == -3:
                 lvl25.draw(screen)
-            elif Y == 7 and X == -2:
+            elif Y == 6 and X == -2:
                 lvl26.draw(screen)
-            elif Y == 8 and X == -2:
+            elif Y == 7 and X == -2:
                 lvl27.draw(screen)
-            elif Y == 8 and X == -3:
+            elif Y == 7 and X == -3:
                 lvl28.draw(screen)
           
             
@@ -606,10 +595,10 @@ def Game():
                             all_sprites_list.add(enemy)
     
             for key in key_collision_list:
-                if UNLOCK == True:
+                if UNLOCK_BLUE == True:
                     Unlock_B_D()
                     print("the blue door has been unlocked")
-                    UNLOCK = False
+                    UNLOCK_BLUE = False
                         
                 
                 
