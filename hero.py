@@ -5,10 +5,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0,255,0)
 GREY = (100, 100, 100)
-
-RED = (255,0,0)
-
-
+RED = (255, 0, 0)
 
  
 class Hero(pygame.sprite.Sprite):
@@ -88,9 +85,7 @@ class Sword(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
     
-
     def __init__(self, colour, width, height, x_pos, y_pos):
- 
         super().__init__()
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
@@ -129,7 +124,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
-        pygame.draw.rect(self.image, RED, [0, 0, width, height])
+        pygame.draw.rect(self.image, BLACK, [0, 0, width, height])
         self.rect = self.image.get_rect()
 
         # Get random x/y coordinates
@@ -179,13 +174,15 @@ class Enemy(pygame.sprite.Sprite):
 
 class Drops(pygame.sprite.Sprite):
 
-    def __init__(self, width, height, enemy):
+    def __init__(self, colour, width, height, enemy):
         super().__init__()
+        self.colour = colour
+        
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
-        pygame.draw.rect(self.image, GREY, [0, 0, width, height])
+        pygame.draw.rect(self.image, colour, [0, 0, width, height])
         self.rect = self.image.get_rect()
         self.rect.x = enemy.rect.x
         self.rect.y = enemy.rect.y
