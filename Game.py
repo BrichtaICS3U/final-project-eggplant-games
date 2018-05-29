@@ -54,6 +54,8 @@ Y = 1
 X = 1
 F_C = DIRT
 Generate = True
+B_D_L = True
+UNLOCK = True
 # ----------- end of variable list ---------------#
 
 
@@ -173,9 +175,12 @@ def Change_SCREEN():
     global X
     global lvls
     global Generate
+    global UNLOCK
+    
     lvls = []
     Generate = True
-   
+    UNLOCK = True
+    
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
         #print("screen UP.")
@@ -220,6 +225,10 @@ def Hit_Wall_D():
     if keys[pygame.K_LSHIFT]:
         player.rect.y += 2
     player.rect.y += 2
+
+def Unlock_B_D():
+    global B_D_L 
+    B_D_L = False
                 
 
             
@@ -279,6 +288,8 @@ def Game():
     global b
     global F_C
     global Generate
+    global B_D_L
+    global UNLOCK
     Game = True                 #while the variable is true the game will run
        
     while Game:
@@ -303,15 +314,9 @@ def Game():
 ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
 # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
 
-<<<<<<< HEAD
-# Forest/outside dungeon ---- Tutorial #
-#lvl 1
-        if Y == 1 and X == 1:
-            lvl1 = LVL(1)
-            lvls.append(lvl1)
-            lvl1.draw(screen)
-            e_screen = 0
-=======
+
+        
+
         if Generate == True:
             #                                                                       ___
             ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
@@ -338,7 +343,7 @@ def Game():
                 lvls.append(lvl3)
                 e_screen = 1
                 print("lvl3")
->>>>>>> 2d37924b1f0971dc309ca18f3db198c403213880
+
             
 
             #lvl 4            
@@ -579,21 +584,35 @@ def Game():
 
 
             
-            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
+            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)
+            key_collision_list  = pygame.sprite.spritecollide(player,lvl.Key_list,False)
+            
             for door in Door_collision_list:
-                Change_SCREEN()
+                if door.LOCK == 0 or B_D_L == False:
+                    door.IS_LOCKED()
+                    if door.OPEN == True:
+                        Change_SCREEN()
                 
 
-                for enemy in enemy_list:                #this code deletes the previous enemies off the screen
-                    enemy.HP = 0
-                    all_sprites_list.remove(enemy)
-                    enemy_list.remove(enemy)
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
+                        for enemy in enemy_list:                #this code deletes the previous enemies off the screen
+                            enemy.HP = 0
+                            all_sprites_list.remove(enemy)
+                            enemy_list.remove(enemy)
+                            pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
 
-                for i in range(e_screen):                      #this code adds new enemies to next screen
-                    enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
-                    enemy_list.add(enemy)                       #set earlier
-                    all_sprites_list.add(enemy)
+                        for i in range(e_screen):                      #this code adds new enemies to next screen
+                            enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
+                            enemy_list.add(enemy)                       #set earlier
+                            all_sprites_list.add(enemy)
+    
+            for key in key_collision_list:
+                if UNLOCK == True:
+                    Unlock_B_D()
+                    print("the blue door has been unlocked")
+                    UNLOCK = False
+                        
+                
+                
 
 #hit detection for objects or "HOLE"(s) or "WALLS" in the game                
             Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
@@ -609,12 +628,6 @@ def Game():
                     elif player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y + 40 > HOLE.rect.y + HOLE.height + 36:#Bottom
                         Hit_Wall_D()
 
-
-#this little bit is for the hit detection between players and keys                    
-            Key_collision_list = pygame.sprite.spritecollide(player,lvl.Key_list,False)
-            for key in Key_collision_list:
-                for Key in lvl.Key_list:
-                    pygame.draw.rect(screen,F_C,[Key.rect.x,Key.rect.y,Key.width,Key.height])
                     
        
 #########################################################            

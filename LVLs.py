@@ -74,7 +74,7 @@ class LVL():
                     
         if N == True:
             if Lock == 1:
-                top_door = DOOR(100,5,BLUE)
+                top_door = DOOR(100,5,BLUE,1)
             else:
                 top_door = DOOR(100,5)
             top_door.rect.x = 625 - 50
@@ -114,7 +114,7 @@ class LVL():
 
 
         if Key == 1:
-            B_Key = KEY(5,7,BLUE)
+            B_Key = KEY(10,10,BLUE,1)
             B_Key.rect.x = 600
             B_Key.rect.y = 600
             self.Key_list.add(B_Key)
