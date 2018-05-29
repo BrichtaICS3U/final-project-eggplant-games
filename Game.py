@@ -1,4 +1,5 @@
-import pygame
+import pygame, sys
+from pygame.locals import *
 pygame.init()
 from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar    #import the sprites that Abbey has made
 from LVLs import LVL                    #FML
@@ -56,6 +57,17 @@ F_C = DIRT
 Generate = True
 B_D_L = True
 UNLOCK_BLUE = True
+TILESIZE = 50
+MAPWIDTH = 25
+MAPHEIGHT = 16
+DIRT = 0
+GRASS = 1
+tilemap = []
+textures =  {
+                DIRT : pygame.image.load('dirt.png'),
+                GRASS : pygame.image.load('grass.png'),
+            }
+  
 # ----------- end of variable list ---------------#
 
 
@@ -175,8 +187,10 @@ def Change_SCREEN():
     global X
     global lvls
     global Generate
+    global tilemap
     
     lvls = []
+    tilemap = []
     Generate = True
     
     if player.rect.y < 50:
@@ -227,6 +241,20 @@ def Hit_Wall_D():
 def Unlock_B_D():
     global B_D_L 
     B_D_L = False
+
+def draw_MAP():
+    global MAPHEIGHT
+    global MAPWIDTH
+    global tilemap
+    global textures
+    global GRASS
+    global DIRT
+    global tilemap
+    for row in range (MAPHEIGHT):
+        for column in range(MAPWIDTH):
+            screen.blit(textures[tilemap[row][column]], (column*TILESIZE,row*TILESIZE))
+            
+
                 
 
             
@@ -274,10 +302,9 @@ Hero_sprite_list.add(player)
 
 def Game():
             
-
-
-
-
+        
+    
+    
     global Y
     global event
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
@@ -288,6 +315,12 @@ def Game():
     global Generate
     global B_D_L
     global UNLOCK_BLUE
+    global MAPHEIGHT
+    global MAPWIDTH
+    global TILESIZE
+    global GRASS
+    global DIRT
+    global tilemap
     Game = True                 #while the variable is true the game will run
        
     while Game:
@@ -509,13 +542,40 @@ def Game():
                 e_screen = 0
                 print("lvl28")
             
-            Generate = False
-           
+            
+
+
+        
+            if Y == 1 and X == 1:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                                        
+                        ]
+                print("shit")
+                
+            Generate = False            
+                   
     
 #hit detection for doors            
         for lvl in lvls:
 
             if Y == 1 and X == 1:#plz dunt dark marks cyuz i t luk bad ;-;
+                draw_MAP()
                 lvl1.draw(screen)
             elif Y == 2 and X == 1:
                 lvl2.draw(screen)

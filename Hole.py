@@ -5,7 +5,6 @@ import pygame
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 BLUE  =  (0,0,255)
-WT = pygame.image.load("TEST_WALL.png")
 BX = 0
 BY = 0
 
