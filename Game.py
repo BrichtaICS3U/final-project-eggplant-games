@@ -1,7 +1,7 @@
 import pygame, sys, random
 from pygame.locals import *
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar    #import the sprites that Abbey has made
+from hero import *    #import the sprites that Abbey has made
 from LVLs import LVL                    #FML
 from Door import DOOR, KEY
 
@@ -11,6 +11,9 @@ from Door import DOOR, KEY
 WHITE = (255,255,255)       #White
 GRAY  = (121,121,121)       #Gray
 BLACK = (0,0,0)             #Black
+BROWN = (74,67,23)          #Brown
+SILVER = (204,201,182)      #Silver
+GOLD = (235,207,26)         #Gold
 RED   = (255,0,0)           #test Red
 GREEN = (0,255,0)           #test Green
 BLUE  = (0,0,255)           #test Blue
@@ -57,14 +60,16 @@ F_C = D
 Generate = True
 B_D_L = True
 R_D_L = True
+Y_D_L = True
 UNLOCK_BLUE = True
 UNLOCK_RED = True
+UNLOCK_YELLOW = True
 TILESIZE = 50
 MAPWIDTH = 25
 MAPHEIGHT = 16
 DIRT = 0
 GRASS = 1
-WATER = 2
+WATER = 2 
 tilemap = []
 textures =  {
                 DIRT : pygame.image.load('Dirt.png'),
@@ -219,28 +224,28 @@ def Hit_Wall_R():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
         player.rect.x -= 2
-    player.rect.x -= 2
+    player.rect.x -= 4
     
 
 def Hit_Wall_L():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
         player.rect.x += 2
-    player.rect.x += 2
+    player.rect.x += 4
     
         
 def Hit_Wall_U():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
         player.rect.y -= 2
-    player.rect.y -= 2
+    player.rect.y -= 4
     
         
 def Hit_Wall_D():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
         player.rect.y += 2
-    player.rect.y += 2
+    player.rect.y += 4
 
 def Unlock_B_D():
     global B_D_L 
@@ -249,6 +254,10 @@ def Unlock_B_D():
 def Unlock_R_D():
     global R_D_L
     R_D_L = False
+
+def Unlock_Y_D():
+    global Y_D_L
+    Y_D_L = False
 
 def draw_MAP():
     global MAPHEIGHT
@@ -288,6 +297,9 @@ all_sprites_list = pygame.sprite.Group()        #this is the master sprite list.
 Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. Only the hero sprite will be located here
 Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
 enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
+ammo_drops_list = pygame.sprite.Group()         #enemy ammo drops list
+health_drops_list = pygame.sprite.Group()       #enemy health drops list
+money_drops_list = pygame.sprite.Group()
 
 #player character)
 player = Hero(30,40)
@@ -331,6 +343,7 @@ def Game():
     global B_D_L
     global UNLOCK_BLUE
     global UNLOCK_RED
+    global UNLOCK_YELLOW
     global MAPHEIGHT
     global MAPWIDTH
     global TILESIZE
@@ -376,7 +389,7 @@ def Game():
             # Forest/outside dungeon ---- Tutorial #
             #lvl 1
             if Y == 1 and X == 1:
-                lvl1 = LVL(1,1)
+                lvl1 = LVL(1)
                 lvls.append(lvl1)
                 e_screen = 1
                 print("lvl1")
@@ -390,7 +403,7 @@ def Game():
 
             #lvl 3
             elif Y == 3 and X == 1:
-                lvl3 = LVL(100,0,1)
+                lvl3 = LVL(100,0,0)
                 lvls.append(lvl3)
                 e_screen = 1
                 print("lvl3")#this is the lvl where i need to  return the locked door into position
@@ -480,7 +493,7 @@ def Game():
 
             #lvl 16
             elif Y == 5 and X == 5:
-                lvl16 = LVL(8,0,0,2)
+                lvl16 = LVL(8,0,0,3)
                 lvls.append(lvl16)
                 e_screen = 0
                 print("lvl16")
@@ -558,7 +571,7 @@ def Game():
 
             #lvl 28
             elif Y == 7 and X == -3:
-                lvl28 = LVL(4)
+                lvl28 = LVL(4,0,0,2)
                 lvls.append(lvl28)
                 e_screen = 0
                 print("lvl28")
@@ -759,6 +772,10 @@ def Game():
                     if R_D_L == False:
                         door.IS_LOCKED()
 
+                elif door.LOCK == 3:
+                    if Y_D_L == False:
+                        door.IS_LOCKED()
+
                 if door.OPEN == True:
                     Change_SCREEN()
                 
@@ -767,8 +784,15 @@ def Game():
                         enemy.HP = 0
                         all_sprites_list.remove(enemy)
                         enemy_list.remove(enemy)
-                        pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
+                
+                    for en_drop in ammo_drops_list:
+                        ammo_drops_list.remove(en_drop)
+                        all_sprites_list.remove(en_drop)
 
+                    for en_drop in health_drops_list:
+                        health_drops_list.remove(en_drop)
+                        all_sprites_list.remove(en_drop)
+                
                     for i in range(e_screen):                      #this code adds new enemies to next screen
                         enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
                         enemy_list.add(enemy)                       #set earlier
@@ -787,6 +811,13 @@ def Game():
                         Unlock_R_D()
                         print("the red door has been unlocked")
                         UNLOCK_RED = False
+
+                if key.D_N == 3:
+                    if UNLOCK_YELLOW == True:
+                        Unlock_Y_D()
+                        print("the yellow door has been unlocked")
+                        UNLOCK_YELLOW = False
+                    
                         
                 
                 
@@ -878,7 +909,7 @@ def Game():
                     enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
                     enemy.rect.y -= 100         #aka player who is holding 'sword'
                 else:
-                    player.HP -= 10
+                    player.HP -= 20
                     player.rect.x -= 100        #Player bounces back on enemy collision
                     player.rect.y -= 50         #collisions between enemy and player
         
@@ -892,6 +923,37 @@ def Game():
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
                     all_sprites_list.remove(bullet)
 
+        for en_drop in ammo_drops_list:                                  
+            ammo_drop_col = pygame.sprite.collide_rect(player, en_drop)
+            if ammo_drop_col == True:                        #if player collides with dropped item
+                ammo_drops_list.remove(en_drop)              #drop is removed from lists
+                all_sprites_list.remove(en_drop)            #and subsequently, screen
+                if player.ammo <5:                          #if player has less than 5 bullets,
+                    player.ammo += 1                        #player gets +1 ammo
+
+        for en_drop in health_drops_list:                                  
+            health_drop_col = pygame.sprite.collide_rect(player, en_drop)
+            if health_drop_col == True:                        
+                health_drops_list.remove(en_drop)               
+                all_sprites_list.remove(en_drop)                
+                if player.HP < 100:                             #if player has less than 100 health,
+                    player.HP += 20                             #player gets +20 health
+
+        for en_drop in money_drops_list:
+            money_drop_col = pygame.sprite.collide_rect(player, en_drop)
+            if money_drop_col == True:
+                if en_drop.colour == BROWN:
+                    money_drops_list.remove(en_drop)               
+                    all_sprites_list.remove(en_drop)
+                    player.money += 1
+                elif en_drop.colour == SILVER:
+                    money_drops_list.remove(en_drop)               
+                    all_sprites_list.remove(en_drop)
+                    player.money += 2
+                elif en_drop.colour == GOLD:
+                    money_drops_list.remove(en_drop)               
+                    all_sprites_list.remove(en_drop)
+                    player.money += 3
             
         """insert code for collisions between enemies here"""
 
@@ -908,17 +970,44 @@ def Game():
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
-            if enemy.HP <= 0:
+            #------enemy drops-------------------------------------------------------------------
+            if enemy.HP <= 0:                               #if enemy dies
+                #money drop (always happens)
+                m_chance = random.randint(0, 100)
+                if m_chance <= 60:                          #60% chance of brown coin (1$)
+                    en_drop = Drops(BROWN, 10, 10, enemy)
+                    en_drop.rect.x += 50
+                    all_sprites_list.add(en_drop)
+                    money_drops_list.add(en_drop)
+                    
+                elif 60 < m_chance < 90:                    #30% chance of silver coin ($2)
+                    en_drop = Drops(SILVER, 10, 10, enemy)
+                    en_drop.rect.x += 50
+                    all_sprites_list.add(en_drop)
+                    money_drops_list.add(en_drop)
+           
+                elif m_chance >= 90:                        #10% chance of gold coin ($3)
+                    en_drop = Drops(GOLD, 10, 10, enemy)
+                    en_drop.rect.x += 50
+                    all_sprites_list.add(en_drop)
+                    money_drops_list.add(en_drop)
+                    
+                #ammo/health drop (happens 50% of time)
+                chance = random.randint(0, 100)             #get a random number from 1-100
+                if chance <= 50:                            #numbers 1-50 give a drop (50% chance)
+                    chance2 = random.randint(0, 100)        #get another random numner
+                    if chance2 <= 75:                       #75% chance the drop is for ammo
+                        en_drop = Drops(GRAY, 20, 20, enemy)
+                        all_sprites_list.add(en_drop)
+                        ammo_drops_list.add(en_drop)
+                    elif chance2 > 75:                      #25% chance the drop is for health
+                        en_drop = Drops(RED, 20, 20, enemy)
+                        all_sprites_list.add(en_drop)
+                        health_drops_list.add(en_drop)
+                    
                 all_sprites_list.remove(enemy)
                 enemy_list.remove(enemy)
-                player.ammodrop(screen) ############FIX THIS
-                ####TENTATIVE DO NOT KEEP######
-                player.money += 10          #gives player 10$
-                if player.HP < 100:         #regenerates health for player after killing an enemy
-                    player.HP += 20
-                if player.ammo < 5:
-                    player.ammo += 1        #gives extra bullet to player after killing an enemy          
-                        
+                
 
 
         
@@ -951,7 +1040,7 @@ def Game():
         
         
         pygame.display.flip()
-        clock.tick(20)
+        clock.tick(30)
 # ------------------- end of main Game code ------------------ #
 
 # ------------------- this section will house the pause menu code --------------- !!!!DONE!!!!

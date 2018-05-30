@@ -8,6 +8,7 @@ BLACK = (0,0,0)
 RED   = (255,0,0)
 GREEN = (0,255,0)
 BLUE  = (0,0,255)
+YELLOW = (255,255,0)
 
 draw = True
 
@@ -78,32 +79,35 @@ class LVL():
             elif Lock == 2:
                 top_door = DOOR(100,5,RED,2)
             else:
-                top_door = DOOR(100,5)
+                top_door = DOOR(100,5,WHITE)
             top_door.rect.x = 650 - 50
             top_door.rect.y = 0
             self.doors_list.add(top_door)
            
 
         if S == True:
-            bot_door = DOOR(100,5)
+            bot_door = DOOR(100,5,WHITE)
             bot_door.rect.x = 650 - 50
             bot_door.rect.y = 800 - 5
             self.doors_list.add(bot_door)
 
         if W == True:
-            lt_door = DOOR(5,100)
+            if Lock == 2:
+                lt_door = DOOR(5,100,YELLOW,3)
+            else:
+                lt_door = DOOR(5,100,WHITE)
             lt_door.rect.x = 0
             lt_door.rect.y = 400 - 50
             self.doors_list.add(lt_door)
 
         if E == True:
-            rt_door = DOOR(5,100)
+            rt_door = DOOR(5,100,WHITE)
             rt_door.rect.x = 1250 - 5
             rt_door.rect.y = 400 - 50
             self.doors_list.add(rt_door)
 
         if END == True:
-            E_door = DOOR(50,50)
+            E_door = DOOR(50,50,WHITE)
             E_door.rect.x = 600
             E_door.rect.y = 400
             self.doors_list.add(E_door)
@@ -126,6 +130,12 @@ class LVL():
             R_Key.rect.x = 600
             R_Key.rect.y = 600
             self.Key_list.add(R_Key)
+
+        if Key == 3:
+            Y_Key = KEY(50,50,YELLOW,3)
+            Y_Key.rect.x = 600
+            Y_Key.rect.y = 600
+            self.Key_list.add(Y_Key)
             
 
 
@@ -149,7 +159,12 @@ class LVL():
 
         self.hole_list = pygame.sprite.Group()
         
-
+        if Holes == 1:
+            h = HOLE(400,400,WHITE)
+            h.rect.x = 0
+            h.rect.y = 0
+            self.hole_list.add(h)
+        
             
             
 
