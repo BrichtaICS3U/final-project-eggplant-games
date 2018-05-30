@@ -1,8 +1,8 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar, Drops     #import the sprites that Abbey has made
-from Door import DOOR                                               #import the sprites that Nick has made
-from LVLs import LVL                                                #FML
+from hero import *                          #import the sprites that Abbey has made
+from Door import DOOR, KEY
+from LVLs import LVL                        #FML
 import math
 import random
 
@@ -250,33 +250,221 @@ def Game():
                 if event.key==pygame.K_p:       #if the p key is pressed
                     Game = False
                     #exit the game and return to the main menu
+
+        keys = pygame.key.get_pressed()
                     
 #fill the screen white evertime the code runs
         screen.fill(WHITE)
     
 ########################################## IMPORTANT DO NOT TOUCH PLZ (@_@)
+        ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
+# this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
+
+# Forest/outside dungeon ---- Tutorial #
+
+#lvl store
+
+        if Y == 0 and X == 1:
+            pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5, SCREEN_HEIGHT-100, 80, 40], 0)
+            pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5*2, SCREEN_HEIGHT-100, 80, 40], 0)
+            pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5*3, SCREEN_HEIGHT-100, 80, 40], 0)
+            pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5*4, SCREEN_HEIGHT-100, 80, 40], 0)
+
+#lvl 1
         if Y == 1 and X == 1:
+            lvl1 = LVL(8)
+            lvls.append(lvl1)
             lvl1.draw(screen)
-            pygame.draw.rect(screen,RED,[75,75,75,75])
-            e_screen = 2        #variable to control the number of enemies on screen
-                                #2 enemies in red room
-            
+            e_screen = 0
+                    
+
+#lvl 2
         if Y == 2 and X == 1:
-            lvl2.draw(screen)
-            pygame.draw.rect(screen,GREEN,[75,75,75,75])
-            e_screen = 3        #3 enemies in green room
-
-
-        if Y == 1 and X == 2:
+            lvl3 = LVL(8)
+            lvls.append(lvl3)
             lvl3.draw(screen)
-            pygame.draw.rect(screen,BLUE,[75,75,75,75])
-            e_screen = 2        #2 enemies in blue room
+            e_screen = 1
             
 
-        if Y == 2 and X == 2:
+#lvl 3
+        if Y == 3 and X == 1:
+            lvl5 = LVL(100)
+            lvls.append(lvl5)
+            lvl5.draw(screen)
+            e_screen = 1
+            
+
+#lvl 4            
+        if Y == 3 and X == 2:
+            lvl2 = LVL(2)
+            lvls.append(lvl2)
+            lvl2.draw(screen)
+            e_screen = 1
+            
+            
+#lvl 5
+        if Y == 3 and X == 0:
+            lvl4 = LVL(6)
+            lvls.append(lvl4)
             lvl4.draw(screen)
-            pygame.draw.rect(screen,BLACK,[75,75,75,75])
-            e_screen = 1        #1 enemy in black room
+            e_screen = 1
+           
+
+#lvl 6
+        if Y == 3 and X == -1:
+            lvl6 = LVL(10)
+            lvls.append(lvl6)
+            lvl6.draw(screen)
+            e_screen = 1
+
+#lvl 7
+        if Y == 2 and X == -1:
+            lvl7 = LVL(1)
+            lvls.append(lvl7)
+            lvl7.draw(screen)
+            e_screen = 1
+            
+# Enterance/Sewers ----- lvl 1 #
+#lvl 8
+        if Y == 4 and X == 1:
+            lvl8 = LVL(8)
+            lvls.append(lvl8)
+            lvl8.draw(screen)
+            e_screen = 0
+
+#lvl 9
+        if Y == 5 and X == 1:
+            lvl9 = LVL(8)
+            lvls.append(lvl9)
+            lvl9.draw(screen)
+            e_screen = 0
+
+#lvl 10 //first floor / hub for floor (reference point)//
+        if Y == 6 and X == 1:
+            lvl10 = LVL(100)
+            lvls.append(lvl10)
+            lvl10.draw(screen)
+            e_screen = 0
+
+#lvl 11
+        if Y == 6 and X == 2:
+            lvl11 = LVL(6)
+            lvls.append(lvl11)
+            lvl11.draw(screen)
+            e_screen = 0
+
+#lvl 12 //Roundabout entrance//
+        if Y == 6 and X == 3:
+            lvl12 = LVL(20)
+            lvls.append(lvl12)
+            lvl12.draw(screen)
+            e_screen = 0
+
+#lvl 13
+        if Y == 7 and X == 3:
+            lvl13 = LVL(10)
+            lvls.append(lvl13)
+            lvl13.draw(screen)
+            e_screen = 0
+
+#lvl 14
+        if Y == 7 and X == 4:
+            lvl14 = LVL(6)
+            lvls.append(lvl14)
+            lvl14.draw(screen)
+            e_screen = 0
+
+#lvl 15
+        if Y == 7 and X == 5:
+            lvl15 = LVL(9)
+            lvls.append(lvl15)
+            lvl15.draw(screen)
+            e_screen = 0
+
+#lvl 16
+        if Y == 6 and X == 5:
+            lvl16 = LVL(8)
+            lvls.append(lvl16)
+            lvl16.draw(screen)
+            e_screen = 0
+
+#lvl 17
+        if Y == 5 and X == 5:
+            lvl17 = LVL(3)
+            lvls.append(lvl17)
+            lvl17.draw(screen)
+            e_screen = 0
+
+#lvl 18
+        if Y == 5 and X == 4:
+            lvl18 = LVL(6)
+            lvls.append(lvl18)
+            lvl18.draw(screen)
+            e_screen = 0
+
+#lvl 19 //end of sewer roundabout//
+        if Y == 5 and X == 3:
+            lvl19 = LVL(5)
+            lvls.append(lvl19)
+            lvl19.draw(screen)
+            e_screen = 0
+
+    
+#lvl 21 // start of left part of sewers//
+        if Y == 6 and X == 0:
+            lvl21 = LVL(6)
+            lvls.append(lvl21)
+            lvl21.draw(screen)
+            e_screen = 0
+
+#lvl 22
+        if Y == 6 and X == -1:
+            lvl22 = LVL(30)
+            lvls.append(lvl22)
+            lvl22.draw(screen)
+            e_screen = 0
+
+#lvl 23
+        if Y == 5 and X == -1:
+            lvl23 = LVL(1)
+            lvls.append(lvl23)
+            lvl23.draw(screen)
+            e_screen = 0
+
+#lvl 24
+        if Y == 6 and X == -2:
+            lvl24 = LVL(40)
+            lvls.append(lvl24)
+            lvl24.draw(screen)
+            e_screen = 0            
+
+#lvl 25
+        if Y == 6 and X == -3:
+            lvl25 = LVL(4)
+            lvls.append(lvl25)
+            lvl25.draw(screen)
+            e_screen = 0    
+
+#lvl 26
+        if Y == 7 and X == -2:
+            lvl26 = LVL(8)
+            lvls.append(lvl26)
+            lvl26.draw(screen)
+            e_screen = 0
+
+#lvl 27
+        if Y == 8 and X == -2:
+            lvl27 = LVL(9)
+            lvls.append(lvl27)
+            lvl27.draw(screen)
+            e_screen = 0
+
+#lvl 28
+        if Y == 8 and X == -3:
+            lvl28 = LVL(4)
+            lvls.append(lvl28)
+            lvl28.draw(screen)
+            e_screen = 0
         
             
         for lvl in lvls:
@@ -284,7 +472,7 @@ def Game():
             for door in Door_collision_list:
                 Change_SCREEN()
                 
-                for enemy in enemy_list:                #this code deletes the previous enemies off the screen
+                for enemy in enemy_list:                        #this code deletes the previous enemies off the screen
                     enemy.HP = 0
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
@@ -297,10 +485,33 @@ def Game():
                     health_drops_list.remove(en_drop)
                     all_sprites_list.remove(en_drop)
                 
-                for i in range(e_screen):                      #this code adds new enemies to next screen
+                for i in range(e_screen):                       #this code adds new enemies to next screen
                     enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
                     enemy_list.add(enemy)                       #set earlier
                     all_sprites_list.add(enemy)
+
+
+            #hit detection for objects or "HOLE"(s) or "WALLS" in the game                
+            Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
+            for hole in Hole_collision_list:
+                
+                for HOLE in lvl.hole_list: 
+                    if player.rect.x + 30 >= HOLE.rect.x -2 and player.rect.x < HOLE.rect.x - 26:#Left
+                        Hit_Wall_R()
+                    elif player.rect.x <= HOLE.rect.x + HOLE.width and player.rect.x + 30 > HOLE.rect.x + HOLE.width + 26:#Right
+                        Hit_Wall_L()
+                    elif player.rect.y + 40 > HOLE.rect.y and player.rect.y < HOLE.rect.y - 36:#Top
+                        Hit_Wall_U()
+                    elif player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y + 40 > HOLE.rect.y + HOLE.height + 36:#Bottom
+                        Hit_Wall_D()
+
+
+#this little bit is for the hit detection between players and keys                    
+            Key_collision_list = pygame.sprite.spritecollide(player,lvl.Key_list,False)
+            for key in Key_collision_list:
+                for Key in lvl.Key_list:
+                    pygame.draw.rect(screen,F_C,[Key.rect.x,Key.rect.y,Key.width,Key.height])
+
                 
 #########################################################            
 
@@ -325,7 +536,7 @@ def Game():
                 player_sword.up(player, screen)     #player melee attacks upwards
 
         #player sprinting
-        if keys[pygame.K_LSHIFT]:               #if left shift is pressed
+        if keys[pygame.K_LSHIFT]:                   #if left shift is pressed
                 if keys[pygame.K_a]:                #and if A is pressed
                     player.move()                       #double the movement speed Left
                 elif keys[pygame.K_s]:              #and if S is pressed
@@ -371,7 +582,7 @@ def Game():
                     enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
                     enemy.rect.y -= 100         #aka player who is holding 'sword'
                 else:
-                    player.HP -= 10
+                    player.HP -= 20
                     player.rect.x -= 100        #Player bounces back on enemy collision
                     player.rect.y -= 50
         
