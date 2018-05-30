@@ -1,14 +1,18 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar     #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar, Drops     #import the sprites that Abbey has made
 from Door import DOOR                                               #import the sprites that Nick has made
 from LVLs import LVL                                                #FML
 import math
+import random
 
 # define colours #
 WHITE = (255,255,255)       #White
 GRAY  = (121,121,121)       #Gray
 BLACK = (0,0,0)             #Black
+BROWN = (74,67,23)          #Brown
+SILVER = (204,201,182)      #Silver
+GOLD = (235,207,26)         #Gold
 RED   = (255,0,0)           #test Red
 GREEN = (0,255,0)           #test Green
 BLUE  = (0,0,255)           #test Blue
@@ -183,7 +187,9 @@ all_sprites_list = pygame.sprite.Group()        #this is the master sprite list.
 Hero_sprite_list = pygame.sprite.Group()        #this is the Hero sprite list. Only the hero sprite will be located here
 Bullet_sprites_list = pygame.sprite.Group()     #this is the bullet sprite list. all the Bullets taht are fired will be located here
 enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
-
+ammo_drops_list = pygame.sprite.Group()         #enemy ammo drops list
+health_drops_list = pygame.sprite.Group()       #enemy health drops list
+money_drops_list = pygame.sprite.Group()
 
 #player character
 player = Hero(30,40)
@@ -282,7 +288,15 @@ def Game():
                     enemy.HP = 0
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
+                
+                for en_drop in ammo_drops_list:
+                    ammo_drops_list.remove(en_drop)
+                    all_sprites_list.remove(en_drop)
 
+                for en_drop in health_drops_list:
+                    health_drops_list.remove(en_drop)
+                    all_sprites_list.remove(en_drop)
+                
                 for i in range(e_screen):                      #this code adds new enemies to next screen
                     enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
                     enemy_list.add(enemy)                       #set earlier
@@ -371,7 +385,38 @@ def Game():
                     Bullet_sprites_list.remove(bullet)  #remove bullet from lists 
                     all_sprites_list.remove(bullet)
 
-        
+        for en_drop in ammo_drops_list:                                  
+            ammo_drop_col = pygame.sprite.collide_rect(player, en_drop)
+            if ammo_drop_col == True:                        #if player collides with dropped item
+                ammo_drops_list.remove(en_drop)              #drop is removed from lists
+                all_sprites_list.remove(en_drop)            #and subsequently, screen
+                if player.ammo <5:                          #if player has less than 5 bullets,
+                    player.ammo += 1                        #player gets +1 ammo
+
+        for en_drop in health_drops_list:                                  
+            health_drop_col = pygame.sprite.collide_rect(player, en_drop)
+            if health_drop_col == True:                        
+                health_drops_list.remove(en_drop)               
+                all_sprites_list.remove(en_drop)                
+                if player.HP < 100:                             #if player has less than 100 health,
+                    player.HP += 20                             #player gets +20 health
+
+        for en_drop in money_drops_list:
+            money_drop_col = pygame.sprite.collide_rect(player, en_drop)
+            if money_drop_col == True:
+                if en_drop.colour == BROWN:
+                    money_drops_list.remove(en_drop)               
+                    all_sprites_list.remove(en_drop)
+                    player.money += 1
+                elif en_drop.colour == SILVER:
+                    money_drops_list.remove(en_drop)               
+                    all_sprites_list.remove(en_drop)
+                    player.money += 2
+                elif en_drop.colour == GOLD:
+                    money_drops_list.remove(en_drop)               
+                    all_sprites_list.remove(en_drop)
+                    player.money += 3
+            
         """insert code for collisions between enemies here"""
     
         
@@ -387,18 +432,45 @@ def Game():
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
-            if enemy.HP <= 0:
+            #------enemy drops-------------------------------------------------------------------
+            if enemy.HP <= 0:                               #if enemy dies
+                #money drop (always happens)
+                m_chance = random.randint(0, 100)
+                if m_chance <= 60:                          #60% chance of brown coin (1$)
+                    en_drop = Drops(BROWN, 10, 10, enemy)
+                    en_drop.rect.x += 50
+                    all_sprites_list.add(en_drop)
+                    money_drops_list.add(en_drop)
+                    
+                elif 60 < m_chance < 90:                    #30% chance of silver coin ($2)
+                    en_drop = Drops(SILVER, 10, 10, enemy)
+                    en_drop.rect.x += 50
+                    all_sprites_list.add(en_drop)
+                    money_drops_list.add(en_drop)
+           
+                elif m_chance >= 90:                        #10% chance of gold coin ($3)
+                    en_drop = Drops(GOLD, 10, 10, enemy)
+                    en_drop.rect.x += 50
+                    all_sprites_list.add(en_drop)
+                    money_drops_list.add(en_drop)
+                    
+                #ammo/health drop (happens 50% of time)
+                chance = random.randint(0, 100)             #get a random number from 1-100
+                if chance <= 50:                            #numbers 1-50 give a drop (50% chance)
+                    chance2 = random.randint(0, 100)        #get another random numner
+                    if chance2 <= 75:                       #75% chance the drop is for ammo
+                        en_drop = Drops(GRAY, 20, 20, enemy)
+                        all_sprites_list.add(en_drop)
+                        ammo_drops_list.add(en_drop)
+                    elif chance2 > 75:                      #25% chance the drop is for health
+                        en_drop = Drops(RED, 20, 20, enemy)
+                        all_sprites_list.add(en_drop)
+                        health_drops_list.add(en_drop)
+                    
                 all_sprites_list.remove(enemy)
                 enemy_list.remove(enemy)
-                player.ammodrop(screen) ############FIX THIS
-                ####TENTATIVE DO NOT KEEP######
-                player.money += 10          #gives player 10$
-                if player.HP < 100:         #regenerates health for player after killing an enemy
-                    player.HP += 20
-                if player.ammo < 5:
-                    player.ammo += 1        #gives extra bullet to player after killing an enemy          
-                        
-                
+
+               
         #wall restrictions
         #Right wall
         if player.rect.x + 30 > SCREEN_WIDTH:
@@ -420,8 +492,7 @@ def Game():
             player.rect.y -= 2
             if keys[pygame.K_LSHIFT]:
                 player.rect.y -= 2
-
-
+        
         #Draw all sprites
         all_sprites_list.draw(screen)
         
