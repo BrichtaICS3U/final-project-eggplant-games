@@ -1,6 +1,7 @@
-import pygame
+import pygame, sys, random
+from pygame.locals import *
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar    #import the sprites that Abbey has made
+from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar    #import the sprites that Abbey has made
 from LVLs import LVL                    #FML
 from Door import DOOR, KEY
 
@@ -18,7 +19,7 @@ BC2   = (104,14,75)         #Button coloutr 2
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
-DIRT    = (252, 216, 168)
+D    = (252, 216, 168)
 
 #background(s)
 T_background = pygame.image.load("Menu_Background.png") #this is the background for the title screen
@@ -52,8 +53,25 @@ LayerP = 1
 b = False
 Y = 1
 X = 1
-F_C = DIRT
-
+F_C = D
+Generate = True
+B_D_L = True
+R_D_L = True
+UNLOCK_BLUE = True
+UNLOCK_RED = True
+TILESIZE = 50
+MAPWIDTH = 25
+MAPHEIGHT = 16
+DIRT = 0
+GRASS = 1
+WATER = 2
+tilemap = []
+textures =  {
+                DIRT : pygame.image.load('Dirt.png'),
+                GRASS : pygame.image.load('grass.png'),
+                WATER : pygame.image.load('water.png')
+            }
+  
 # ----------- end of variable list ---------------#
 
 
@@ -172,7 +190,13 @@ def Change_SCREEN():
     global Y
     global X
     global lvls
+    global Generate
+    global tilemap
+    
     lvls = []
+    tilemap = []
+    Generate = True
+    
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
         #print("screen UP.")
@@ -189,8 +213,7 @@ def Change_SCREEN():
         player.rect.x = 6
         #print("screen RIGHT.")
         X += 1
-    elif Y == 2:
-        pygame.quit()
+    
 
 def Hit_Wall_R():
     keys = pygame.key.get_pressed()
@@ -218,6 +241,35 @@ def Hit_Wall_D():
     if keys[pygame.K_LSHIFT]:
         player.rect.y += 2
     player.rect.y += 2
+
+def Unlock_B_D():
+    global B_D_L 
+    B_D_L = False
+
+def Unlock_R_D():
+    global R_D_L
+    R_D_L = False
+
+def draw_MAP():
+    global MAPHEIGHT
+    global MAPWIDTH
+    global tilemap
+    global textures
+    global GRASS
+    global DIRT
+    global WATER
+    global tilemap
+    global Y
+    global X
+    if tilemap != []:
+        for row in range (MAPHEIGHT):
+            for column in range(MAPWIDTH):
+                screen.blit(textures[tilemap[row][column]], (column*TILESIZE,row*TILESIZE))
+
+    
+    
+        
+
                 
 
             
@@ -243,6 +295,10 @@ player.rect.x = SCREEN_WIDTH/2
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
+#Initial sword
+player_sword = Sword(1,1)
+all_sprites_list.add(player_sword)
+
 #Initial enemy character
 enemy = Enemy(BLACK, 40, 40)        #adds a single enemy to first room
 enemy_list.add(enemy)
@@ -260,6 +316,10 @@ Hero_sprite_list.add(player)
 
 
 def Game():
+            
+        
+    
+    
     global Y
     global event
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
@@ -267,6 +327,17 @@ def Game():
     global shoot                #adds the shoot variable
     global b
     global F_C
+    global Generate
+    global B_D_L
+    global UNLOCK_BLUE
+    global UNLOCK_RED
+    global MAPHEIGHT
+    global MAPWIDTH
+    global TILESIZE
+    global GRASS
+    global DIRT
+    global WATER
+    global tilemap
     Game = True                 #while the variable is true the game will run
        
     while Game:
@@ -276,236 +347,449 @@ def Game():
             elif event.type == pygame.KEYDOWN:  #
                 if event.key==pygame.K_ESCAPE:
                     Pause_Menu()
-                    Game = False
-                    #exit the game and return to the main menu
+                    Game = False                #exit the game and return to the main menu
 
         keys = pygame.key.get_pressed()
+
+        
 
         screen.fill(F_C)
 
         if Y < 4:
-            F_C = DIRT
+            F_C = D
         if Y >= 4:
             F_C = GRAY
+
+        
 #                                                                       ___
 ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
 # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
 
-# Forest/outside dungeon ---- Tutorial #
-#lvl 1
-        if Y == 1 and X == 1:
-            lvl1 = LVL(1,1,0,1)
-            lvls.append(lvl1)
-            lvl1.draw(screen)
-            e_screen = 0
-            
+
         
 
-#lvl 2
-        if Y == 2 and X == 1:
-            lvl3 = LVL(8)
-            lvls.append(lvl3)
-            lvl3.draw(screen)
-            e_screen = 1
+        if Generate == True:
+            #                                                                       ___
+            ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
+            # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
+
+            # Forest/outside dungeon ---- Tutorial #
+            #lvl 1
+            if Y == 1 and X == 1:
+                lvl1 = LVL(1,1)
+                lvls.append(lvl1)
+                e_screen = 1
+                print("lvl1")
+                    
+            #lvl 2
+            elif Y == 2 and X == 1:
+                lvl2 = LVL(8)
+                lvls.append(lvl2)
+                e_screen = 1
+                print("lvl2")
+
+            #lvl 3
+            elif Y == 3 and X == 1:
+                lvl3 = LVL(100,0,1)
+                lvls.append(lvl3)
+                e_screen = 1
+                print("lvl3")#this is the lvl where i need to  return the locked door into position
+
             
 
-#lvl 3
-        if Y == 3 and X == 1:
-            lvl5 = LVL(100,0,1)
-            lvls.append(lvl5)
-            lvl5.draw(screen)
-            e_screen = 1
-            
-
-#lvl 4            
-        if Y == 3 and X == 2:
-            lvl2 = LVL(2)
-            lvls.append(lvl2)
-            lvl2.draw(screen)
-            e_screen = 1
+            #lvl 4            
+            elif Y == 3 and X == 2:
+                lvl4 = LVL(2)
+                lvls.append(lvl4)
+                e_screen = 1
+                print("lvl4")
             
             
-#lvl 5
-        if Y == 3 and X == 0:
-            lvl4 = LVL(6)
-            lvls.append(lvl4)
-            lvl4.draw(screen)
-            e_screen = 1
+            #lvl 5
+            elif Y == 3 and X == 0:
+                lvl5 = LVL(6)
+                lvls.append(lvl5)
+                e_screen = 1
+                print("lvl5")
+                
            
+            #lvl 6
+            elif Y == 3 and X == -1:
+                lvl6 = LVL(10)
+                lvls.append(lvl6)
+                e_screen = 1
+                print("lvl6")
 
-#lvl 6
-        if Y == 3 and X == -1:
-            lvl6 = LVL(10)
-            lvls.append(lvl6)
-            lvl6.draw(screen)
-            e_screen = 1
-
-#lvl 7
-        if Y == 2 and X == -1:
-            lvl7 = LVL(1,0,0,1)
-            lvls.append(lvl7)
-            lvl7.draw(screen)
-            e_screen = 1
+            #lvl 7
+            elif Y == 2 and X == -1:
+                lvl7 = LVL(1,0,0,1)
+                lvls.append(lvl7)
+                e_screen = 1
+                print("lvl7")
             
-# Enterance/Sewers ----- lvl 1 #
-#lvl 8
-        if Y == 4 and X == 1:
-            lvl8 = LVL(8)
-            lvls.append(lvl8)
-            lvl8.draw(screen)
-            e_screen = 0
+            # Enterance/Sewers ----- lvl 1 #
+            #lvl 8
+            elif Y == 4 and X == 1:
+                lvl8 = LVL(8)
+                lvls.append(lvl8)
+                e_screen = 0
+                print("lvl8")
 
-#lvl 9
-        if Y == 5 and X == 1:
-            lvl9 = LVL(8)
-            lvls.append(lvl9)
-            lvl9.draw(screen)
-            e_screen = 0
+        
+            #lvl 10 //first floor / hub for floor (reference point)//
+            elif Y == 5 and X == 1:
+                lvl10 = LVL(100,0,2)
+                lvls.append(lvl10)
+                e_screen = 0
+                print("lvl10")
 
-#lvl 10 //first floor / hub for floor (reference point)//
-        if Y == 6 and X == 1:
-            lvl10 = LVL(100)
-            lvls.append(lvl10)
-            lvl10.draw(screen)
-            e_screen = 0
+            #lvl 11
+            elif Y == 5 and X == 2:
+                lvl11 = LVL(6)
+                lvls.append(lvl11)
+                e_screen = 0
+                print("lvl11")
 
-#lvl 11
-        if Y == 6 and X == 2:
-            lvl11 = LVL(6)
-            lvls.append(lvl11)
-            lvl11.draw(screen)
-            e_screen = 0
+            #lvl 12 //Roundabout entrance//
+            elif Y == 5 and X == 3:
+                lvl12 = LVL(20)
+                lvls.append(lvl12)
+                e_screen = 0
+                print("lvl12")
 
-#lvl 12 //Roundabout entrance//
-        if Y == 6 and X == 3:
-            lvl12 = LVL(20)
-            lvls.append(lvl12)
-            lvl12.draw(screen)
-            e_screen = 0
+            #lvl 13
+            elif Y == 6 and X == 3:
+                lvl13 = LVL(10)
+                lvls.append(lvl13)
+                e_screen = 0
+                print("lvl13")
 
-#lvl 13
-        if Y == 7 and X == 3:
-            lvl13 = LVL(10)
-            lvls.append(lvl13)
-            lvl13.draw(screen)
-            e_screen = 0
+            #lvl 14
+            elif Y == 6 and X == 4:
+                lvl14 = LVL(6)
+                lvls.append(lvl14)
+                e_screen = 0
+                print("lvl14")
 
-#lvl 14
-        if Y == 7 and X == 4:
-            lvl14 = LVL(6)
-            lvls.append(lvl14)
-            lvl14.draw(screen)
-            e_screen = 0
+           #lvl 15
+            elif Y == 6 and X == 5:
+                lvl15 = LVL(9)
+                lvls.append(lvl15)
+                e_screen = 0
+                print("lvl15")
 
-#lvl 15
-        if Y == 7 and X == 5:
-            lvl15 = LVL(9)
-            lvls.append(lvl15)
-            lvl15.draw(screen)
-            e_screen = 0
+            #lvl 16
+            elif Y == 5 and X == 5:
+                lvl16 = LVL(8,0,0,2)
+                lvls.append(lvl16)
+                e_screen = 0
+                print("lvl16")
 
-#lvl 16
-        if Y == 6 and X == 5:
-            lvl16 = LVL(8)
-            lvls.append(lvl16)
-            lvl16.draw(screen)
-            e_screen = 0
+            #lvl 17
+            elif Y == 4 and X == 5:
+                lvl17 = LVL(3)
+                lvls.append(lvl17)
+                e_screen = 0
+                print("lvl17")
 
-#lvl 17
-        if Y == 5 and X == 5:
-            lvl17 = LVL(3)
-            lvls.append(lvl17)
-            lvl17.draw(screen)
-            e_screen = 0
+            #lvl 18
+            elif Y == 4 and X == 4:
+                lvl18 = LVL(6)
+                lvls.append(lvl18)
+                e_screen = 0
+                print("lvl18")
 
-#lvl 18
-        if Y == 5 and X == 4:
-            lvl18 = LVL(6)
-            lvls.append(lvl18)
-            lvl18.draw(screen)
-            e_screen = 0
-
-#lvl 19 //end of sewer roundabout//
-        if Y == 5 and X == 3:
-            lvl19 = LVL(5)
-            lvls.append(lvl19)
-            lvl19.draw(screen)
-            e_screen = 0
-
+            #lvl 19 //end of sewer roundabout//
+            elif Y == 4 and X == 3:
+                lvl19 = LVL(5)
+                lvls.append(lvl19)
+                e_screen = 0
+                print("lvl19")
     
-#lvl 21 // start of left part of sewers//
-        if Y == 6 and X == 0:
-            lvl21 = LVL(6)
-            lvls.append(lvl21)
-            lvl21.draw(screen)
-            e_screen = 0
+    
+            #lvl 21 // start of left part of sewers//
+            elif Y == 5 and X == 0:
+                lvl21 = LVL(6)
+                lvls.append(lvl21)
+                e_screen = 0
+                print("lvl21")
 
-#lvl 22
-        if Y == 6 and X == -1:
-            lvl22 = LVL(30)
-            lvls.append(lvl22)
-            lvl22.draw(screen)
-            e_screen = 0
+            #lvl 22
+            elif Y == 5 and X == -1:
+                lvl22 = LVL(30)
+                lvls.append(lvl22)
+                e_screen = 0
+                print("lvl22")
 
-#lvl 23
-        if Y == 5 and X == -1:
-            lvl23 = LVL(1)
-            lvls.append(lvl23)
-            lvl23.draw(screen)
-            e_screen = 0
+            #lvl 23
+            elif Y == 4 and X == -1:
+                lvl23 = LVL(1)
+                lvls.append(lvl23)
+                e_screen = 0
+                print("lvl23")
 
-#lvl 24
-        if Y == 6 and X == -2:
-            lvl24 = LVL(40)
-            lvls.append(lvl24)
-            lvl24.draw(screen)
-            e_screen = 0            
+            #lvl 24
+            elif Y == 5 and X == -2:
+                lvl24 = LVL(40)
+                lvls.append(lvl24)
+                e_screen = 0
+                print("lvl24")
 
-#lvl 25
-        if Y == 6 and X == -3:
-            lvl25 = LVL(4)
-            lvls.append(lvl25)
-            lvl25.draw(screen)
-            e_screen = 0    
+            #lvl 25
+            elif Y == 5 and X == -3:
+                lvl25 = LVL(4)
+                lvls.append(lvl25)
+                e_screen = 0
+                print("lvl25")
 
-#lvl 26
-        if Y == 7 and X == -2:
-            lvl26 = LVL(8)
-            lvls.append(lvl26)
-            lvl26.draw(screen)
-            e_screen = 0
+            #lvl 26
+            elif Y == 6 and X == -2:
+                lvl26 = LVL(8)
+                lvls.append(lvl26)
+                e_screen = 0
+                print("lvl26")
 
-#lvl 27
-        if Y == 8 and X == -2:
-            lvl27 = LVL(9)
-            lvls.append(lvl27)
-            lvl27.draw(screen)
-            e_screen = 0
+            #lvl 27
+            elif Y == 7 and X == -2:
+                lvl27 = LVL(9)
+                lvls.append(lvl27)
+                e_screen = 0
+                print("lvl27")
 
-#lvl 28
-        if Y == 8 and X == -3:
-            lvl28 = LVL(4)
-            lvls.append(lvl28)
-            lvl28.draw(screen)
-            e_screen = 0
+            #lvl 28
+            elif Y == 7 and X == -3:
+                lvl28 = LVL(4)
+                lvls.append(lvl28)
+                e_screen = 0
+                print("lvl28")
             
+            
+
+
+        
+            if Y == 1 and X == 1:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2],
+                            [2,2,2,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2],
+                            [2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2],
+                            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+                            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+                            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+                                        
+                        ]
+
+            if Y == 2 and X == 1:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1]
+                                        
+                        ]
+
+            if Y == 3 and X == 1:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1]
+                                        
+                        ]
+
+            if Y == 3 and X == 2:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1],
+                            [0,0,0,1,1,0,1,0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0]
+                                        
+                        ]
+                
+            Generate = False            
+                   
+    
 #hit detection for doors            
         for lvl in lvls:
-            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)       
+
+            if Y == 1 and X == 1:#plz dunt dark marks cyuz i t luk bad ;-;
+                draw_MAP()
+                lvl1.draw(screen)
+            elif Y == 2 and X == 1:
+                draw_MAP()
+                lvl2.draw(screen)
+            elif Y == 3 and X == 1:
+                draw_MAP()
+                lvl3.draw(screen)
+            elif Y == 3 and X == 2:
+                draw_MAP()
+                lvl4.draw(screen)
+            elif Y == 3 and X == 0:
+                draw_MAP()
+                lvl5.draw(screen)
+            elif Y == 3 and X == -1:
+                draw_MAP()
+                lvl6.draw(screen)
+            elif Y == 2 and X == -1:
+                draw_MAP()
+                lvl7.draw(screen)
+            elif Y == 4 and X == 1:
+                draw_MAP()
+                lvl8.draw(screen)
+            elif Y == 5 and X == 1:
+                draw_MAP()
+                lvl10.draw(screen)
+            elif Y == 5 and X == 2:
+                draw_MAP()
+                lvl11.draw(screen)
+            elif Y == 5 and X == 3:
+                draw_MAP()
+                lvl12.draw(screen)
+            elif Y == 6 and X == 3:
+                draw_MAP()
+                lvl13.draw(screen)
+            elif Y == 6 and X == 4:
+                draw_MAP()
+                lvl14.draw(screen)
+            elif Y == 6 and X == 5:
+                draw_MAP()
+                lvl15.draw(screen)
+            elif Y == 5 and X == 5:
+                draw_MAP()
+                lvl16.draw(screen)
+            elif Y == 4 and X == 5:
+                lvl17.draw(screen)
+            elif Y == 4 and X == 4:
+                draw_MAP()
+                lvl18.draw(screen)
+            elif Y == 4 and X == 3:
+                draw_MAP()
+                lvl19.draw(screen)
+            elif Y == 5 and X == 0:
+                draw_MAP()
+                lvl21.draw(screen)
+            elif Y == 5 and X == -1:
+                draw_MAP()
+                lvl22.draw(screen)
+            elif Y == 4 and X == -1:
+                draw_MAP()
+                lvl23.draw(screen)
+            elif Y == 5 and X == -2:
+                draw_MAP()
+                lvl24.draw(screen)
+            elif Y == 5 and X == -3:
+                draw_MAP()
+                lvl25.draw(screen)
+            elif Y == 6 and X == -2:
+                draw_MAP()
+                lvl26.draw(screen)
+            elif Y == 7 and X == -2:
+                draw_MAP()
+                lvl27.draw(screen)
+            elif Y == 7 and X == -3:
+                draw_MAP()
+                lvl28.draw(screen)
+          
+            
+            
+
+
+            
+            Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)
+            key_collision_list  = pygame.sprite.spritecollide(player,lvl.Key_list,False)
+            
             for door in Door_collision_list:
-                Change_SCREEN()
+                
+                
+                        
+                
+                if door.LOCK == 0:
+                    door.IS_LOCKED()
+
+                elif door.LOCK == 1:
+                    if B_D_L == False:
+                        door.IS_LOCKED()
+
+                elif door.LOCK == 2:
+                    if R_D_L == False:
+                        door.IS_LOCKED()
+
+                if door.OPEN == True:
+                    Change_SCREEN()
                 
 
-                for enemy in enemy_list:                #this code deletes the previous enemies off the screen
-                    enemy.HP = 0
-                    all_sprites_list.remove(enemy)
-                    enemy_list.remove(enemy)
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
+                    for enemy in enemy_list:                #this code deletes the previous enemies off the screen
+                        enemy.HP = 0
+                        all_sprites_list.remove(enemy)
+                        enemy_list.remove(enemy)
+                        pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
 
-                for i in range(e_screen):                      #this code adds new enemies to next screen
-                    enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
-                    enemy_list.add(enemy)                       #set earlier
-                    all_sprites_list.add(enemy)
+                    for i in range(e_screen):                      #this code adds new enemies to next screen
+                        enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
+                        enemy_list.add(enemy)                       #set earlier
+                        all_sprites_list.add(enemy)
+    
+            for key in key_collision_list:
+
+                if key.D_N == 1:
+                    if UNLOCK_BLUE == True:
+                        Unlock_B_D()
+                        print("the blue door has been unlocked")
+                        UNLOCK_BLUE = False
+                    
+                if key.D_N == 2:    
+                    if UNLOCK_RED == True:
+                        Unlock_R_D()
+                        print("the red door has been unlocked")
+                        UNLOCK_RED = False
+                        
+                
+                
 
 #hit detection for objects or "HOLE"(s) or "WALLS" in the game                
             Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
@@ -521,28 +805,30 @@ def Game():
                     elif player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y + 40 > HOLE.rect.y + HOLE.height + 36:#Bottom
                         Hit_Wall_D()
 
-
-#this little bit is for the hit detection between players and keys                    
-            Key_collision_list = pygame.sprite.spritecollide(player,lvl.Key_list,False)
-            for key in Key_collision_list:
-                for Key in lvl.Key_list:
-                    pygame.draw.rect(screen,F_C,[Key.rect.x,Key.rect.y,Key.width,Key.height])
                     
        
 #########################################################            
 
         keys = pygame.key.get_pressed()         #built in pygame function to detect is keys are pressed
 
-        #player movement
-        if keys[pygame.K_a]:                    #if the A key is pressed
+         #player movement / melee
+        if keys[pygame.K_a]:                        #if the A key is pressed
             player.move()                           #the player will move to the Left at a speed of 2 pixels
-        elif keys[pygame.K_s]:                  #if the S key is pressed
+            if keys[pygame.K_e]:
+                player_sword.left(player, screen)   #player melee attacks to the left            
+        elif keys[pygame.K_s]:                      #if the S key is pressed
             player.move()                           #the player will move Down at a speed of 2 pixels
-        elif keys[pygame.K_d]:                  #if the D key is pressed
+            if keys[pygame.K_e]:
+                player_sword.down(player, screen)   #player melee attacks downward
+        elif keys[pygame.K_d]:                      #if the D key is pressed
             player.move()                           #the player will move to the Right at a speed of 2 pixels
-        elif keys[pygame.K_w]:                  #if the W key is pressed
+            if keys[pygame.K_e]:
+                player_sword.right(player, screen)  #player melee attacks to the right
+        elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
-
+            if keys[pygame.K_e]:
+                player_sword.up(player, screen)     #player melee attacks upwards
+                
         #player sprinting
         if keys[pygame.K_LSHIFT]:               #if left shift is pressed
                 if keys[pygame.K_a]:                #and if A is pressed
@@ -555,22 +841,15 @@ def Game():
                     player.move()                       #double the movement speed up
 
 
-        #player melee attack
-        if keys[pygame.K_e]:
-            if enemy.rect.x < player.rect.x:    #enemy is to the left of player
-                player.meleeLeft(enemy,screen)
-            elif enemy.rect.x > player.rect.x:  #enemy is to the right of player
-                player.meleeRight(enemy,screen)
-            elif enemy.rect.y < player.rect.y:  #enemy is above player
-                player.meleeUp(enemy, screen)
                         
         #player shooting
-        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True:                            #if the mouse Button has been pressed and the player is allowed to shoot
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
                 all_sprites_list.add(bullet)                                                #add the bullets to th universal list
                 b = True
-                Bullet_sprites_list.add(bullet)                                             #add the bullets to the respected list
+                Bullet_sprites_list.add(bullet)
+                player.ammo -= 1
                 
         #this allows the player to shoot again when he/she relases the mouse button
         
@@ -589,19 +868,19 @@ def Game():
 
 
 
-#--------------- drawing ----------------------------------------------------------------------------------
-    #if there is a problem with drawing sprites, this line may need to be moved to the end of the game function
-        all_sprites_list.draw(screen)
-
-        pygame.draw.rect(screen,BLACK,[0,0,150,75])
-        HealthBar(screen)                   #this draws the initial 5 health bars on screen
-
-        
-        for enemy in enemy_list:
-            pygame.draw.rect(screen, RED, [enemy.rect.x+5, enemy.rect.y-10, 30, 5], 0)  #this draws enemy health bars
 
 #---------------- collisions--------------------------------------------------------------------------------------
-        collision_list = pygame.sprite.spritecollide(player, enemy_list, False)     #collisions between enemy and player
+        for enemy in enemy_list:    
+            main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
+            if main_col == True:
+                if keys[pygame.K_e]:            #if the player is holding E, cue melee attack
+                    enemy.HP -= 25              #decrease enemy health by 10
+                    enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
+                    enemy.rect.y -= 100         #aka player who is holding 'sword'
+                else:
+                    player.HP -= 10
+                    player.rect.x -= 100        #Player bounces back on enemy collision
+                    player.rect.y -= 50         #collisions between enemy and player
         
         if b == True:                                   #global variable indicating that a bullet is present   
             for enemy in enemy_list:
@@ -616,65 +895,63 @@ def Game():
             
         """insert code for collisions between enemies here"""
 
-        for collision in collision_list:
-            player.HP -= 20
-            print(player.HP)
-            player.rect.x -= 100        #Player bounces back on enemy collision
-            player.rect.y -= 50
         
 # -------------------end of collisions --------------------------------------------------------------------------------                   
     
-
-        #UPDATING HEALTH BARS (player and enemies)
-            #this code draws white over original health bars
-            #to make it seem like they are disappearing
-
-        player.health(screen)       #player health bar updates
+        HealthBar(screen, player)           #this draws and updates the player health bar(s)
+        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
+        AmmoBar(screen, player)             #draws and updates the player ammo bar
+        TEXT("Player Ammo", 60, 80, 15)
+        TEXT("Money", 40, 140, 15)
+        money_string = "$ {}".format(player.money)
+        TEXT(money_string, 40, 160, 15)
                 
-        for enemy in enemy_list:    #enemy health bar updates
-            if enemy.HP <= 80:
-                pygame.draw.rect(screen, WHITE, [enemy.rect.x+29, enemy.rect.y-10, 6, 5], 0)
-                if enemy.HP <= 60:
-                    pygame.draw.rect(screen, WHITE, [enemy.rect.x+23, enemy.rect.y-10, 6, 5], 0)
-                    if enemy.HP <= 40:
-                        pygame.draw.rect(screen, WHITE, [enemy.rect.x+17, enemy.rect.y-10, 6, 5], 0)
-                        if enemy.HP <= 20:
-                            pygame.draw.rect(screen, WHITE, [enemy.rect.x+11, enemy.rect.y-10, 6, 5], 0)
-                            if enemy.HP <= 0:
-                                pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
-                                all_sprites_list.remove(enemy)
-                                enemy_list.remove(enemy)
+        for enemy in enemy_list:    #enemy health bar drawing/updates
+            enemy.health(screen)
+            if enemy.HP <= 0:
+                all_sprites_list.remove(enemy)
+                enemy_list.remove(enemy)
+                player.ammodrop(screen) ############FIX THIS
+                ####TENTATIVE DO NOT KEEP######
+                player.money += 10          #gives player 10$
+                if player.HP < 100:         #regenerates health for player after killing an enemy
+                    player.HP += 20
+                if player.ammo < 5:
+                    player.ammo += 1        #gives extra bullet to player after killing an enemy          
+                        
+
 
         
         #wall restrictions
         #Right wall
-        if player.rect.x + 30 > SCREEN_WIDTH:
-            player.rect.x -= 2
+        if player.rect.x + 28 > SCREEN_WIDTH:
+            player.rect.x -= 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.x -= 2
+                player.rect.x -= 4
         #Left wall
-        elif player.rect.x < 0:
-            player.rect.x += 2
+        elif player.rect.x < -2:
+            player.rect.x += 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.x += 2
+                player.rect.x += 4
         #top wall
-        elif player.rect.y < 0:
-            player.rect.y += 2
+        elif player.rect.y < -2:
+            player.rect.y += 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.y += 2
+                player.rect.y += 4
         #Bottom wall
-        elif player.rect.y + 40 > SCREEN_HEIGHT:
-            player.rect.y -= 2
+        elif player.rect.y + 38 > SCREEN_HEIGHT:
+            player.rect.y -= 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.y -= 2
+                player.rect.y -= 4
 
 
     
-
+        #Draw all sprites
+        all_sprites_list.draw(screen)
         
         
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(20)
 # ------------------- end of main Game code ------------------ #
 
 # ------------------- this section will house the pause menu code --------------- !!!!DONE!!!!

@@ -74,16 +74,19 @@ class LVL():
                     
         if N == True:
             if Lock == 1:
-                top_door = DOOR(100,5,BLUE)
+                top_door = DOOR(100,5,BLUE,1)
+            elif Lock == 2:
+                top_door = DOOR(100,5,RED,2)
             else:
                 top_door = DOOR(100,5)
-            top_door.rect.x = 625 - 50
+            top_door.rect.x = 650 - 50
             top_door.rect.y = 0
             self.doors_list.add(top_door)
+           
 
         if S == True:
             bot_door = DOOR(100,5)
-            bot_door.rect.x = 625 - 50
+            bot_door.rect.x = 650 - 50
             bot_door.rect.y = 800 - 5
             self.doors_list.add(bot_door)
 
@@ -113,10 +116,16 @@ class LVL():
 
 
         if Key == 1:
-            B_Key = KEY(5,7,BLUE)
+            B_Key = KEY(50,50,BLUE,1)
             B_Key.rect.x = 600
             B_Key.rect.y = 600
             self.Key_list.add(B_Key)
+
+        if Key == 2:
+            R_Key = KEY(50,50,RED,2)
+            R_Key.rect.x = 600
+            R_Key.rect.y = 600
+            self.Key_list.add(R_Key)
             
 
 
@@ -140,13 +149,6 @@ class LVL():
 
         self.hole_list = pygame.sprite.Group()
         
-    #1-1 (the first number indicates the number of the hole in the section. the second number is the possibility)
-        if Holes == 1:
-            h1_1 = HOLE(575,300,BLUE)
-            h1_1.rect.x = 0
-            h1_1.rect.y = 0
-            self.hole_list.add(h1_1)
-            
 
             
             
