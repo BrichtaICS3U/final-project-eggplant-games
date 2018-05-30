@@ -37,13 +37,13 @@ class Hero(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_w]: #Up
-            self.rect.y -= 2
+            self.rect.y -= 4
         if keys[pygame.K_s]:# Down
-           self.rect.y += 2
+           self.rect.y += 4
         if keys[pygame.K_a]: #Left
-            self.rect.x -= 2
+            self.rect.x -= 4
         if keys[pygame.K_d]: #Right
-            self.rect.x += 2
+            self.rect.x += 4
 
     def sprint(self):
         keys = pygame.key.get_pressed()
@@ -116,8 +116,8 @@ class Bullet(pygame.sprite.Sprite):
     
     def update(self):      
         # move along vector towards the mouse click at speed of 3 pixels
-        self.rect.x -= self.dist_x * 3
-        self.rect.y -= self.dist_y * 3        
+        self.rect.x -= self.dist_x * 5
+        self.rect.y -= self.dist_y * 5        
         
         
 class Enemy(pygame.sprite.Sprite):
@@ -149,7 +149,7 @@ class Enemy(pygame.sprite.Sprite):
         dist_x, dist_y = dist_x / distance, dist_y / distance
         
         # move along vector towards the player at current speed
-        speed = 2
+        speed = 7
         self.rect.x -= dist_x * speed
         self.rect.y -= dist_y * speed
 

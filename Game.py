@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, random
 from pygame.locals import *
 pygame.init()
 from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar    #import the sprites that Abbey has made
@@ -19,7 +19,7 @@ BC2   = (104,14,75)         #Button coloutr 2
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
-DIRT    = (252, 216, 168)
+D    = (252, 216, 168)
 
 #background(s)
 T_background = pygame.image.load("Menu_Background.png") #this is the background for the title screen
@@ -53,19 +53,23 @@ LayerP = 1
 b = False
 Y = 1
 X = 1
-F_C = DIRT
+F_C = D
 Generate = True
 B_D_L = True
+R_D_L = True
 UNLOCK_BLUE = True
+UNLOCK_RED = True
 TILESIZE = 50
 MAPWIDTH = 25
 MAPHEIGHT = 16
 DIRT = 0
 GRASS = 1
+WATER = 2
 tilemap = []
 textures =  {
-                DIRT : pygame.image.load('dirt.png'),
+                DIRT : pygame.image.load('Dirt.png'),
                 GRASS : pygame.image.load('grass.png'),
+                WATER : pygame.image.load('water.png')
             }
   
 # ----------- end of variable list ---------------#
@@ -242,6 +246,10 @@ def Unlock_B_D():
     global B_D_L 
     B_D_L = False
 
+def Unlock_R_D():
+    global R_D_L
+    R_D_L = False
+
 def draw_MAP():
     global MAPHEIGHT
     global MAPWIDTH
@@ -249,11 +257,18 @@ def draw_MAP():
     global textures
     global GRASS
     global DIRT
+    global WATER
     global tilemap
-    for row in range (MAPHEIGHT):
-        for column in range(MAPWIDTH):
-            screen.blit(textures[tilemap[row][column]], (column*TILESIZE,row*TILESIZE))
-            
+    global Y
+    global X
+    if tilemap != []:
+        for row in range (MAPHEIGHT):
+            for column in range(MAPWIDTH):
+                screen.blit(textures[tilemap[row][column]], (column*TILESIZE,row*TILESIZE))
+
+    
+    
+        
 
                 
 
@@ -315,11 +330,13 @@ def Game():
     global Generate
     global B_D_L
     global UNLOCK_BLUE
+    global UNLOCK_RED
     global MAPHEIGHT
     global MAPWIDTH
     global TILESIZE
     global GRASS
     global DIRT
+    global WATER
     global tilemap
     Game = True                 #while the variable is true the game will run
        
@@ -334,12 +351,16 @@ def Game():
 
         keys = pygame.key.get_pressed()
 
+        
+
         screen.fill(F_C)
 
         if Y < 4:
-            F_C = DIRT
+            F_C = D
         if Y >= 4:
             F_C = GRAY
+
+        
 #                                                                       ___
 ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
 # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
@@ -372,7 +393,7 @@ def Game():
                 lvl3 = LVL(100,0,1)
                 lvls.append(lvl3)
                 e_screen = 1
-                print("lvl3")
+                print("lvl3")#this is the lvl where i need to  return the locked door into position
 
             
 
@@ -417,7 +438,7 @@ def Game():
         
             #lvl 10 //first floor / hub for floor (reference point)//
             elif Y == 5 and X == 1:
-                lvl10 = LVL(100)
+                lvl10 = LVL(100,0,2)
                 lvls.append(lvl10)
                 e_screen = 0
                 print("lvl10")
@@ -459,7 +480,7 @@ def Game():
 
             #lvl 16
             elif Y == 5 and X == 5:
-                lvl16 = LVL(8)
+                lvl16 = LVL(8,0,0,2)
                 lvls.append(lvl16)
                 e_screen = 0
                 print("lvl16")
@@ -548,25 +569,87 @@ def Game():
         
             if Y == 1 and X == 1:
                 tilemap = [
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                            [2,2,2,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2],
+                            [2,2,2,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2],
+                            [2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2],
+                            [2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2],
+                            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+                            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+                            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
                                         
                         ]
-                print("shit")
+
+            if Y == 2 and X == 1:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1]
+                                        
+                        ]
+
+            if Y == 3 and X == 1:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1]
+                                        
+                        ]
+
+            if Y == 3 and X == 2:
+                tilemap = [
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1],
+                            [0,0,0,1,1,0,1,0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1],
+                            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0]
+                                        
+                        ]
                 
             Generate = False            
                    
@@ -578,54 +661,78 @@ def Game():
                 draw_MAP()
                 lvl1.draw(screen)
             elif Y == 2 and X == 1:
+                draw_MAP()
                 lvl2.draw(screen)
             elif Y == 3 and X == 1:
+                draw_MAP()
                 lvl3.draw(screen)
             elif Y == 3 and X == 2:
+                draw_MAP()
                 lvl4.draw(screen)
             elif Y == 3 and X == 0:
+                draw_MAP()
                 lvl5.draw(screen)
             elif Y == 3 and X == -1:
+                draw_MAP()
                 lvl6.draw(screen)
             elif Y == 2 and X == -1:
+                draw_MAP()
                 lvl7.draw(screen)
             elif Y == 4 and X == 1:
+                draw_MAP()
                 lvl8.draw(screen)
             elif Y == 5 and X == 1:
+                draw_MAP()
                 lvl10.draw(screen)
             elif Y == 5 and X == 2:
+                draw_MAP()
                 lvl11.draw(screen)
             elif Y == 5 and X == 3:
+                draw_MAP()
                 lvl12.draw(screen)
             elif Y == 6 and X == 3:
+                draw_MAP()
                 lvl13.draw(screen)
             elif Y == 6 and X == 4:
+                draw_MAP()
                 lvl14.draw(screen)
             elif Y == 6 and X == 5:
+                draw_MAP()
                 lvl15.draw(screen)
             elif Y == 5 and X == 5:
+                draw_MAP()
                 lvl16.draw(screen)
             elif Y == 4 and X == 5:
                 lvl17.draw(screen)
             elif Y == 4 and X == 4:
+                draw_MAP()
                 lvl18.draw(screen)
             elif Y == 4 and X == 3:
+                draw_MAP()
                 lvl19.draw(screen)
             elif Y == 5 and X == 0:
+                draw_MAP()
                 lvl21.draw(screen)
             elif Y == 5 and X == -1:
+                draw_MAP()
                 lvl22.draw(screen)
             elif Y == 4 and X == -1:
+                draw_MAP()
                 lvl23.draw(screen)
             elif Y == 5 and X == -2:
+                draw_MAP()
                 lvl24.draw(screen)
             elif Y == 5 and X == -3:
+                draw_MAP()
                 lvl25.draw(screen)
             elif Y == 6 and X == -2:
+                draw_MAP()
                 lvl26.draw(screen)
             elif Y == 7 and X == -2:
+                draw_MAP()
                 lvl27.draw(screen)
             elif Y == 7 and X == -3:
+                draw_MAP()
                 lvl28.draw(screen)
           
             
@@ -637,28 +744,49 @@ def Game():
             key_collision_list  = pygame.sprite.spritecollide(player,lvl.Key_list,False)
             
             for door in Door_collision_list:
-                if door.LOCK == 0 or B_D_L == False:
+                
+                
+                        
+                
+                if door.LOCK == 0:
                     door.IS_LOCKED()
-                    if door.OPEN == True:
-                        Change_SCREEN()
+
+                elif door.LOCK == 1:
+                    if B_D_L == False:
+                        door.IS_LOCKED()
+
+                elif door.LOCK == 2:
+                    if R_D_L == False:
+                        door.IS_LOCKED()
+
+                if door.OPEN == True:
+                    Change_SCREEN()
                 
 
-                        for enemy in enemy_list:                #this code deletes the previous enemies off the screen
-                            enemy.HP = 0
-                            all_sprites_list.remove(enemy)
-                            enemy_list.remove(enemy)
-                            pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
+                    for enemy in enemy_list:                #this code deletes the previous enemies off the screen
+                        enemy.HP = 0
+                        all_sprites_list.remove(enemy)
+                        enemy_list.remove(enemy)
+                        pygame.draw.rect(screen, WHITE, [enemy.rect.x+5, enemy.rect.y-10, 10, 5], 0)
 
-                        for i in range(e_screen):                      #this code adds new enemies to next screen
-                            enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
-                            enemy_list.add(enemy)                       #set earlier
-                            all_sprites_list.add(enemy)
+                    for i in range(e_screen):                      #this code adds new enemies to next screen
+                        enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
+                        enemy_list.add(enemy)                       #set earlier
+                        all_sprites_list.add(enemy)
     
             for key in key_collision_list:
-                if UNLOCK_BLUE == True:
-                    Unlock_B_D()
-                    print("the blue door has been unlocked")
-                    UNLOCK_BLUE = False
+
+                if key.D_N == 1:
+                    if UNLOCK_BLUE == True:
+                        Unlock_B_D()
+                        print("the blue door has been unlocked")
+                        UNLOCK_BLUE = False
+                    
+                if key.D_N == 2:    
+                    if UNLOCK_RED == True:
+                        Unlock_R_D()
+                        print("the red door has been unlocked")
+                        UNLOCK_RED = False
                         
                 
                 
@@ -796,25 +924,25 @@ def Game():
         
         #wall restrictions
         #Right wall
-        if player.rect.x + 30 > SCREEN_WIDTH:
-            player.rect.x -= 2
+        if player.rect.x + 28 > SCREEN_WIDTH:
+            player.rect.x -= 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.x -= 2
+                player.rect.x -= 4
         #Left wall
-        elif player.rect.x < 0:
-            player.rect.x += 2
+        elif player.rect.x < -2:
+            player.rect.x += 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.x += 2
+                player.rect.x += 4
         #top wall
-        elif player.rect.y < 0:
-            player.rect.y += 2
+        elif player.rect.y < -2:
+            player.rect.y += 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.y += 2
+                player.rect.y += 4
         #Bottom wall
-        elif player.rect.y + 40 > SCREEN_HEIGHT:
-            player.rect.y -= 2
+        elif player.rect.y + 38 > SCREEN_HEIGHT:
+            player.rect.y -= 4
             if keys[pygame.K_LSHIFT]:
-                player.rect.y -= 2
+                player.rect.y -= 4
 
 
     
@@ -823,7 +951,7 @@ def Game():
         
         
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(30)
 # ------------------- end of main Game code ------------------ #
 
 # ------------------- this section will house the pause menu code --------------- !!!!DONE!!!!
