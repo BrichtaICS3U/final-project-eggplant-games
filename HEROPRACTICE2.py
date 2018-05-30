@@ -438,16 +438,19 @@ def Game():
                 m_chance = random.randint(0, 100)
                 if m_chance <= 60:                          #60% chance of brown coin (1$)
                     en_drop = Drops(BROWN, 10, 10, enemy)
+                    en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
                     
                 elif 60 < m_chance < 90:                    #30% chance of silver coin ($2)
                     en_drop = Drops(SILVER, 10, 10, enemy)
+                    en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
            
                 elif m_chance >= 90:                        #10% chance of gold coin ($3)
                     en_drop = Drops(GOLD, 10, 10, enemy)
+                    en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
                     
