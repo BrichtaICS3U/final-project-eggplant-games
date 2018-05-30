@@ -951,7 +951,7 @@ def Game():
         
         
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(20)
 # ------------------- end of main Game code ------------------ #
 
 # ------------------- this section will house the pause menu code --------------- !!!!DONE!!!!
