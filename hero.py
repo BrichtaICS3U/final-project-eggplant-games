@@ -174,9 +174,11 @@ class Enemy(pygame.sprite.Sprite):
 
 class Drops(pygame.sprite.Sprite):
 
-    def __init__(self, colour, width, height, enemy):
+    def __init__(self, colour, width, height, x_pos, y_pos):
         super().__init__()
         self.colour = colour
+        self.x_pos = x_pos
+        self.y_pos = y_pos
         
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
@@ -184,8 +186,35 @@ class Drops(pygame.sprite.Sprite):
 
         pygame.draw.rect(self.image, colour, [0, 0, width, height])
         self.rect = self.image.get_rect()
-        self.rect.x = enemy.rect.x
-        self.rect.y = enemy.rect.y
+        self.rect.x = x_pos
+        self.rect.y = y_pos
+
+class StorePlate(pygame.sprite.Sprite):
+
+    def __init__(self, colour, x_pos, y_pos, width, height):
+        super().__init__()
+        self.colour = colour
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+
+        pygame.draw.rect(self.image, colour, [0, 0, width, height])
+        self.rect = self.image.get_rect()
+        self.rect.x = x_pos
+        self.rect.y = y_pos
+
+    def drawExtra(self, screen):
+        pygame.draw.rect(screen, BLACK, [(1250/5)+40, (800-100)+20, 5, 5], 0)
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4), (800-100)+20, 5, 5], 0)
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*2), (800-100)+20, 5, 5], 0)
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*3), (800-100)+20, 5, 5], 0)
+        pygame.draw.rect(screen, GREEN, [(1250/5*3)+40, (800-100)+20, 15, 25], 0)
+        
+            
+
     
                                  
 class HealthBar():
