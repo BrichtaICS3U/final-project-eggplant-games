@@ -266,6 +266,10 @@ def Game():
 
         if Y == 0 and X == 1:
             pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5, SCREEN_HEIGHT-100, 80, 40], 0)
+            store_bullet = Drops(BLACK, 10, 10, enemy)
+            store_bullet.rect.x = (SCREEN_WIDTH/5)
+            store_bullet.rect.x = (SCREEN_HEIGHT-50)
+            all_sprites_list.add(store_bullet)
             pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5*2, SCREEN_HEIGHT-100, 80, 40], 0)
             pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5*3, SCREEN_HEIGHT-100, 80, 40], 0)
             pygame.draw.rect(screen, GRAY, [SCREEN_WIDTH/5*4, SCREEN_HEIGHT-100, 80, 40], 0)
