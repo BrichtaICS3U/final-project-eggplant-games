@@ -224,9 +224,9 @@ def Change_SCREEN():
 
 def Hit_Wall_R():
     keys = pygame.key.get_pressed()
-    player.rect.x -= 5
+    player.rect.x -= 4
     if keys[pygame.K_LSHIFT]:
-        player.rect.x -= 3
+        player.rect.x -= 10
     
     
 
@@ -234,7 +234,7 @@ def Hit_Wall_L():
     keys = pygame.key.get_pressed()
     player.rect.x += 4
     if keys[pygame.K_LSHIFT]:
-        player.rect.x += 3
+        player.rect.x += 10
     
     
         
@@ -242,7 +242,7 @@ def Hit_Wall_U():
     keys = pygame.key.get_pressed()
     player.rect.y -= 4
     if keys[pygame.K_LSHIFT]:
-        player.rect.y -= 3
+        player.rect.y -= 10
     
     
         
@@ -250,7 +250,7 @@ def Hit_Wall_D():
     keys = pygame.key.get_pressed()
     player.rect.y += 4
     if keys[pygame.K_LSHIFT]:
-        player.rect.y += 3
+        player.rect.y += 10
     
 
 def Unlock_B_D():
@@ -397,14 +397,14 @@ def Game():
             # Forest/outside dungeon ---- Tutorial #
             #lvl 1
             if Y == 1 and X == 1:
-                lvl1 = LVL(1)
+                lvl1 = LVL(1,1)
                 lvls.append(lvl1)
                 e_screen = 1
                 print("lvl1")
                     
             #lvl 2
             elif Y == 2 and X == 1:
-                lvl2 = LVL(8)
+                lvl2 = LVL(8,2)
                 lvls.append(lvl2)
                 e_screen = 1
                 print("lvl2")
@@ -593,7 +593,7 @@ def Game():
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,3,1,1,1,1,1,0,0,1,1,1,3,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,3,1,1,2,2,2,2,2],
-                            [2,2,2,2,2,1,1,1,3,1,1,1,0,0,1,1,1,1,3,1,2,2,2,2,2],
+                            [2,2,2,2,2,1,1,3,3,1,1,1,0,0,1,1,1,3,3,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,3,3,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
@@ -890,16 +890,16 @@ def Game():
 #hit detection for objects or "HOLE"(s) or "WALLS" in the game                
             Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
             for hole in Hole_collision_list:
-                
-                for HOLE in lvl.hole_list: 
-                    if player.rect.x + 30 >= HOLE.rect.x -2 and player.rect.x < HOLE.rect.x - 26:#Left
-                        Hit_Wall_R()
-                    elif player.rect.x <= HOLE.rect.x + HOLE.width and player.rect.x + 30 > HOLE.rect.x + HOLE.width + 26:#Right
-                        Hit_Wall_L()
-                    elif player.rect.y + 40 > HOLE.rect.y and player.rect.y < HOLE.rect.y - 36:#Top
-                        Hit_Wall_U()
-                    elif player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y + 40 > HOLE.rect.y + HOLE.height + 36:#Bottom
-                        Hit_Wall_D()
+                 
+                if player.rect.y < hole.rect.y - 30:
+                    Hit_Wall_U()
+                if player.rect.x < hole.rect.x - 10:
+                    Hit_Wall_R()
+                if player.rect.x + 30 > hole.rect.x + hole.width + 10:
+                    Hit_Wall_L()
+                if player.rect.y + 40 > hole.rect.y + hole.height + 30:
+                    Hit_Wall_D()
+                        
 
                     
        

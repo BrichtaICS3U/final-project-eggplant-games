@@ -176,6 +176,26 @@ class LVL():
             h1_3.rect.y = 650
             self.hole_list.add(h1_3)
 
+            h1_4 = HOLE(50,50,WHITE)
+            h1_4.rect.x = 300
+            h1_4.rect.y = 50
+            self.hole_list.add(h1_4)
+
+            h1_5 = HOLE(100,100,WHITE)
+            h1_5.rect.x = 350
+            h1_5.rect.y = 150
+            self.hole_list.add(h1_5)
+
+        if Holes == 2:
+            h2_1 = HOLE(50,800,WHITE)
+            h2_1.rect.x = 400
+            h2_1.rect.y = 0
+            self.hole_list.add(h2_1)
+
+            h2_2 = HOLE(50,800,WHITE)
+            h2_2.rect.x = 850
+            h2_2.rect.y = 0
+            self.hole_list.add(h2_2)
             
         
             
