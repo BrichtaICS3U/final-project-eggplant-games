@@ -121,8 +121,8 @@ class LVL():
 
         if Key == 1:
             B_Key = KEY(50,50,BLUE,1)
-            B_Key.rect.x = 600
-            B_Key.rect.y = 600
+            B_Key.rect.x = 625
+            B_Key.rect.y = 750
             self.Key_list.add(B_Key)
 
         if Key == 2:
@@ -160,10 +160,23 @@ class LVL():
         self.hole_list = pygame.sprite.Group()
         
         if Holes == 1:
-            h = HOLE(400,400,WHITE)
-            h.rect.x = 0
-            h.rect.y = 0
-            self.hole_list.add(h)
+            
+            h1_1 = HOLE(250,800,WHITE)
+            h1_1.rect.x = 0
+            h1_1.rect.y = 0
+            self.hole_list.add(h1_1)
+
+            h1_2 = HOLE(250,800,WHITE)
+            h1_2.rect.x = 1000
+            h1_2.rect.y = 0
+            self.hole_list.add(h1_2)
+            
+            h1_3 = HOLE(750,150,WHITE)
+            h1_3.rect.x = 250
+            h1_3.rect.y = 650
+            self.hole_list.add(h1_3)
+
+            
         
             
             
