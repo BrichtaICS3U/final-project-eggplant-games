@@ -6,12 +6,13 @@ BLACK = (0, 0, 0)
 GREEN = (0,255,0)
 GREY = (100, 100, 100)
 RED = (255, 0, 0)
+ORANGE = (247,163,7)
 
  
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, HP=100, ammo=5, money=100, movespeed=2):
+    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=2):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.HP = HP
@@ -208,13 +209,17 @@ class StorePlate(pygame.sprite.Sprite):
         self.rect.y = y_pos
 
     def drawExtra(self, screen):
-        pygame.draw.rect(screen, BLACK, [(1250/5)+38.5, (800-100)+18.5, 5, 5], 0)
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4)-2.5, (800-100)+18.5, 5, 5], 0)
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*2)-2.5, (800-100)+18.5, 5, 5], 0)
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*3)-2.5, (800-100)+18.5, 5, 5], 0)
-        pygame.draw.rect(screen, GREEN, [(1250/5*3)+32.5, (800-100)+7.5, 15, 25], 0)
-        
-            
+        pygame.draw.rect(screen, BLACK, [(1250/5)+38.5, (800-200)+18.5, 5, 5], 0)               #single bullet
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4)-2.5, (800-200)+18.5, 5, 5], 0)       #3 bullets
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*2)-2.5, (800-200)+18.5, 5, 5], 0)     #
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*3)-2.5, (800-200)+18.5, 5, 5], 0)     #
+        pygame.draw.rect(screen, GREEN, [(1250/5*3)+32.5, (800-200)+7.5, 15, 25], 0)            #health bar
+        pygame.draw.line(screen, ORANGE,((1250/5*4)+10, 800-195), ((1250/5*4)+25,(800-180)), 5) #speed boost lines
+        pygame.draw.line(screen, ORANGE,((1250/5*4)+25, 800-180), ((1250/5*4)+10,800-165), 5)
+        pygame.draw.line(screen, ORANGE,((1250/5*4)+30, 800-195), ((1250/5*4)+45,(800-180)), 5)
+        pygame.draw.line(screen, ORANGE,((1250/5*4)+45, 800-180), ((1250/5*4)+30,800-165), 5)
+        pygame.draw.line(screen, ORANGE,((1250/5*4)+50, 800-195), ((1250/5*4)+65,(800-180)), 5)
+        pygame.draw.line(screen, ORANGE,((1250/5*4)+65, 800-180), ((1250/5*4)+50,800-165), 5)
 
     
                                  

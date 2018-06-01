@@ -19,7 +19,7 @@ BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
 PURPLE3 = (140, 18, 101)
-PURPLE4 = (153, 24, 112)
+PURPLE4 = (179, 25, 130)
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
@@ -280,16 +280,42 @@ def Game():
                 lvl0 = LVL(1)
                 lvls.append(lvl0)
                 e_screen = 0
-                store_ammo1 = StorePlate(PURPLE4, SCREEN_WIDTH/5, SCREEN_HEIGHT-100, 80, 40)
-                store_ammo3 = StorePlate(PURPLE3, SCREEN_WIDTH/5*2, SCREEN_HEIGHT-100, 80, 40)            
-                store_health = StorePlate(BC2, SCREEN_WIDTH/5*3, SCREEN_HEIGHT-100, 80, 40)
-                store_speed = StorePlate(BC1, SCREEN_WIDTH/5*4, SCREEN_HEIGHT-100, 80, 40)
+                store_ammo1 = StorePlate(PURPLE4, SCREEN_WIDTH/5, SCREEN_HEIGHT-200, 80, 40)
+                store_ammo3 = StorePlate(PURPLE3, SCREEN_WIDTH/5*2, SCREEN_HEIGHT-200, 80, 40)            
+                store_health = StorePlate(BC2, SCREEN_WIDTH/5*3, SCREEN_HEIGHT-200, 80, 40)
+                store_speed = StorePlate(BC1, SCREEN_WIDTH/5*4, SCREEN_HEIGHT-200, 80, 40)
 
                 store_stuff_list.add(store_ammo1)
                 store_stuff_list.add(store_ammo3)
                 store_stuff_list.add(store_health)
                 store_stuff_list.add(store_speed)
-              
+
+                # all of market text
+                SfontTitle = pygame.font.Font('freesansbold.ttf', 50)
+                StextSurfaceTitle = SfontTitle.render("NESTER MARKET", True, BLACK)
+                StextRectTitle = StextSurfaceTitle.get_rect()
+                StextRectTitle.center = (1000,100)
+                S2fontTitle = pygame.font.Font('freesansbold.ttf', 30)
+                S2textSurfaceTitle = S2fontTitle.render("give us all ur $", True, BLACK)
+                S2textRectTitle = S2textSurfaceTitle.get_rect()
+                S2textRectTitle.center = (1000,250)
+                S3fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S3textSurfaceTitle = S3fontTitle.render("1 bullet, $2", False, BLACK)
+                S3textRectTitle = S3textSurfaceTitle.get_rect()
+                S3textRectTitle.center = ((SCREEN_WIDTH/5)+40,(SCREEN_HEIGHT-200)+70)
+                S4fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S4textSurfaceTitle = S4fontTitle.render("3 bullets, $5", False, BLACK)
+                S4textRectTitle = S4textSurfaceTitle.get_rect()
+                S4textRectTitle.center = ((SCREEN_WIDTH/5*2)+40,(SCREEN_HEIGHT-200)+70)
+                S5fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S5textSurfaceTitle = S5fontTitle.render("+20 health, $10", False, BLACK)
+                S5textRectTitle = S5textSurfaceTitle.get_rect()
+                S5textRectTitle.center = ((SCREEN_WIDTH/5*3)+40,(SCREEN_HEIGHT-200)+70)
+                S6fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S6textSurfaceTitle = S6fontTitle.render("**ONE TIME PURCHASE** SPEED BOOST - $30", False, BLACK)
+                S6textRectTitle = S6textSurfaceTitle.get_rect()
+                S6textRectTitle.center = ((SCREEN_WIDTH/5*4)+40,(SCREEN_HEIGHT-200)+70)
+                 
 
     #lvl 1
             elif Y == 1 and X == 1:
@@ -462,10 +488,17 @@ def Game():
 
             if Y == 0 and X == 1:
                 lvl0.draw(screen)
-                store_stuff_list.draw(screen)
-                store_speed.drawExtra(screen)
+                store_stuff_list.draw(screen)   #draw store 'pressure plates'  
+                store_speed.drawExtra(screen)   #draw extra items that you're buying on screen
+                                                #(bullets, health, etc)
+                screen.blit(StextSurfaceTitle,StextRectTitle)
+                screen.blit(S2textSurfaceTitle,S2textRectTitle)
+                screen.blit(S3textSurfaceTitle,S3textRectTitle)
+                screen.blit(S4textSurfaceTitle,S4textRectTitle)
+                screen.blit(S5textSurfaceTitle,S5textRectTitle)
+                screen.blit(S6textSurfaceTitle,S6textRectTitle)
                     
-            elif Y == 1 and X == 1:#plz dunt dark marks cyuz i t luk bad ;-;
+            elif Y == 1 and X == 1:             #plz dunt dark marks cyuz i t luk bad ;-;
                 lvl1.draw(screen)
             elif Y == 2 and X == 1:
                 lvl2.draw(screen)
