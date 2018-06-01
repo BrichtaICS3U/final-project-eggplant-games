@@ -18,6 +18,8 @@ GREEN = (0,255,0)           #test Green
 BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
+PURPLE3 = (140, 18, 101)
+PURPLE4 = (153, 24, 112)
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
@@ -54,6 +56,7 @@ b = False
 Y = 1
 X = 1
 Generate = True
+already_bought = False 
 # ----------- end of variable list ---------------#
 
 
@@ -157,6 +160,7 @@ def Change_SCREEN():
     global Y
     global X
     global Generate
+    global already_bought
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
         print("screen UP.")
@@ -174,6 +178,7 @@ def Change_SCREEN():
         print("screen RIGHT.")
         X += 1
     Generate = True
+    already_bought = False
 
 # --------------------- End of functions list ----------------------- #
 
@@ -245,6 +250,7 @@ def Game():
     global shoot                #adds the shoot variable
     global b                    #adds bullet collision variable
     global Generate             #adds variable to generate levels
+    global already_bought       #variable to control amount of times player can buy speedboost
     Game = True                 #while the variable is true the game will run
     
     while Game:
@@ -274,18 +280,16 @@ def Game():
                 lvl0 = LVL(1)
                 lvls.append(lvl0)
                 e_screen = 0
-                store_ammo1 = StorePlate(GRAY, SCREEN_WIDTH/5, SCREEN_HEIGHT-100, 80, 40)
-                store_ammo3 = StorePlate(GRAY, SCREEN_WIDTH/5*2, SCREEN_HEIGHT-100, 80, 40)            
-                store_health = StorePlate(GRAY, SCREEN_WIDTH/5*3, SCREEN_HEIGHT-100, 80, 40)
-                store_speed = StorePlate(GRAY, SCREEN_WIDTH/5*4, SCREEN_HEIGHT-100, 80, 40)
+                store_ammo1 = StorePlate(PURPLE4, SCREEN_WIDTH/5, SCREEN_HEIGHT-100, 80, 40)
+                store_ammo3 = StorePlate(PURPLE3, SCREEN_WIDTH/5*2, SCREEN_HEIGHT-100, 80, 40)            
+                store_health = StorePlate(BC2, SCREEN_WIDTH/5*3, SCREEN_HEIGHT-100, 80, 40)
+                store_speed = StorePlate(BC1, SCREEN_WIDTH/5*4, SCREEN_HEIGHT-100, 80, 40)
 
                 store_stuff_list.add(store_ammo1)
                 store_stuff_list.add(store_ammo3)
                 store_stuff_list.add(store_health)
                 store_stuff_list.add(store_speed)
-                store_stuff_list.draw(screen)
-                store_speed.drawExtra(screen)
-                
+              
 
     #lvl 1
             elif Y == 1 and X == 1:
@@ -452,11 +456,14 @@ def Game():
 
             Generate = False
 
+        
         #hit detection for doors            
         for lvl in lvls:
 
             if Y == 0 and X == 1:
                 lvl0.draw(screen)
+                store_stuff_list.draw(screen)
+                store_speed.drawExtra(screen)
                     
             elif Y == 1 and X == 1:#plz dunt dark marks cyuz i t luk bad ;-;
                 lvl1.draw(screen)
@@ -676,12 +683,27 @@ def Game():
         for store_item in store_stuff_list:
             store_col = pygame.sprite.collide_rect(player, store_item)
             if store_col == True:
-                if store_item.colour == GRAY and player.money >= 2:
+                if store_item.colour == PURPLE4 and player.money >= 2 and player.ammo <5:               #Player is buying 1x bullet
                     player.money -= 2
                     player.rect.y -= 200
                     player.ammo += 1
+                elif store_item.colour == PURPLE3 and player.money >= 5 and player.ammo <= 2:           #Player is buying 3x bullet
+                    player.money -= 5
+                    player.rect.y -= 200
+                    player.ammo += 3
+                elif store_item.colour == BC2 and player.money >= 10 and player.HP <= 80:               #Player is buying extra health
+                    player.money -= 10
+                    player.rect.y -= 200
+                    player.HP += 20
+                elif store_item.colour == BC1 and player.money >= 30 and already_bought==False:         #player is buying speed boost (SINGLE BUY ITEM)
+                    player.money -= 30
+                    player.rect.y -= 200
+                    player.movespeed += 1
+                    already_bought = True
                 else:
                     player.rect.y -= 200
+                    print("You dont have enough money / room for what you're trying to buy!")
+                    
         """insert code for collisions between enemies here"""
     
         

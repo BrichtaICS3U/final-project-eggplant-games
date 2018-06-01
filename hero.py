@@ -11,12 +11,13 @@ RED = (255, 0, 0)
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, HP=100, ammo=5, money=0):
+    def __init__(self, width, height, HP=100, ammo=5, money=100, movespeed=2):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.HP = HP
         self.ammo = ammo
         self.money = money
+        self.movespeed = movespeed
         
         # Pass in the color of the hero, x and y position, width and height.
         # Set the background color and set it to be transparent
@@ -34,25 +35,25 @@ class Hero(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_w]: #Up
-            self.rect.y -= 2
+            self.rect.y -= self.movespeed
         if keys[pygame.K_s]:# Down
-           self.rect.y += 2
+           self.rect.y += self.movespeed
         if keys[pygame.K_a]: #Left
-            self.rect.x -= 2
+            self.rect.x -= self.movespeed
         if keys[pygame.K_d]: #Right
-            self.rect.x += 2
+            self.rect.x += self.movespeed
 
     def sprint(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]: #Up 
-            self.rect.y -= 2
+            self.rect.y -= self.movespeed
         if keys[pygame.K_s]: #Down
-           self.rect.y += 2
+           self.rect.y += self.movespeed
         if keys[pygame.K_a]: #Left
-            self.rect.x -= 2
+            self.rect.x -= self.movespeed
         if keys[pygame.K_d]: #Right
-            self.rect.x += 2
+            self.rect.x += self.movespeed
         
     def die(self):
         print("You died!")
@@ -207,11 +208,11 @@ class StorePlate(pygame.sprite.Sprite):
         self.rect.y = y_pos
 
     def drawExtra(self, screen):
-        pygame.draw.rect(screen, BLACK, [(1250/5)+40, (800-100)+20, 5, 5], 0)
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4), (800-100)+20, 5, 5], 0)
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*2), (800-100)+20, 5, 5], 0)
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*3), (800-100)+20, 5, 5], 0)
-        pygame.draw.rect(screen, GREEN, [(1250/5*3)+40, (800-100)+20, 15, 25], 0)
+        pygame.draw.rect(screen, BLACK, [(1250/5)+38.5, (800-100)+18.5, 5, 5], 0)
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4)-2.5, (800-100)+18.5, 5, 5], 0)
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*2)-2.5, (800-100)+18.5, 5, 5], 0)
+        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*3)-2.5, (800-100)+18.5, 5, 5], 0)
+        pygame.draw.rect(screen, GREEN, [(1250/5*3)+32.5, (800-100)+7.5, 15, 25], 0)
         
             
 
