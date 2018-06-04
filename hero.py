@@ -209,17 +209,17 @@ class StorePlate(pygame.sprite.Sprite):
         self.rect.y = y_pos
 
     def drawExtra(self, screen):
-        pygame.draw.rect(screen, BLACK, [(1250/5)+38.5, (800-200)+18.5, 5, 5], 0)               #single bullet
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4)-2.5, (800-200)+18.5, 5, 5], 0)       #3 bullets
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*2)-2.5, (800-200)+18.5, 5, 5], 0)     #
-        pygame.draw.rect(screen, BLACK, [(1250/5*2)+(80/4*3)-2.5, (800-200)+18.5, 5, 5], 0)     #
-        pygame.draw.rect(screen, GREEN, [(1250/5*3)+32.5, (800-200)+7.5, 15, 25], 0)            #health bar
-        pygame.draw.line(screen, ORANGE,((1250/5*4)+10, 800-195), ((1250/5*4)+25,(800-180)), 5) #speed boost lines
-        pygame.draw.line(screen, ORANGE,((1250/5*4)+25, 800-180), ((1250/5*4)+10,800-165), 5)
-        pygame.draw.line(screen, ORANGE,((1250/5*4)+30, 800-195), ((1250/5*4)+45,(800-180)), 5)
-        pygame.draw.line(screen, ORANGE,((1250/5*4)+45, 800-180), ((1250/5*4)+30,800-165), 5)
-        pygame.draw.line(screen, ORANGE,((1250/5*4)+50, 800-195), ((1250/5*4)+65,(800-180)), 5)
-        pygame.draw.line(screen, ORANGE,((1250/5*4)+65, 800-180), ((1250/5*4)+50,800-165), 5)
+        pygame.draw.rect(screen, BLACK, [(154)+58.5, (800-300)+38.5, 5, 5], 0)              #single bullet
+        pygame.draw.rect(screen, BLACK, [(428)+(120/4)-2.5, (800-300)+38.5, 5, 5], 0)       #3 bullets
+        pygame.draw.rect(screen, BLACK, [(428)+(120/4*2)-2.5, (800-300)+38.5, 5, 5], 0)     #
+        pygame.draw.rect(screen, BLACK, [(428)+(120/4*3)-2.5, (800-300)+38.5, 5, 5], 0)     #
+        pygame.draw.rect(screen, GREEN, [(702)+52.5, (800-300)+27.5, 15, 25], 0)             #health bar
+        pygame.draw.line(screen, ORANGE,((976)+35, 800-275), ((976)+50,(800-260)), 5)       #speed boost lines
+        pygame.draw.line(screen, ORANGE,((976)+50, 800-260), ((976)+35,800-245), 5)
+        pygame.draw.line(screen, ORANGE,((976)+55, 800-275), ((976)+70,(800-260)), 5)
+        pygame.draw.line(screen, ORANGE,((976)+70, 800-260), ((976)+55,800-245), 5)
+        pygame.draw.line(screen, ORANGE,((976)+75, 800-275), ((976)+90,(800-260)), 5)
+        pygame.draw.line(screen, ORANGE,((976)+90, 800-260), ((976)+75,800-245), 5)
 
     
                                  
