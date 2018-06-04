@@ -434,12 +434,12 @@ class LVL():
         if Holes == 8:
 
             h8_1 = HOLE(50,800,WHITE)
-            h8_1.rect.x = 550
+            h8_1.rect.x = 500
             h8_1.rect.y = 0
             self.hole_list.add(h8_1)
 
             h8_2 = HOLE(50,800,WHITE)
-            h8_2.rect.x = 700
+            h8_2.rect.x = 750
             h8_2.rect.y = 0
             self.hole_list.add(h8_2)
             
@@ -591,6 +591,123 @@ class LVL():
             h11_9.rect.x = 750
             h11_9.rect.y = 350
             self.hole_list.add(h11_9)
+
+        if Holes == 12:
+            h12_1 = HOLE(150,50,WHITE)
+            h12_1.rect.x = 0
+            h12_1.rect.y = 250
+            self.hole_list.add(h12_1)
+
+            h12_2 = HOLE(150,50,WHITE)
+            h12_2.rect.x = 0
+            h12_2.rect.y = 500
+            self.hole_list.add(h12_2)
+
+            h12_3 = HOLE(100,100,WHITE)
+            h12_3.rect.x = 150
+            h12_3.rect.y = 450
+            self.hole_list.add(h12_3)
+
+            h12_4 = HOLE(50,100,WHITE)
+            h12_4.rect.x = 0
+            h12_4.rect.y = 550
+            self.hole_list.add(h12_4)
+
+            h12_5 = HOLE(300,100,WHITE)
+            h12_5.rect.x = 0
+            h12_5.rect.y = 650
+            self.hole_list.add(h12_5)
+
+            h12_6 = HOLE(100,50,WHITE)
+            h12_6.rect.x = 300
+            h12_6.rect.y = 750
+            self.hole_list.add(h12_6)
+
+            h12_7 = HOLE(450,250,WHITE)
+            h12_7.rect.x = 500
+            h12_7.rect.y = 450
+            self.hole_list.add(h12_7)
+
+            h12_8 = HOLE(50,100,WHITE)
+            h12_8.rect.x = 350
+            h12_8.rect.y = 450
+            self.hole_list.add(h12_8)
+            
+            h12_9 = HOLE(100,200,WHITE)
+            h12_9.rect.x = 400
+            h12_9.rect.y = 450
+            self.hole_list.add(h12_9)
+
+            h12_10 = HOLE(50,100,WHITE)
+            h12_10.rect.x = 950
+            h12_10.rect.y = 600
+            self.hole_list.add(h12_10)
+
+            h12_11 = HOLE(50,100,WHITE)
+            h12_11.rect.x = 500
+            h12_11.rect.y = 700
+            self.hole_list.add(h12_11)
+
+            h12_12 = HOLE(300,50,WHITE)
+            h12_12.rect.x = 750
+            h12_12.rect.y = 750
+            self.hole_list.add(h12_12)
+
+            h12_13 = HOLE(50,200,WHITE)
+            h12_13.rect.x = 1050
+            h12_13.rect.y = 550
+            self.hole_list.add(h12_13)
+
+            h12_14 = HOLE(50,150,WHITE)
+            h12_14.rect.x = 1000
+            h12_14.rect.y = 400
+            self.hole_list.add(h12_14)
+
+            h12_15 = HOLE(450,100,WHITE)
+            h12_15.rect.x = 150
+            h12_15.rect.y = 250
+            self.hole_list.add(h12_15)
+
+            h12_16 = HOLE(100,50,WHITE)
+            h12_16.rect.x = 450
+            h12_16.rect.y = 350
+            self.hole_list.add(h12_16)
+
+            h12_17 = HOLE(50,150,WHITE)
+            h12_17.rect.x = 700
+            h12_17.rect.y = 250
+            self.hole_list.add(h12_17)
+
+            h12_18 = HOLE(150,100,WHITE)
+            h12_18.rect.x = 750
+            h12_18.rect.y = 250
+            self.hole_list.add(h12_18)
+
+            h12_19 = HOLE(50,50,WHITE)
+            h12_19.rect.x = 800
+            h12_19.rect.y = 400
+            self.hole_list.add(h12_19)
+
+            h12_20 = HOLE(100,50,WHITE)
+            h12_20.rect.x = 900
+            h12_20.rect.y = 350
+            self.hole_list.add(h12_20)
+
+            h12_21 = HOLE(50,250,WHITE)
+            h12_21.rect.x = 350
+            h12_21.rect.y = 0
+            self.hole_list.add(h12_21)
+
+            h12_22 = HOLE(50,100,WHITE)
+            h12_22.rect.x = 750
+            h12_22.rect.y = 0
+            self.hole_list.add(h12_22)
+
+            h12_23 = HOLE(350,50,WHITE)
+            h12_23.rect.x = 450
+            h12_23.rect.y = 100
+            self.hole_list.add(h12_23)
+            
 
         if Holes == 13:
             
