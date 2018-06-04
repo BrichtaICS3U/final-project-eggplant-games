@@ -79,6 +79,7 @@ class LVL():
             elif Lock == 2:
                 top_door = DOOR(100,5,RED,2)
             else:
+
                 top_door = DOOR(100,5,WHITE)
             top_door.rect.x = 650 - 50
             top_door.rect.y = 0
@@ -86,7 +87,9 @@ class LVL():
            
 
         if S == True:
+
             bot_door = DOOR(100,5,WHITE)
+
             bot_door.rect.x = 650 - 50
             bot_door.rect.y = 800 - 5
             self.doors_list.add(bot_door)
@@ -131,11 +134,13 @@ class LVL():
             R_Key.rect.y = 600
             self.Key_list.add(R_Key)
 
+
         if Key == 3:
             Y_Key = KEY(50,50,YELLOW,3)
             Y_Key.rect.x = 1175
             Y_Key.rect.y = 425
             self.Key_list.add(Y_Key)
+
             
 
 
@@ -159,6 +164,7 @@ class LVL():
 
         self.hole_list = pygame.sprite.Group()
         
+
         if Holes == 1:
             
             h1_1 = HOLE(250,800,WHITE)
@@ -1294,6 +1300,7 @@ class LVL():
             h16_7.rect.y = 0
             self.hole_list.add(h16_7)
 
+
             h16_8 = HOLE(50,50,WHITE)
             h16_8.rect.x = 250
             h16_8.rect.y = 550
@@ -1418,5 +1425,3 @@ class LVL():
         self.doors_list.draw(screen)
         self.hole_list.draw(screen)
         self.Key_list.draw(screen)
-
-        

@@ -6,17 +6,19 @@ BLACK = (0, 0, 0)
 GREEN = (0,255,0)
 GREY = (100, 100, 100)
 RED = (255, 0, 0)
+ORANGE = (247,163,7)
 
  
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, HP=100, ammo=5, money=0):
+    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=2):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.HP = HP
         self.ammo = ammo
         self.money = money
+        self.movespeed = movespeed
         
         # Pass in the color of the hero, x and y position, width and height.
         # Set the background color and set it to be transparent
@@ -34,55 +36,92 @@ class Hero(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_w]: #Up
-            self.rect.y -= 4
+            self.rect.y -= self.movespeed
         if keys[pygame.K_s]:# Down
-           self.rect.y += 4
+           self.rect.y += self.movespeed
         if keys[pygame.K_a]: #Left
-            self.rect.x -= 4
+            self.rect.x -= self.movespeed
         if keys[pygame.K_d]: #Right
-            self.rect.x += 4
+            self.rect.x += self.movespeed
+
 
     def sprint(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]: #Up 
-            self.rect.y -= 2
+            self.rect.y -= self.movespeed
         if keys[pygame.K_s]: #Down
-           self.rect.y += 2
+           self.rect.y += self.movespeed
         if keys[pygame.K_a]: #Left
-            self.rect.x -= 2
+            self.rect.x -= self.movespeed
         if keys[pygame.K_d]: #Right
-            self.rect.x += 2
+            self.rect.x += self.movespeed
         
     def die(self):
         print("You died!")
 
 class Sword(pygame.sprite.Sprite):
 
-    def __init__(self, width, height):
+    def __init__(self, x_pos, y_pos, width, height):
         super().__init__()
-
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.width = width
+        self.height = height
+        
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
  
-        pygame.draw.rect(self.image, GREY, [-10, -10, width, height])
+        pygame.draw.rect(self.image, GREY, [0, 0, width, height])
         
         self.rect = self.image.get_rect()
 
     def up(self, player, screen):
-        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y-25, 5, 25], 0) #draw sword from center of player
+      
+        self.width = 5
+        self.height = 25
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.x = player.rect.x+12.5
+        self.rect.y = player.rect.y-25
         
     def down(self, player, screen):
-        pygame.draw.rect(screen, GREY, [(player.rect.x+12.5), player.rect.y+40, 5, 25], 0)
-
-    def right(self, player, screen):
-        pygame.draw.rect(screen, GREY, [player.rect.x+30, player.rect.y+17.5, 25, 5], 0)
-     
-    def left(self, player, screen):
-        pygame.draw.rect(screen, GREY, [player.rect.x-25, player.rect.y+17.5, 25, 5], 0)       
+        self.width = 5
+        self.height = 25
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.x = player.rect.x+12.5
+        self.rect.y = player.rect.y+40
         
+    def right(self, player, screen):
+        self.width = 25
+        self.height = 5
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.x = player.rect.x+30
+        self.rect.y = player.rect.y+17.5
+        
+    def left(self, player, screen):       
+        self.width = 25
+        self.height = 5
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.x = player.rect.x+-25
+        self.rect.y = player.rect.y+17.5
 
+    def draw(self, player, screen):
+        pygame.draw.rect(self.image, GREY, [0, 0, self.width, self.height])
+        screen.blit(self.image, (player.rect.x, player.rect.y))
+        
 class Bullet(pygame.sprite.Sprite):
     
     def __init__(self, colour, width, height, x_pos, y_pos):
@@ -174,9 +213,11 @@ class Enemy(pygame.sprite.Sprite):
 
 class Drops(pygame.sprite.Sprite):
 
-    def __init__(self, colour, width, height, enemy):
+    def __init__(self, colour, width, height, x_pos, y_pos):
         super().__init__()
         self.colour = colour
+        self.x_pos = x_pos
+        self.y_pos = y_pos
         
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
@@ -184,8 +225,39 @@ class Drops(pygame.sprite.Sprite):
 
         pygame.draw.rect(self.image, colour, [0, 0, width, height])
         self.rect = self.image.get_rect()
-        self.rect.x = enemy.rect.x
-        self.rect.y = enemy.rect.y
+        self.rect.x = x_pos
+        self.rect.y = y_pos
+
+class StorePlate(pygame.sprite.Sprite):
+
+    def __init__(self, colour, x_pos, y_pos, width, height):
+        super().__init__()
+        self.colour = colour
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(WHITE)
+        self.image.set_colorkey(WHITE)
+
+        pygame.draw.rect(self.image, colour, [0, 0, width, height])
+        self.rect = self.image.get_rect()
+        self.rect.x = x_pos
+        self.rect.y = y_pos
+
+    def drawExtra(self, screen):
+        pygame.draw.rect(screen, BLACK, [(154)+58.5, (800-300)+38.5, 5, 5], 0)              #single bullet
+        pygame.draw.rect(screen, BLACK, [(428)+(120/4)-2.5, (800-300)+38.5, 5, 5], 0)       #3 bullets
+        pygame.draw.rect(screen, BLACK, [(428)+(120/4*2)-2.5, (800-300)+38.5, 5, 5], 0)     #
+        pygame.draw.rect(screen, BLACK, [(428)+(120/4*3)-2.5, (800-300)+38.5, 5, 5], 0)     #
+        pygame.draw.rect(screen, GREEN, [(702)+52.5, (800-300)+27.5, 15, 25], 0)             #health bar
+        pygame.draw.line(screen, ORANGE,((976)+35, 800-275), ((976)+50,(800-260)), 5)       #speed boost lines
+        pygame.draw.line(screen, ORANGE,((976)+50, 800-260), ((976)+35,800-245), 5)
+        pygame.draw.line(screen, ORANGE,((976)+55, 800-275), ((976)+70,(800-260)), 5)
+        pygame.draw.line(screen, ORANGE,((976)+70, 800-260), ((976)+55,800-245), 5)
+        pygame.draw.line(screen, ORANGE,((976)+75, 800-275), ((976)+90,(800-260)), 5)
+        pygame.draw.line(screen, ORANGE,((976)+90, 800-260), ((976)+75,800-245), 5)
+
     
                                  
 class HealthBar():

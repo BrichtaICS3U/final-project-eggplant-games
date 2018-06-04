@@ -1,8 +1,8 @@
 import pygame
 pygame.init()
-from hero import Hero, Enemy, Bullet, HealthBar, Sword, AmmoBar, Drops     #import the sprites that Abbey has made
-from Door import DOOR                                               #import the sprites that Nick has made
-from LVLs import LVL                                                #FML
+from hero import *                          #import the sprites that Abbey has made
+from Door import DOOR, KEY
+from LVLs import LVL                        #FML
 import math
 import random
 
@@ -18,6 +18,8 @@ GREEN = (0,255,0)           #test Green
 BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
+PURPLE3 = (140, 18, 101)
+PURPLE4 = (179, 25, 130)
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
@@ -53,6 +55,8 @@ shoot = True
 b = False
 Y = 1
 X = 1
+Generate = True
+already_bought = False 
 # ----------- end of variable list ---------------#
 
 
@@ -155,6 +159,8 @@ def Quit():
 def Change_SCREEN():
     global Y
     global X
+    global Generate
+    global already_bought
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
         print("screen UP.")
@@ -171,6 +177,8 @@ def Change_SCREEN():
         player.rect.x = 6
         print("screen RIGHT.")
         X += 1
+    Generate = True
+    already_bought = False
 
 # --------------------- End of functions list ----------------------- #
 
@@ -190,6 +198,7 @@ enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
 ammo_drops_list = pygame.sprite.Group()         #enemy ammo drops list
 health_drops_list = pygame.sprite.Group()       #enemy health drops list
 money_drops_list = pygame.sprite.Group()
+store_stuff_list = pygame.sprite.Group()
 
 #player character
 player = Hero(30,40)
@@ -206,7 +215,7 @@ all_sprites_list.add(enemy)
 bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
 
 #Initial sword
-player_sword = Sword(1,1)
+player_sword = Sword(-40,-40, 1,1)
 all_sprites_list.add(player_sword)
 
 #list of lvls
@@ -240,6 +249,8 @@ def Game():
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot                #adds the shoot variable
     global b                    #adds bullet collision variable
+    global Generate             #adds variable to generate levels
+    global already_bought       #variable to control amount of times player can buy speedboost
     Game = True                 #while the variable is true the game will run
     
     while Game:
@@ -250,41 +261,304 @@ def Game():
                 if event.key==pygame.K_p:       #if the p key is pressed
                     Game = False
                     #exit the game and return to the main menu
+
+        keys = pygame.key.get_pressed()
                     
 #fill the screen white evertime the code runs
         screen.fill(WHITE)
     
 ########################################## IMPORTANT DO NOT TOUCH PLZ (@_@)
-        if Y == 1 and X == 1:
-            lvl1.draw(screen)
-            pygame.draw.rect(screen,RED,[75,75,75,75])
-            e_screen = 2        #variable to control the number of enemies on screen
-                                #2 enemies in red room
-            
-        if Y == 2 and X == 1:
-            lvl2.draw(screen)
-            pygame.draw.rect(screen,GREEN,[75,75,75,75])
-            e_screen = 3        #3 enemies in green room
+        ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
+# this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
 
+# Forest/outside dungeon ---- Tutorial #
 
-        if Y == 1 and X == 2:
-            lvl3.draw(screen)
-            pygame.draw.rect(screen,BLUE,[75,75,75,75])
-            e_screen = 2        #2 enemies in blue room
-            
+        if Generate == True:
 
-        if Y == 2 and X == 2:
-            lvl4.draw(screen)
-            pygame.draw.rect(screen,BLACK,[75,75,75,75])
-            e_screen = 1        #1 enemy in black room
+    #lvl store
+            if Y == 0 and X == 1:
+                lvl0 = LVL(1)
+                lvls.append(lvl0)
+                e_screen = 0
+                store_ammo1 = StorePlate(PURPLE4, 154, SCREEN_HEIGHT-300, 120, 80)
+                store_ammo3 = StorePlate(PURPLE3, 428, SCREEN_HEIGHT-300, 120, 80)            
+                store_health = StorePlate(BC2, 702, SCREEN_HEIGHT-300, 120, 80)
+                store_speed = StorePlate(BC1, 976, SCREEN_HEIGHT-300, 120, 80)
+
+                store_stuff_list.add(store_ammo1)
+                store_stuff_list.add(store_ammo3)
+                store_stuff_list.add(store_health)
+                store_stuff_list.add(store_speed)
+
+                # all of market text
+                SfontTitle = pygame.font.Font('freesansbold.ttf', 50)
+                StextSurfaceTitle = SfontTitle.render("NESTER MARKET", True, BLACK)
+                StextRectTitle = StextSurfaceTitle.get_rect()
+                StextRectTitle.center = (1000,100)
+                S2fontTitle = pygame.font.Font('freesansbold.ttf', 30)
+                S2textSurfaceTitle = S2fontTitle.render("give us all ur $", True, BLACK)
+                S2textRectTitle = S2textSurfaceTitle.get_rect()
+                S2textRectTitle.center = (1000,250)
+                S3fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S3textSurfaceTitle = S3fontTitle.render("1 bullet, $2", False, BLACK)
+                S3textRectTitle = S3textSurfaceTitle.get_rect()
+                S3textRectTitle.center = ((154)+60,(SCREEN_HEIGHT-250)+70)
+                S4fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S4textSurfaceTitle = S4fontTitle.render("3 bullets, $5", False, BLACK)
+                S4textRectTitle = S4textSurfaceTitle.get_rect()
+                S4textRectTitle.center = ((428)+60,(SCREEN_HEIGHT-250)+70)
+                S5fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S5textSurfaceTitle = S5fontTitle.render("+20 health, $10", False, BLACK)
+                S5textRectTitle = S5textSurfaceTitle.get_rect()
+                S5textRectTitle.center = ((702)+60,(SCREEN_HEIGHT-250)+70)
+                S6fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S6textSurfaceTitle = S6fontTitle.render("**ONE TIME PURCHASE** SPEED BOOST, $30", False, BLACK)
+                S6textRectTitle = S6textSurfaceTitle.get_rect()
+                S6textRectTitle.center = ((976)+60,(SCREEN_HEIGHT-250)+70)
+                 
+
+    #lvl 1
+            elif Y == 1 and X == 1:
+                lvl1 = LVL(8)
+                lvls.append(lvl1)
+                e_screen = 0
+                        
+
+    #lvl 2
+            elif Y == 2 and X == 1:
+                lvl3 = LVL(8)
+                lvls.append(lvl3)
+                lvl3.draw(screen)
+                e_screen = 1
+                
+
+    #lvl 3
+            elif Y == 3 and X == 1:
+                lvl5 = LVL(100)
+                lvls.append(lvl5)
+                
+                
+    #lvl 5
+            elif Y == 3 and X == 0:
+                lvl4 = LVL(6)
+                lvls.append(lvl4)
+                e_screen = 1
+               
+
+    #lvl 6
+            elif Y == 3 and X == -1:
+                lvl6 = LVL(10)
+                lvls.append(lvl6)
+                e_screen = 1
+
+    #lvl 7
+            elif Y == 2 and X == -1:
+                lvl7 = LVL(1)
+                lvls.append(lvl7)
+                e_screen = 1
+                
+    # Enterance/Sewers ----- lvl 1 #
+    #lvl 8
+            elif Y == 4 and X == 1:
+                lvl8 = LVL(8)
+                lvls.append(lvl8)
+                e_screen = 0
+
+    #lvl 9
+            elif Y == 5 and X == 1:
+                lvl9 = LVL(8)
+                lvls.append(lvl9)
+                e_screen = 0
+
+    #lvl 10 //first floor / hub for floor (reference point)//
+            elif Y == 6 and X == 1:
+                lvl10 = LVL(100)
+                lvls.append(lvl10)
+                e_screen = 0
+
+    #lvl 11
+            elif Y == 6 and X == 2:
+                lvl11 = LVL(6)
+                lvls.append(lvl11)
+                e_screen = 0
+
+    #lvl 12 //Roundabout entrance//
+            elif Y == 6 and X == 3:
+                lvl12 = LVL(20)
+                lvls.append(lvl12)
+                e_screen = 0
+
+    #lvl 13
+            elif Y == 7 and X == 3:
+                lvl13 = LVL(10)
+                lvls.append(lvl13)
+                e_screen = 0
+
+    #lvl 14
+            elif Y == 7 and X == 4:
+                lvl14 = LVL(6)
+                lvls.append(lvl14)
+                e_screen = 0
+
+    #lvl 15
+            elif Y == 7 and X == 5:
+                lvl15 = LVL(9)
+                lvls.append(lvl15)
+                e_screen = 0
+
+    #lvl 16
+            elif Y == 6 and X == 5:
+                lvl16 = LVL(8)
+                lvls.append(lvl16)
+                e_screen = 0
+
+    #lvl 17
+            elif Y == 5 and X == 5:
+                lvl17 = LVL(3)
+                lvls.append(lvl17)
+                e_screen = 0
+
+    #lvl 18
+            elif Y == 5 and X == 4:
+                lvl18 = LVL(6)
+                lvls.append(lvl18)
+                e_screen = 0
+
+    #lvl 19 //end of sewer roundabout//
+            elif Y == 5 and X == 3:
+                lvl19 = LVL(5)
+                lvls.append(lvl19)
+                e_screen = 0
+
+        
+    #lvl 21 // start of left part of sewers//
+            elif Y == 6 and X == 0:
+                lvl21 = LVL(6)
+                lvls.append(lvl21)
+                e_screen = 0
+
+    #lvl 22
+            elif Y == 6 and X == -1:
+                lvl22 = LVL(30)
+                lvls.append(lvl22)
+                e_screen = 0
+
+    #lvl 23
+            elif Y == 5 and X == -1:
+                lvl23 = LVL(1)
+                lvls.append(lvl23)
+                e_screen = 0
+
+    #lvl 24
+            elif Y == 6 and X == -2:
+                lvl24 = LVL(40)
+                lvls.append(lvl24)
+                e_screen = 0            
+
+    #lvl 25
+            elif Y == 6 and X == -3:
+                lvl25 = LVL(4)
+                lvls.append(lvl25)
+                e_screen = 0    
+
+    #lvl 26
+            elif Y == 7 and X == -2:
+                lvl26 = LVL(8)
+                lvls.append(lvl26)
+                e_screen = 0
+
+    #lvl 27
+            elif Y == 8 and X == -2:
+                lvl27 = LVL(9)
+                lvls.append(lvl27)
+                e_screen = 0
+
+    #lvl 28
+            elif Y == 8 and X == -3:
+                lvl28 = LVL(4)
+                lvls.append(lvl28)
+                e_screen = 0
+
+            Generate = False
+
+        
+        #hit detection for doors            
+        for lvl in lvls:
+
+            if Y == 0 and X == 1:
+                lvl0.draw(screen)
+                store_stuff_list.draw(screen)   #draw store 'pressure plates'  
+                store_speed.drawExtra(screen)   #draw extra items that you're buying on screen
+                                                #(bullets, health, etc)
+                screen.blit(StextSurfaceTitle,StextRectTitle)
+                screen.blit(S2textSurfaceTitle,S2textRectTitle)
+                screen.blit(S3textSurfaceTitle,S3textRectTitle)
+                screen.blit(S4textSurfaceTitle,S4textRectTitle)
+                screen.blit(S5textSurfaceTitle,S5textRectTitle)
+                screen.blit(S6textSurfaceTitle,S6textRectTitle)
+                    
+            elif Y == 1 and X == 1:             #plz dunt dark marks cyuz i t luk bad ;-;
+                lvl1.draw(screen)
+            elif Y == 2 and X == 1:
+                lvl2.draw(screen)
+            elif Y == 3 and X == 1:
+                lvl3.draw(screen)
+            elif Y == 3 and X == 2:
+                lvl4.draw(screen)
+            elif Y == 3 and X == 0:
+                lvl5.draw(screen)
+            elif Y == 3 and X == -1:
+                lvl6.draw(screen)
+            elif Y == 2 and X == -1:
+                lvl7.draw(screen)
+            elif Y == 4 and X == 1:
+                lvl8.draw(screen)
+            elif Y == 5 and X == 1:
+                lvl10.draw(screen)
+            elif Y == 5 and X == 2:
+                lvl11.draw(screen)
+            elif Y == 5 and X == 3:
+                lvl12.draw(screen)
+            elif Y == 6 and X == 3:
+                lvl13.draw(screen)
+            elif Y == 6 and X == 4:
+                lvl14.draw(screen)
+            elif Y == 6 and X == 5:
+                lvl15.draw(screen)
+            elif Y == 5 and X == 5:
+                lvl16.draw(screen)
+            elif Y == 4 and X == 5:
+                lvl17.draw(screen)
+            elif Y == 4 and X == 4:
+                lvl18.draw(screen)
+            elif Y == 4 and X == 3:
+                lvl19.draw(screen)
+            elif Y == 5 and X == 0:
+                lvl21.draw(screen)
+            elif Y == 5 and X == -1:
+                lvl22.draw(screen)
+            elif Y == 4 and X == -1:
+                lvl23.draw(screen)
+            elif Y == 5 and X == -2:
+                lvl24.draw(screen)
+            elif Y == 5 and X == -3:
+                lvl25.draw(screen)
+            elif Y == 6 and X == -2:
+                lvl26.draw(screen)
+            elif Y == 7 and X == -2:
+                lvl27.draw(screen)
+            elif Y == 7 and X == -3:
+                lvl28.draw(screen)
         
             
         for lvl in lvls:
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)
             for door in Door_collision_list:
                 Change_SCREEN()
+
+                store_stuff_list.empty()
                 
-                for enemy in enemy_list:                #this code deletes the previous enemies off the screen
+                for enemy in enemy_list:                        #this code deletes the previous enemies off the screen
                     enemy.HP = 0
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
@@ -296,11 +570,38 @@ def Game():
                 for en_drop in health_drops_list:
                     health_drops_list.remove(en_drop)
                     all_sprites_list.remove(en_drop)
+
+                for bullet in Bullet_sprites_list:
+                    all_sprites_list.remove(bullet)
+                    Bullet_sprites_list.remove(bullet)
                 
-                for i in range(e_screen):                      #this code adds new enemies to next screen
+                for i in range(e_screen):                       #this code adds new enemies to next screen
                     enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
                     enemy_list.add(enemy)                       #set earlier
                     all_sprites_list.add(enemy)
+
+
+            #hit detection for objects or "HOLE"(s) or "WALLS" in the game                
+            Hole_collision_list = pygame.sprite.spritecollide(player,lvl.hole_list,False)
+            for hole in Hole_collision_list:
+                
+                for HOLE in lvl.hole_list: 
+                    if player.rect.x + 30 >= HOLE.rect.x -2 and player.rect.x < HOLE.rect.x - 26:#Left
+                        Hit_Wall_R()
+                    elif player.rect.x <= HOLE.rect.x + HOLE.width and player.rect.x + 30 > HOLE.rect.x + HOLE.width + 26:#Right
+                        Hit_Wall_L()
+                    elif player.rect.y + 40 > HOLE.rect.y and player.rect.y < HOLE.rect.y - 36:#Top
+                        Hit_Wall_U()
+                    elif player.rect.y < HOLE.rect.y + HOLE.height and player.rect.y + 40 > HOLE.rect.y + HOLE.height + 36:#Bottom
+                        Hit_Wall_D()
+
+
+#this little bit is for the hit detection between players and keys                    
+            Key_collision_list = pygame.sprite.spritecollide(player,lvl.Key_list,False)
+            for key in Key_collision_list:
+                for Key in lvl.Key_list:
+                    pygame.draw.rect(screen,F_C,[Key.rect.x,Key.rect.y,Key.width,Key.height])
+
                 
 #########################################################            
 
@@ -310,22 +611,31 @@ def Game():
         if keys[pygame.K_a]:                        #if the A key is pressed
             player.move()                           #the player will move to the Left at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player_sword.left(player, screen)   #player melee attacks to the left            
+                player_sword.left(player, screen)   #player melee attacks to the left
+                player_sword.draw(player,screen)
         elif keys[pygame.K_s]:                      #if the S key is pressed
             player.move()                           #the player will move Down at a speed of 2 pixels
             if keys[pygame.K_e]:
                 player_sword.down(player, screen)   #player melee attacks downward
+                player_sword.draw(player,screen)
         elif keys[pygame.K_d]:                      #if the D key is pressed
             player.move()                           #the player will move to the Right at a speed of 2 pixels
             if keys[pygame.K_e]:
                 player_sword.right(player, screen)  #player melee attacks to the right
+                player_sword.draw(player,screen)
         elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
             if keys[pygame.K_e]:
                 player_sword.up(player, screen)     #player melee attacks upwards
+                player_sword.draw(player,screen)
 
+
+        if keys[pygame.K_e] == False:
+            player_sword.rect.x = -40
+            player_sword.rect.y = -40
+            
         #player sprinting
-        if keys[pygame.K_LSHIFT]:               #if left shift is pressed
+        if keys[pygame.K_LSHIFT]:                   #if left shift is pressed
                 if keys[pygame.K_a]:                #and if A is pressed
                     player.move()                       #double the movement speed Left
                 elif keys[pygame.K_s]:              #and if S is pressed
@@ -340,6 +650,12 @@ def Game():
         for enemy in enemy_list:
             if enemy.HP > 0:
                 enemy.move_to_player(player)
+
+        #To make bullets not warp around screen
+        for bullet in Bullet_sprites_list:
+            if bullet.rect.x < 0 or bullet.rect.x > 1250 or bullet.rect.y < 0 or bullet.rect.y > 800:   #if bullet goes off screen,
+                all_sprites_list.remove(bullet)             #delete it    
+                Bullet_sprites_list.remove(bullet)
                         
         #player shooting
         if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
@@ -366,14 +682,15 @@ def Game():
         for enemy in enemy_list:    
             main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
             if main_col == True:
-                if keys[pygame.K_e]:            #if the player is holding E, cue melee attack
-                    enemy.HP -= 25              #decrease enemy health by 10
-                    enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
-                    enemy.rect.y -= 100         #aka player who is holding 'sword'
-                else:
-                    player.HP -= 10
-                    player.rect.x -= 100        #Player bounces back on enemy collision
-                    player.rect.y -= 50
+                player.HP -= 20
+                player.rect.x -= 100        #Player bounces back on enemy collision
+                player.rect.y -= 50
+        
+            melee_col = pygame.sprite.collide_rect(player_sword, enemy)
+            if melee_col == True:
+                enemy.HP -= 50
+                enemy.rect.x -=100
+                enemy.rect.y -= 100
         
         if b == True:                                   #global variable indicating that a bullet is present   
             for enemy in enemy_list:
@@ -416,12 +733,35 @@ def Game():
                     money_drops_list.remove(en_drop)               
                     all_sprites_list.remove(en_drop)
                     player.money += 3
-            
+
+        for store_item in store_stuff_list:
+            store_col = pygame.sprite.collide_rect(player, store_item)
+            if store_col == True:
+                if store_item.colour == PURPLE4 and player.money >= 2 and player.ammo <5:               #Player is buying 1x bullet
+                    player.money -= 2
+                    player.rect.y -= 200
+                    player.ammo += 1
+                elif store_item.colour == PURPLE3 and player.money >= 5 and player.ammo <= 2:           #Player is buying 3x bullet
+                    player.money -= 5
+                    player.rect.y -= 200
+                    player.ammo += 3
+                elif store_item.colour == BC2 and player.money >= 10 and player.HP <= 80:               #Player is buying extra health
+                    player.money -= 10
+                    player.rect.y -= 200
+                    player.HP += 20
+                elif store_item.colour == BC1 and player.money >= 30 and already_bought==False:         #player is buying speed boost (SINGLE BUY ITEM)
+                    player.money -= 30
+                    player.rect.y -= 200
+                    player.movespeed += 1
+                    already_bought = True
+                else:
+                    player.rect.y -= 200
+                    print("You dont have enough money / room for what you're trying to buy!")
+                    
         """insert code for collisions between enemies here"""
     
         
-# -------------------end of collisions --------------------------------------------------------------------------------                   
-    
+# -------------------end of collisions --------------------------------------------------------------------------------                         
         HealthBar(screen, player)           #this draws and updates the player health bar(s)
         TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
         AmmoBar(screen, player)             #draws and updates the player ammo bar
@@ -437,19 +777,19 @@ def Game():
                 #money drop (always happens)
                 m_chance = random.randint(0, 100)
                 if m_chance <= 60:                          #60% chance of brown coin (1$)
-                    en_drop = Drops(BROWN, 10, 10, enemy)
+                    en_drop = Drops(BROWN, 10, 10, enemy.rect.x, enemy.rect.y)
                     en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
                     
                 elif 60 < m_chance < 90:                    #30% chance of silver coin ($2)
-                    en_drop = Drops(SILVER, 10, 10, enemy)
+                    en_drop = Drops(SILVER, 10, 10, enemy.rect.x, enemy.rect.y)
                     en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
            
                 elif m_chance >= 90:                        #10% chance of gold coin ($3)
-                    en_drop = Drops(GOLD, 10, 10, enemy)
+                    en_drop = Drops(GOLD, 10, 10, enemy.rect.x, enemy.rect.y)
                     en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
@@ -459,11 +799,11 @@ def Game():
                 if chance <= 50:                            #numbers 1-50 give a drop (50% chance)
                     chance2 = random.randint(0, 100)        #get another random numner
                     if chance2 <= 75:                       #75% chance the drop is for ammo
-                        en_drop = Drops(GRAY, 20, 20, enemy)
+                        en_drop = Drops(BLACK, 10, 10, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         ammo_drops_list.add(en_drop)
                     elif chance2 > 75:                      #25% chance the drop is for health
-                        en_drop = Drops(RED, 20, 20, enemy)
+                        en_drop = Drops(RED, 20, 20, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         health_drops_list.add(en_drop)
                     
