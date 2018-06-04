@@ -215,7 +215,7 @@ all_sprites_list.add(enemy)
 bullet = Bullet(BLACK, 5, 5, player.rect.x, player.rect.y)
 
 #Initial sword
-player_sword = Sword(1,1)
+player_sword = Sword(-40,-40, 1,1)
 all_sprites_list.add(player_sword)
 
 #list of lvls
@@ -319,7 +319,6 @@ def Game():
 
     #lvl 1
             elif Y == 1 and X == 1:
-                store_stuff_list.empty()
                 lvl1 = LVL(8)
                 lvls.append(lvl1)
                 e_screen = 0
@@ -556,6 +555,8 @@ def Game():
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)
             for door in Door_collision_list:
                 Change_SCREEN()
+
+                store_stuff_list.empty()
                 
                 for enemy in enemy_list:                        #this code deletes the previous enemies off the screen
                     enemy.HP = 0
@@ -569,6 +570,10 @@ def Game():
                 for en_drop in health_drops_list:
                     health_drops_list.remove(en_drop)
                     all_sprites_list.remove(en_drop)
+
+                for bullet in Bullet_sprites_list:
+                    all_sprites_list.remove(bullet)
+                    Bullet_sprites_list.remove(bullet)
                 
                 for i in range(e_screen):                       #this code adds new enemies to next screen
                     enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
@@ -606,20 +611,29 @@ def Game():
         if keys[pygame.K_a]:                        #if the A key is pressed
             player.move()                           #the player will move to the Left at a speed of 2 pixels
             if keys[pygame.K_e]:
-                player_sword.left(player, screen)   #player melee attacks to the left            
+                player_sword.left(player, screen)   #player melee attacks to the left
+                player_sword.draw(player,screen)
         elif keys[pygame.K_s]:                      #if the S key is pressed
             player.move()                           #the player will move Down at a speed of 2 pixels
             if keys[pygame.K_e]:
                 player_sword.down(player, screen)   #player melee attacks downward
+                player_sword.draw(player,screen)
         elif keys[pygame.K_d]:                      #if the D key is pressed
             player.move()                           #the player will move to the Right at a speed of 2 pixels
             if keys[pygame.K_e]:
                 player_sword.right(player, screen)  #player melee attacks to the right
+                player_sword.draw(player,screen)
         elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
             if keys[pygame.K_e]:
                 player_sword.up(player, screen)     #player melee attacks upwards
+                player_sword.draw(player,screen)
 
+
+        if keys[pygame.K_e] == False:
+            player_sword.rect.x = -40
+            player_sword.rect.y = -40
+            
         #player sprinting
         if keys[pygame.K_LSHIFT]:                   #if left shift is pressed
                 if keys[pygame.K_a]:                #and if A is pressed
@@ -636,6 +650,12 @@ def Game():
         for enemy in enemy_list:
             if enemy.HP > 0:
                 enemy.move_to_player(player)
+
+        #To make bullets not warp around screen
+        for bullet in Bullet_sprites_list:
+            if bullet.rect.x < 0 or bullet.rect.x > 1250 or bullet.rect.y < 0 or bullet.rect.y > 800:   #if bullet goes off screen,
+                all_sprites_list.remove(bullet)             #delete it    
+                Bullet_sprites_list.remove(bullet)
                         
         #player shooting
         if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
@@ -662,14 +682,15 @@ def Game():
         for enemy in enemy_list:    
             main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
             if main_col == True:
-                if keys[pygame.K_e]:            #if the player is holding E, cue melee attack
-                    enemy.HP -= 25              #decrease enemy health by 10
-                    enemy.rect.x -= 100         #enemy bounces back on collision with 'sword' 
-                    enemy.rect.y -= 100         #aka player who is holding 'sword'
-                else:
-                    player.HP -= 20
-                    player.rect.x -= 100        #Player bounces back on enemy collision
-                    player.rect.y -= 50
+                player.HP -= 20
+                player.rect.x -= 100        #Player bounces back on enemy collision
+                player.rect.y -= 50
+        
+            melee_col = pygame.sprite.collide_rect(player_sword, enemy)
+            if melee_col == True:
+                enemy.HP -= 50
+                enemy.rect.x -=100
+                enemy.rect.y -= 100
         
         if b == True:                                   #global variable indicating that a bullet is present   
             for enemy in enemy_list:
@@ -740,8 +761,7 @@ def Game():
         """insert code for collisions between enemies here"""
     
         
-# -------------------end of collisions --------------------------------------------------------------------------------                   
-    
+# -------------------end of collisions --------------------------------------------------------------------------------                         
         HealthBar(screen, player)           #this draws and updates the player health bar(s)
         TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
         AmmoBar(screen, player)             #draws and updates the player ammo bar
@@ -779,7 +799,7 @@ def Game():
                 if chance <= 50:                            #numbers 1-50 give a drop (50% chance)
                     chance2 = random.randint(0, 100)        #get another random numner
                     if chance2 <= 75:                       #75% chance the drop is for ammo
-                        en_drop = Drops(GRAY, 20, 20, enemy.rect.x, enemy.rect.y)
+                        en_drop = Drops(BLACK, 10, 10, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         ammo_drops_list.add(en_drop)
                     elif chance2 > 75:                      #25% chance the drop is for health
