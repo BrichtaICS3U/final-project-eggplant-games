@@ -12,7 +12,7 @@ ORANGE = (247,163,7)
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=2):
+    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=4):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.HP = HP
@@ -49,13 +49,13 @@ class Hero(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]: #Up 
-            self.rect.y -= self.movespeed
+            self.rect.y -= self.movespeed -3
         if keys[pygame.K_s]: #Down
-           self.rect.y += self.movespeed
+           self.rect.y += self.movespeed -3
         if keys[pygame.K_a]: #Left
-            self.rect.x -= self.movespeed
+            self.rect.x -= self.movespeed -3
         if keys[pygame.K_d]: #Right
-            self.rect.x += self.movespeed
+            self.rect.x += self.movespeed -3
         
     def die(self):
         print("You died!")
@@ -180,7 +180,7 @@ class Enemy(pygame.sprite.Sprite):
         dist_x, dist_y = dist_x / distance, dist_y / distance
         
         # move along vector towards the player at current speed
-        speed = 7
+        speed = 5
         self.rect.x -= dist_x * speed
         self.rect.y -= dist_y * speed
 

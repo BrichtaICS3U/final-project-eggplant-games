@@ -19,6 +19,8 @@ GREEN = (0,255,0)           #test Green
 BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
+PURPLE3 = (140, 18, 101)
+PURPLE4 = (179, 25, 130)
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
@@ -81,6 +83,7 @@ TILE3 = 9
 TILE4 = 10
 GRATE2 = 11
 RUN = True
+already_bought = False 
 tilemap = []
 textures =  {
                 DIRT : pygame.image.load('Dirt.png'),
@@ -216,13 +219,16 @@ def Change_SCREEN():
     global X
     global lvls
     global Generate
+    global already_bought
     global tilemap
     global RUN
+    
     RUN = True
     
     lvls = []
     tilemap = []
     Generate = True
+    already_bought = False
     
     if player.rect.y < 50:
         player.rect.y = SCREEN_HEIGHT - 46
@@ -337,6 +343,7 @@ enemy_list = pygame.sprite.Group()              #this is the enemy sprite list
 ammo_drops_list = pygame.sprite.Group()         #enemy ammo drops list
 health_drops_list = pygame.sprite.Group()       #enemy health drops list
 money_drops_list = pygame.sprite.Group()
+store_stuff_list = pygame.sprite.Group()
 
 #player character)
 player = Hero(30,40)
@@ -345,7 +352,7 @@ player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
 #Initial sword
-player_sword = Sword(1,1)
+player_sword = Sword(-40,-40, 1,1)
 all_sprites_list.add(player_sword)
 
 #Initial enemy character
@@ -462,10 +469,50 @@ def Game():
 
             #lvl 4            
             elif Y == 3 and X == 2:
-                lvl4 = LVL(2)
+                lvl4 = LVL(6)
                 e_screen = random.randint(2,3)
                 lvls.append(lvl4)
                 print("lvl4")
+
+            if Y == 3 and X == 3:
+                lvl0 = LVL(2)
+                lvls.append(lvl0)
+                e_screen = 0
+                store_ammo1 = StorePlate(PURPLE4, 154, SCREEN_HEIGHT-300, 120, 80)
+                store_ammo3 = StorePlate(PURPLE3, 428, SCREEN_HEIGHT-300, 120, 80)            
+                store_health = StorePlate(BC2, 702, SCREEN_HEIGHT-300, 120, 80)
+                store_speed = StorePlate(BC1, 976, SCREEN_HEIGHT-300, 120, 80)
+
+                store_stuff_list.add(store_ammo1)
+                store_stuff_list.add(store_ammo3)
+                store_stuff_list.add(store_health)
+                store_stuff_list.add(store_speed)
+
+                # all of market text
+                SfontTitle = pygame.font.Font('freesansbold.ttf', 50)
+                StextSurfaceTitle = SfontTitle.render("NESTER MARKET", True, BLACK)
+                StextRectTitle = StextSurfaceTitle.get_rect()
+                StextRectTitle.center = (1000,100)
+                S2fontTitle = pygame.font.Font('freesansbold.ttf', 30)
+                S2textSurfaceTitle = S2fontTitle.render("give us all ur $", True, BLACK)
+                S2textRectTitle = S2textSurfaceTitle.get_rect()
+                S2textRectTitle.center = (1000,250)
+                S3fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S3textSurfaceTitle = S3fontTitle.render("1 bullet, $2", False, BLACK)
+                S3textRectTitle = S3textSurfaceTitle.get_rect()
+                S3textRectTitle.center = ((154)+60,(SCREEN_HEIGHT-250)+70)
+                S4fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S4textSurfaceTitle = S4fontTitle.render("3 bullets, $5", False, BLACK)
+                S4textRectTitle = S4textSurfaceTitle.get_rect()
+                S4textRectTitle.center = ((428)+60,(SCREEN_HEIGHT-250)+70)
+                S5fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S5textSurfaceTitle = S5fontTitle.render("+20 health, $10", False, BLACK)
+                S5textRectTitle = S5textSurfaceTitle.get_rect()
+                S5textRectTitle.center = ((702)+60,(SCREEN_HEIGHT-250)+70)
+                S6fontTitle = pygame.font.Font('freesansbold.ttf', 15)
+                S6textSurfaceTitle = S6fontTitle.render("**ONE TIME PURCHASE** SPEED BOOST, $30", False, BLACK)
+                S6textRectTitle = S6textSurfaceTitle.get_rect()
+                S6textRectTitle.center = ((976)+60,(SCREEN_HEIGHT-250)+70)
             
             
             #lvl 5
@@ -1002,6 +1049,17 @@ def Game():
     
 #hit detection for doors            
         for lvl in lvls:
+            if Y == 3 and X == 3:
+                lvl0.draw(screen)
+                store_stuff_list.draw(screen)   #draw store 'pressure plates'  
+                store_speed.drawExtra(screen)   #draw extra items that you're buying on screen
+                                                #(bullets, health, etc)
+                screen.blit(StextSurfaceTitle,StextRectTitle)
+                screen.blit(S2textSurfaceTitle,S2textRectTitle)
+                screen.blit(S3textSurfaceTitle,S3textRectTitle)
+                screen.blit(S4textSurfaceTitle,S4textRectTitle)
+                screen.blit(S5textSurfaceTitle,S5textRectTitle)
+                screen.blit(S6textSurfaceTitle,S6textRectTitle)
 
             if Y == 1 and X == 1:#plz dunt dark marks cyuz i t luk bad ;-;
                 draw_MAP()
@@ -1112,6 +1170,8 @@ def Game():
 
                 if door.OPEN == True:
                     Change_SCREEN()
+
+                    store_stuff_list.empty()
                 
 
                     for enemy in enemy_list:                #this code deletes the previous enemies off the screen
@@ -1131,8 +1191,12 @@ def Game():
                         money_drops_list.remove(en_drop)
                         all_sprites_list.remove(en_drop)
 
+                    for bullet in Bullet_sprites_list:
+                        all_sprites_list.remove(bullet)
+                        Bullet_sprites_list.remove(bullet)
+
                     
-                    e_screen = 0
+                    #e_screen = 0
                     for i in range(e_screen):                      #this code adds new enemies to next screen
                         enemy = Enemy(BLACK, 40, 40)                #based off of the number of enemies that was
                         enemy_list.add(enemy)                       #set earlier
@@ -1202,20 +1266,28 @@ def Game():
 
         if ATTK == True:
             if keys[pygame.K_LEFT]:
-                player_sword.left(player, screen)
-                ATTK = False
+                player_sword.left(player, screen)   #player melee attacks to the left
+                player_sword.draw(player,screen)
+                #ATTK = False
 
             elif keys[pygame.K_DOWN]:
                 player_sword.down(player, screen)   #player melee attacks downward
-                ATTK = False
+                player_sword.draw(player,screen)
+                #ATTK = False
 
             elif keys[pygame.K_RIGHT]:
                 player_sword.right(player, screen)  #player melee attacks to the right
-                ATTK = False
+                player_sword.draw(player,screen)
+                #ATTK = False
 
             elif keys[pygame.K_UP]:
                 player_sword.up(player, screen)     #player melee attacks upwards
-                ATTK = False
+                player_sword.draw(player,screen)
+                #ATTK = False
+
+            else:
+                player_sword.rect.x = -40
+                player_sword.rect.y = -40
           
                 
         #player sprinting
@@ -1229,6 +1301,12 @@ def Game():
                         player.move()                       #double the movement speed Right
                     elif keys[pygame.K_w]:              #and if W is pressed
                          player.move()                       #double the movement speed up
+
+        #To make bullets not warp around screen
+        for bullet in Bullet_sprites_list:
+            if bullet.rect.x < 0 or bullet.rect.x > 1250 or bullet.rect.y < 0 or bullet.rect.y > 800:   #if bullet goes off screen,
+                all_sprites_list.remove(bullet)             #delete it    
+                Bullet_sprites_list.remove(bullet)
 
         
                         
@@ -1263,6 +1341,12 @@ def Game():
         for enemy in enemy_list:    
             main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
             if main_col == True:
+                player.HP -= 20
+                enemy.rect.x -= 100        #Player bounces back on enemy collision
+                enemy.rect.y -= 50         #collisions between enemy and player
+
+            melee_col = pygame.sprite.collide_rect(player_sword, enemy)
+            if melee_col == True:
                 if keys[pygame.K_UP]:            #if the player is holding E, cue melee attack
                     enemy.HP -= 25              #decrease enemy health by 10
                     enemy.rect.y -= 100
@@ -1275,10 +1359,8 @@ def Game():
                 elif keys[pygame.K_LEFT]:
                     enemy.HP -= 25 
                     enemy.rect.x -= 100
-                else:
-                    player.HP -= 20
-                    enemy.rect.x -= 100        #Player bounces back on enemy collision
-                    enemy.rect.y -= 50         #collisions between enemy and player
+               
+                  
         
         if b == True:                                   #global variable indicating that a bullet is present   
             for enemy in enemy_list:
@@ -1321,6 +1403,32 @@ def Game():
                     money_drops_list.remove(en_drop)               
                     all_sprites_list.remove(en_drop)
                     player.money += 3
+
+        for store_item in store_stuff_list:
+            store_col = pygame.sprite.collide_rect(player, store_item)
+            if store_col == True:
+                if store_item.colour == PURPLE4 and player.money >= 2 and player.ammo <5:               #Player is buying 1x bullet
+                    player.money -= 2
+                    player.rect.y -= 200
+                    player.ammo += 1
+                elif store_item.colour == PURPLE3 and player.money >= 5 and player.ammo <= 2:           #Player is buying 3x bullet
+                    player.money -= 5
+                    player.rect.y -= 200
+                    player.ammo += 3
+                elif store_item.colour == BC2 and player.money >= 10 and player.HP <= 80:               #Player is buying extra health
+                    player.money -= 10
+                    player.rect.y -= 200
+                    player.HP += 20
+                elif store_item.colour == BC1 and player.money >= 30 and already_bought==False:         #player is buying speed boost (SINGLE BUY ITEM)
+                    player.money -= 30
+                    player.rect.y -= 200
+                    player.movespeed += 1
+                    already_bought = True
+                else:
+                    player.rect.y -= 200
+                    print("You dont have enough money / room for what you're trying to buy!")
+                    
+        """insert code for collisions between enemies here"""
             
         """insert code for collisions between enemies here"""
 
@@ -1342,19 +1450,19 @@ def Game():
                 #money drop (always happens)
                 m_chance = random.randint(0, 100)
                 if m_chance <= 60:                          #60% chance of brown coin (1$)
-                    en_drop = Drops(BROWN, 10, 10, enemy)
+                    en_drop = Drops(BROWN, 10, 10, enemy.rect.x, enemy.rect.y)
                     en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
                     
                 elif 60 < m_chance < 90:                    #30% chance of silver coin ($2)
-                    en_drop = Drops(SILVER, 10, 10, enemy)
+                    en_drop = Drops(SILVER, 10, 10, enemy.rect.x, enemy.rect.y)
                     en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
            
                 elif m_chance >= 90:                        #10% chance of gold coin ($3)
-                    en_drop = Drops(GOLD, 10, 10, enemy)
+                    en_drop = Drops(GOLD, 10, 10, enemy.rect.x, enemy.rect.y)
                     en_drop.rect.x += 50
                     all_sprites_list.add(en_drop)
                     money_drops_list.add(en_drop)
@@ -1364,11 +1472,11 @@ def Game():
                 if chance <= 50:                            #numbers 1-50 give a drop (50% chance)
                     chance2 = random.randint(0, 100)        #get another random numner
                     if chance2 <= 75:                       #75% chance the drop is for ammo
-                        en_drop = Drops(GRAY, 20, 20, enemy)
+                        en_drop = Drops(GRAY, 20, 20, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         ammo_drops_list.add(en_drop)
                     elif chance2 > 75:                      #25% chance the drop is for health
-                        en_drop = Drops(RED, 20, 20, enemy)
+                        en_drop = Drops(RED, 20, 20, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         health_drops_list.add(en_drop)
                     
@@ -1515,15 +1623,14 @@ while Menu:
         Button("A",50,170,50,50,BC1,BC2,35,None,"Move LEFT")      #hovering over this button will tell the player how to move left
         Button("D",190,170,50,50,BC1,BC2,35,None,"Move RIGHT")    #hovering over this button will tell the player how to move Right
 
-        #melee atk control
-        Button("E",120,300,50,50,BC1,BC2,35,None,"Melee Atk")     #hovering over this button will tell the player how to Attack 
+         
 
         #shoot controls
         #have to manualy create arrows using a sprite engine
-        Button("",120,430,50,50,BC1,BC2,35,None,"Shoot UP")       #hovering over this button will tell the player how to shoot up  
-        Button("",120,500,50,50,BC1,BC2,35,None,"Shoot DOWN")     #hovering over this button will tell the player how to shoot down
-        Button("",50,500,50,50,BC1,BC2,35,None,"Shoot LEFT")      #hovering over this button will tell the player how to shoot left
-        Button("",190,500,50,50,BC1,BC2,35,None,"Shoot RIGHT")    #hovering over this button will tell the player how to shoot right
+        Button("",120,430,50,50,BC1,BC2,35,None,"ATK UP")       #hovering over this button will tell the player how to shoot up  
+        Button("",120,500,50,50,BC1,BC2,35,None,"ATK  DOWN")     #hovering over this button will tell the player how to shoot down
+        Button("",50,500,50,50,BC1,BC2,35,None,"ATK  LEFT")      #hovering over this button will tell the player how to shoot left
+        Button("",190,500,50,50,BC1,BC2,35,None,"ATK  RIGHT")    #hovering over this button will tell the player how to shoot right
 
         #pause menu bind
         Button("ESC",100,630,90,50,BC1,BC2,35,None,"Toggle Menu") #hovering over this button will tell the player how to toggle the main menu
