@@ -1393,6 +1393,90 @@ class LVL():
 
             
 
+        elif Holes == 21:
+            h21_1 = HOLE(1100,50,WHITE)
+            h21_1.rect.x = 150
+            h21_1.rect.y = 300
+            self.hole_list.add(h21_1)
+
+            h21_2 = HOLE(1100,50,WHITE)
+            h21_2.rect.x = 150
+            h21_2.rect.y = 450
+            self.hole_list.add(h21_2)
+
+            h21_3 = HOLE(150,50,WHITE)
+            h21_3.rect.x = 0
+            h21_3.rect.y = 250
+            self.hole_list.add(h21_3)
+
+            h21_4 = HOLE(150,50,WHITE)
+            h21_4.rect.x = 0
+            h21_4.rect.y = 500
+            self.hole_list.add(h21_4)
+
+        elif Holes == 22:
+
+            h22_1 = HOLE(50,50,WHITE)
+            h22_1.rect.x = 0
+            h22_1.rect.y = 300
+            self.hole_list.add(h22_1)
+
+            h22_2 = HOLE(50,50,WHITE)
+            h22_2.rect.x = 0
+            h22_2.rect.y = 450
+            self.hole_list.add(h22_2)
+
+            h22_3 = HOLE(100,200,WHITE)
+            h22_3.rect.x = 50
+            h22_3.rect.y = 100
+            self.hole_list.add(h22_3)
+
+            h22_4 = HOLE(100,200,WHITE)
+            h22_4.rect.x = 50
+            h22_4.rect.y = 500
+            self.hole_list.add(h22_4)
+
+            h22_5 = HOLE(1250,50,WHITE)
+            h22_5.rect.x = 0
+            h22_5.rect.y = 50
+            self.hole_list.add(h22_5)
+
+            h22_6 = HOLE(1250,50,WHITE)
+            h22_6.rect.x = 0
+            h22_6.rect.y = 700
+            self.hole_list.add(h22_6)
+
+            h22_7 = HOLE(200,200,WHITE)
+            h22_7.rect.x = 1050
+            h22_7.rect.y = 100
+            self.hole_list.add(h22_7)
+
+            h22_8 = HOLE(200,200,WHITE)
+            h22_8.rect.x = 1050
+            h22_8.rect.y = 500
+            self.hole_list.add(h22_8)
+
+            h22_9 = HOLE(100,500,WHITE)
+            h22_9.rect.x = 850
+            h22_9.rect.y = 100
+            self.hole_list.add(h22_9)
+
+            h22_10 = HOLE(100,500,WHITE)
+            h22_10.rect.x = 650
+            h22_10.rect.y = 200
+            self.hole_list.add(h22_10)
+
+            h22_11 = HOLE(100,150,WHITE)
+            h22_11.rect.x = 450
+            h22_11.rect.y = 100
+            self.hole_list.add(h22_11)
+
+            h22_12 = HOLE(100,350,WHITE)
+            h22_12.rect.x = 450
+            h22_12.rect.y = 350
+            self.hole_list.add(h22_12)
+
+            
             
 
             

@@ -61,7 +61,10 @@ Y = 1
 X = 1
 F_C = D
 Generate = True
-ATTK = True
+ATTK_D = True
+ATTK_R = True
+ATTK_U = True
+ATTK_L = True
 B_D_L = True
 R_D_L = True
 Y_D_L = True
@@ -380,7 +383,10 @@ def Game():
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
     global SCREEN_HEIGHT        #turn the screen height into a global variable for the game
     global shoot
-    global ATTK
+    global ATTK_U
+    global ATTK_D
+    global ATTK_R
+    global ATTK_L
     global b
     global F_C
     global Generate
@@ -404,6 +410,7 @@ def Game():
     global TILE3
     global TILE4
     global GRATE2
+    global already_bought
     global tilemap
     Game = True                 #while the variable is true the game will run
     B_S = False
@@ -628,14 +635,14 @@ def Game():
     
             #lvl 21 // start of left part of sewers//
             elif Y == 5 and X == 0:
-                lvl21 = LVL(6)
+                lvl21 = LVL(6,21)
                 lvls.append(lvl21)
                 e_screen = random.randint(2,3)
                 print("lvl21")
 
             #lvl 22
             elif Y == 5 and X == -1:
-                lvl22 = LVL(30)
+                lvl22 = LVL(30,22)
                 lvls.append(lvl22)
                 e_screen = random.randint(2,3)
                 print("lvl22")
@@ -1073,12 +1080,12 @@ def Game():
                             [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
                             [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
                             [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
-                            [10,10,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,9,10,10,10],
-                            [10,9,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,9,8,8,8],
+                            [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
+                            [10,9,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,8,8,8,8],
                             [9,9,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,9,9,9,9],
                             [9,9,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,9,9,9,9],
-                            [10,9,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,9,8,8,8],
-                            [10,10,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,9,10,10,10],
+                            [10,9,9,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,8,8,8,8],
+                            [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
                             [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
                             [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
                             [10,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,9,9,10,10,10,10],
@@ -1337,7 +1344,7 @@ def Game():
                         Bullet_sprites_list.remove(bullet)
 
                     
-                    e_screen = 0
+                    #e_screen = 0
                     for i in range(e_screen):                      #this code adds new enemies to next screen
                         enemy = Enemy(BLACK, 30, 30)                #based off of the number of enemies that was
 
@@ -1420,33 +1427,43 @@ def Game():
         elif keys[pygame.K_w]:                      #if the W key is pressed
             player.move()                           #the player will move Up at a speed of 2 pixels
 
-        if ATTK == True:
-            if keys[pygame.K_LEFT]:
-                player_sword.left(player, screen)   #player melee attacks to the left
-                player_sword.draw(player,screen)
-                #ATTK = False
+        
+        if keys[pygame.K_LEFT] and ATTK_L == True:
+            player_sword.left(player, screen)   #player melee attacks to the left
+            player_sword.draw(player,screen)
+            ATTK_L = False
 
-            elif keys[pygame.K_DOWN]:
-                player_sword.down(player, screen)   #player melee attacks downward
-                player_sword.draw(player,screen)
-                #ATTK = False
+        elif keys[pygame.K_DOWN] and ATTK_D == True:
+            player_sword.down(player, screen)   #player melee attacks downward
+            player_sword.draw(player,screen)
+            ATTK_D = False
 
-            elif keys[pygame.K_RIGHT]:
-                player_sword.right(player, screen)  #player melee attacks to the right
-                player_sword.draw(player,screen)
-                #ATTK = False
+        elif keys[pygame.K_RIGHT] and ATTK_R == True:
+            player_sword.right(player, screen)  #player melee attacks to the right
+            player_sword.draw(player,screen)
+            ATTK_R = False
 
-            elif keys[pygame.K_UP]:
-                player_sword.up(player, screen)     #player melee attacks upwards
-                player_sword.draw(player,screen)
-                #ATTK = False
+        elif keys[pygame.K_UP] and ATTK_U == True:
+            player_sword.up(player, screen)     #player melee attacks upwards
+            player_sword.draw(player,screen)
+            ATTK_U = False
 
-            else:
-                player_sword.rect.x = -40
-                player_sword.rect.y = -40
+        elif ATTK_U == False or ATTK_D == False or ATTK_L == False or ATTK_R == False:
+            player_sword.rect.x = -40
+            player_sword.rect.y = -40
 
-    
-
+        
+        for event in pygame.event.get():
+            if event.type == pygame.KEYUP:
+                if event.key==pygame.K_UP:
+                    ATTK_U = True
+                if event.key==pygame.K_DOWN:
+                    ATTK_D = True
+                if event.key==pygame.K_LEFT:
+                    ATTK_L = True
+                if event.key==pygame.K_RIGHT:
+                    ATTK_R = True
+            
         
           
                 

@@ -7,6 +7,7 @@ GREEN = (0,255,0)
 GREY = (100, 100, 100)
 RED = (255, 0, 0)
 ORANGE = (247,163,7)
+B = (153,0,153)
 
  
 class Hero(pygame.sprite.Sprite):
@@ -73,7 +74,7 @@ class Sword(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
  
-        pygame.draw.rect(self.image, GREY, [0, 0, width, height])
+        pygame.draw.rect(self.image, BLACK, [0, 0, width, height])
         
         self.rect = self.image.get_rect()
 
@@ -130,7 +131,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
-        pygame.draw.rect(self.image, BLACK, [0, 0, width, height])
+        pygame.draw.rect(self.image, B, [0, 0, width, height])
         self.rect = self.image.get_rect()
         self.rect.x = x_pos
         self.rect.y = y_pos
@@ -163,7 +164,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
-        pygame.draw.rect(self.image, BLACK, [0, 0, width, height])
+        pygame.draw.rect(self.image, RED, [0, 0, width, height])
         self.rect = self.image.get_rect()
 
         # Get random x/y coordinates
