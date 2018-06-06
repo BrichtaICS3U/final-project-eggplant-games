@@ -180,7 +180,9 @@ class Enemy(pygame.sprite.Sprite):
         dist_x, dist_y = dist_x / distance, dist_y / distance
         
         # move along vector towards the player at current speed
-        speed = 7
+
+        speed = 6
+
         self.rect.x -= dist_x * speed
         self.rect.y -= dist_y * speed
 
