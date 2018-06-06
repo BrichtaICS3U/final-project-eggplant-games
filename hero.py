@@ -13,7 +13,7 @@ B = (153,0,153)
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=4):
+    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=3):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.HP = HP
@@ -120,8 +120,8 @@ class Sword(pygame.sprite.Sprite):
         self.rect.y = player.rect.y+17.5
 
     def draw(self, player, screen):
-        pygame.draw.rect(self.image, GREY, [0, 0, self.width, self.height])
-        screen.blit(self.image, (player.rect.x, player.rect.y))
+        pygame.draw.rect(self.image, B, [0, 0, self.width, self.height])
+        #screen.blit(self.image, (player.rect.x, player.rect.y))
         
 class Bullet(pygame.sprite.Sprite):
     
@@ -182,7 +182,7 @@ class Enemy(pygame.sprite.Sprite):
         
         # move along vector towards the player at current speed
 
-        speed = 6
+        speed = 5
 
         self.rect.x -= dist_x * speed
         self.rect.y -= dist_y * speed
