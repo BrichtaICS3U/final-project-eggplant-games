@@ -130,8 +130,8 @@ class LVL():
 
         if Key == 2:
             R_Key = KEY(50,50,RED,2)
-            R_Key.rect.x = 600
-            R_Key.rect.y = 600
+            R_Key.rect.x = 550
+            R_Key.rect.y = 375
             self.Key_list.add(R_Key)
 
 
