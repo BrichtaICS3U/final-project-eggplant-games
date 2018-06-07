@@ -1627,13 +1627,13 @@ def Game():
         TEXT(money_string, 135, 40, 20, BLACK)
 
         if B_S == True:
-            pygame.draw.rect(screen,BLUE,[150,30,15,25])
+            pygame.draw.rect(screen,BLUE,[160,30,15,25])
 
         if R_S == True:
-            pygame.draw.rect(screen,RED,[200,30,15,25])
+            pygame.draw.rect(screen,RED,[210,30,15,25])
 
         if Y_S == True:
-            pygame.draw.rect(screen,YELLOW,[175,30,15,25])
+            pygame.draw.rect(screen,YELLOW,[185,30,15,25])
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
