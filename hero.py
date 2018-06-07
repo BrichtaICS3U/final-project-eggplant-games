@@ -13,7 +13,7 @@ B = (153,0,153)
 class Hero(pygame.sprite.Sprite):
     #Hero/main character class that derives from pygame "Sprite" class.
     
-    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=3):
+    def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=4):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.HP = HP
