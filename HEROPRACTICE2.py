@@ -5,6 +5,8 @@ from Door import DOOR, KEY
 from LVLs import LVL                        #FML
 import math
 import random
+from tkinter import *
+from tkinter import messagebox
 
 # define colours #
 WHITE = (255,255,255)       #White
@@ -20,6 +22,7 @@ BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
 PURPLE3 = (140, 18, 101)
 PURPLE4 = (179, 25, 130)
+YELLOW = (255,212,38)
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
@@ -756,19 +759,19 @@ def Game():
                     already_bought = True
                 else:
                     player.rect.y -= 200
-                    print("You dont have enough money / room for what you're trying to buy!")
+                    #tkinter().wm_withdraw() #to hide the main window
+                    messagebox.showinfo('Rip',"You do not have enough money / space to buy this item")
                     
         """insert code for collisions between enemies here"""
     
         
 # -------------------end of collisions --------------------------------------------------------------------------------                         
-        HealthBar(screen, player)           #this draws and updates the player health bar(s)
-        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
-        AmmoBar(screen, player)             #draws and updates the player ammo bar
-        TEXT("Player Ammo", 60, 80, 15)
-        TEXT("Money", 40, 140, 15)
+        Hud(screen)                                 #draws hud behind ammo&healthbar to increase visibility
+        HealthBar(screen, player)                   #this draws and updates the player health bar(s)
+        AmmoBar(screen, player)                     #draws and updates the player ammo bar
         money_string = "$ {}".format(player.money)
-        TEXT(money_string, 40, 160, 15)
+        TEXT(money_string, 135, 40, 20, BLACK)      #draws and updates player's money stash
+
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
@@ -803,7 +806,7 @@ def Game():
                         all_sprites_list.add(en_drop)
                         ammo_drops_list.add(en_drop)
                     elif chance2 > 75:                      #25% chance the drop is for health
-                        en_drop = Drops(RED, 20, 20, enemy.rect.x, enemy.rect.y)
+                        en_drop = Drops(YELLOW, 20, 25, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         health_drops_list.add(en_drop)
                     
