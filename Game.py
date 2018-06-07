@@ -37,6 +37,9 @@ C_background = pygame.image.load("Controls_back.jpg")   #this is the background 
 S_bakckground = pygame.image.load("S_B.jpg")            #this is the background for the settings screen
 PG_Background = pygame.image.load("Settings_B.jpg")     #this is the background for the pre game screen
 
+#feels birthday man
+F_Background = pygame.image.load("pepe.jpg")
+
 # screen dimensions and game clock #
 SCREEN_WIDTH = 1250                     #screen width
 SCREEN_HEIGHT = 800                     #screen height
@@ -567,10 +570,15 @@ def Game():
         
             #lvl 10 //first floor / hub for floor (reference point)//
             elif Y == 5 and X == 1:
-                lvl10 = LVL(100,10,2)
+                lvl10 = LVL(100,10,0)
                 lvls.append(lvl10)
-                e_screen = random.randint(1,2)
+                #e_screen = random.randint(1,2)
                 print("lvl10")
+
+            elif Y == 6 and X == 1:
+                lvlE1 = LVL(1)
+                lvls.append(lvlE1)
+                screen.blit(F_Background(250,50))
 
             #lvl 11
             elif Y == 5 and X == 2:
@@ -1634,6 +1642,10 @@ def Game():
 
         if Y_S == True:
             pygame.draw.rect(screen,YELLOW,[185,30,15,25])
+
+        if Y == 6 and X == 1:
+            PEPE()
+            Game = False
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
@@ -1713,7 +1725,20 @@ def Game():
 # ------------------- end of main Game code ------------------ #
 
 # ------------------- this section will house the pause menu code --------------- !!!!DONE!!!!
-
+def PEPE():
+    PEP = True
+    while PEP == True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+               pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+        screen.fill(WHITE)
+        screen.blit(F_Background,(275,40))
+        pygame.display.update()
+        clock.tick(60)
+    
 def Pause_Menu():
     global LayerP
     Pause = True
