@@ -2,7 +2,7 @@ import pygame
 pygame.init()
 from hero import *                          #import the sprites that Abbey has made
 from Door import DOOR, KEY
-from LVLs import LVL                        #FML
+from LVLs import LVL                
 import math
 import random
 from tkinter import *
@@ -20,10 +20,10 @@ GREEN = (0,255,0)           #test Green
 BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
-PURPLE3 = (140, 18, 101)
-PURPLE4 = (179, 25, 130)
-YELLOW = (255,212,38)
-I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
+PURPLE3 = (140, 18, 101)    #Purple
+PURPLE4 = (179, 25, 130)    #Another purple
+YELLOW = (255,212,38)       #Yellow for health
+I_TEXT = (255,164,0)        #instructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
 
@@ -204,13 +204,13 @@ money_drops_list = pygame.sprite.Group()
 store_stuff_list = pygame.sprite.Group()
 
 #player character
-player = Hero(30,40)
-player.rect.x = SCREEN_WIDTH/2
+player = Hero(30,40)                    #creates the player !   
+player.rect.x = SCREEN_WIDTH/2          #spawn in the middle of the screen
 player.rect.y = SCREEN_HEIGHT/2
 playerHealth = player.HP
 
 #Initial enemy character
-enemy = Enemy(BLACK, 40, 40)        #adds a single enemy to first room
+enemy = Enemy(BLACK, 40, 40)            #adds a single enemy to the first room (you're welcome)
 enemy_list.add(enemy)
 all_sprites_list.add(enemy)
 
@@ -500,7 +500,7 @@ def Game():
                 screen.blit(S5textSurfaceTitle,S5textRectTitle)
                 screen.blit(S6textSurfaceTitle,S6textRectTitle)
                     
-            elif Y == 1 and X == 1:             #plz dunt dark marks cyuz i t luk bad ;-;
+            elif Y == 1 and X == 1:             
                 lvl1.draw(screen)
             elif Y == 2 and X == 1:
                 lvl2.draw(screen)
@@ -566,7 +566,7 @@ def Game():
                     all_sprites_list.remove(enemy)
                     enemy_list.remove(enemy)
                 
-                for en_drop in ammo_drops_list:
+                for en_drop in ammo_drops_list:                 #these lines delete all of the drops&bullets off the screen
                     ammo_drops_list.remove(en_drop)
                     all_sprites_list.remove(en_drop)
 
@@ -657,11 +657,11 @@ def Game():
         #To make bullets not warp around screen
         for bullet in Bullet_sprites_list:
             if bullet.rect.x < 0 or bullet.rect.x > 1250 or bullet.rect.y < 0 or bullet.rect.y > 800:   #if bullet goes off screen,
-                all_sprites_list.remove(bullet)             #delete it    
+                all_sprites_list.remove(bullet)                                                         #delete it    
                 Bullet_sprites_list.remove(bullet)
                         
         #player shooting
-        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:                            #if the mouse Button has been pressed and the player is allowed to shoot
+        if event.type==pygame.MOUSEBUTTONDOWN and shoot == True and player.ammo > 0:        #if the mouse Button has been pressed and the player is allowed to shoot
                 bullet = Bullet(BLACK,5,5,player.rect.x + (30/2),player.rect.y + (40/2))    #shoot a bullet from the center of the player sprite
                 shoot = False                                                               #take away he ability to shoot so the game doesn't break
                 b = True
@@ -686,7 +686,7 @@ def Game():
             main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
             if main_col == True:
                 player.HP -= 20
-                player.rect.x -= 100        #Player bounces back on enemy collision
+                player.rect.x -= 100                    #player bounces back on enemy collision
                 player.rect.y -= 50
         
             melee_col = pygame.sprite.collide_rect(player_sword, enemy)
@@ -707,8 +707,8 @@ def Game():
 
         for en_drop in ammo_drops_list:                                  
             ammo_drop_col = pygame.sprite.collide_rect(player, en_drop)
-            if ammo_drop_col == True:                        #if player collides with dropped item
-                ammo_drops_list.remove(en_drop)              #drop is removed from lists
+            if ammo_drop_col == True:                       #if player collides with dropped item
+                ammo_drops_list.remove(en_drop)             #drop is removed from lists
                 all_sprites_list.remove(en_drop)            #and subsequently, screen
                 if player.ammo <5:                          #if player has less than 5 bullets,
                     player.ammo += 1                        #player gets +1 ammo
@@ -718,49 +718,51 @@ def Game():
             if health_drop_col == True:                        
                 health_drops_list.remove(en_drop)               
                 all_sprites_list.remove(en_drop)                
-                if player.HP < 100:                             #if player has less than 100 health,
-                    player.HP += 20                             #player gets +20 health
+                if player.HP < 100:                         #if player has less than 100 health,
+                    player.HP += 20                         #player gets +20 health
 
-        for en_drop in money_drops_list:
+        for en_drop in money_drops_list:                        
             money_drop_col = pygame.sprite.collide_rect(player, en_drop)
             if money_drop_col == True:
-                if en_drop.colour == BROWN:
-                    money_drops_list.remove(en_drop)               
-                    all_sprites_list.remove(en_drop)
+                if en_drop.colour == BROWN:                 #if player picks up a brown coin
+                    money_drops_list.remove(en_drop)        #we delete it off the screen      
+                    all_sprites_list.remove(en_drop)        #and pay them 1$
                     player.money += 1
-                elif en_drop.colour == SILVER:
-                    money_drops_list.remove(en_drop)               
-                    all_sprites_list.remove(en_drop)
+                elif en_drop.colour == SILVER:              #silver coin = $2
+                    money_drops_list.remove(en_drop)        #          
+                    all_sprites_list.remove(en_drop)        #
                     player.money += 2
-                elif en_drop.colour == GOLD:
-                    money_drops_list.remove(en_drop)               
-                    all_sprites_list.remove(en_drop)
+                elif en_drop.colour == GOLD:                #gold coin = $3
+                    money_drops_list.remove(en_drop)        #          
+                    all_sprites_list.remove(en_drop)        #
                     player.money += 3
 
         for store_item in store_stuff_list:
             store_col = pygame.sprite.collide_rect(player, store_item)
             if store_col == True:
-                if store_item.colour == PURPLE4 and player.money >= 2 and player.ammo <5:               #Player is buying 1x bullet
-                    player.money -= 2
-                    player.rect.y -= 200
-                    player.ammo += 1
-                elif store_item.colour == PURPLE3 and player.money >= 5 and player.ammo <= 2:           #Player is buying 3x bullet
+                if store_item.colour == PURPLE4 and player.money >= 2 and player.ammo <5:           #player is buying 1x bullet
+                    player.money -= 2                                                               #take their money
+                    player.rect.y -= 200                                                            #bounce them back
+                    player.ammo += 1                                                                #give them the item they bought
+                elif store_item.colour == PURPLE3 and player.money >= 5 and player.ammo <= 2:       #player is buying 3x bullet
                     player.money -= 5
                     player.rect.y -= 200
                     player.ammo += 3
-                elif store_item.colour == BC2 and player.money >= 10 and player.HP <= 80:               #Player is buying extra health
+                elif store_item.colour == BC2 and player.money >= 10 and player.HP <= 80:           #player is buying extra health
                     player.money -= 10
                     player.rect.y -= 200
                     player.HP += 20
-                elif store_item.colour == BC1 and player.money >= 30 and already_bought==False:         #player is buying speed boost (SINGLE BUY ITEM)
+                elif store_item.colour == BC1 and player.money >= 30 and already_bought==False:     #player is buying speed boost (SINGLE BUY ITEM)
                     player.money -= 30
                     player.rect.y -= 200
                     player.movespeed += 1
                     already_bought = True
                 else:
                     player.rect.y -= 200
-                    #tkinter().wm_withdraw() #to hide the main window
-                    messagebox.showinfo('Rip',"You do not have enough money / space to buy this item")
+                    Tk().wm_withdraw()      #this hides the main tkinter window that pops up (we dont want it)
+                    messagebox.showinfo('Rip',"You do not have enough money / space to buy this item")   #this shows a message box !
+
+                    #####https://stackoverflow.com/questions/41639671/pop-up-message-box-in-pygame
                     
         """insert code for collisions between enemies here"""
     
@@ -769,13 +771,13 @@ def Game():
         Hud(screen)                                 #draws hud behind ammo&healthbar to increase visibility
         HealthBar(screen, player)                   #this draws and updates the player health bar(s)
         AmmoBar(screen, player)                     #draws and updates the player ammo bar
-        money_string = "$ {}".format(player.money)
+        money_string = "$ {}".format(player.money)  #converts the int money value to a string
         TEXT(money_string, 135, 40, 20, BLACK)      #draws and updates player's money stash
 
                 
-        for enemy in enemy_list:    #enemy health bar drawing/updates
+        for enemy in enemy_list:                    #enemy health bar drawing/updates
             enemy.health(screen)
-            #------enemy drops-------------------------------------------------------------------
+#---------------------------enemy drops-------------------------------------------------------------------
             if enemy.HP <= 0:                               #if enemy dies
                 #money drop (always happens)
                 m_chance = random.randint(0, 100)
@@ -810,8 +812,8 @@ def Game():
                         all_sprites_list.add(en_drop)
                         health_drops_list.add(en_drop)
                     
-                all_sprites_list.remove(enemy)
-                enemy_list.remove(enemy)
+                all_sprites_list.remove(enemy)              #delete dead enemy from lists
+                enemy_list.remove(enemy)                    #
 
                
         #wall restrictions

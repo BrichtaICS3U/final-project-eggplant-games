@@ -12,7 +12,7 @@ BC2 = (104,14,75)
 
  
 class Hero(pygame.sprite.Sprite):
-    #Hero/main character class that derives from pygame "Sprite" class.
+    """Hero/main character class that derives from pygame "Sprite" class."""
     
     def __init__(self, width, height, HP=100, ammo=5, money=0, movespeed=2):
         # Call the parent class (Sprite) constructor
@@ -62,7 +62,7 @@ class Hero(pygame.sprite.Sprite):
         print("You died!")
 
 class Sword(pygame.sprite.Sprite):
-
+    """Sword sprite class to allow for player melee attack"""
     def __init__(self, x_pos, y_pos, width, height):
         super().__init__()
         self.x_pos = x_pos
@@ -80,14 +80,14 @@ class Sword(pygame.sprite.Sprite):
 
     def up(self, player, screen):
       
-        self.width = 5
-        self.height = 25
-        self.image = pygame.Surface([self.width, self.height])
-        self.image.fill(WHITE)
-        self.image.set_colorkey(WHITE)
-        self.rect = self.image.get_rect()
-        self.rect.x = player.rect.x+12.5
-        self.rect.y = player.rect.y-25
+        self.width = 5                                                  #The sword functions are tricky because depending on
+        self.height = 25                                                #the orientation of the sword, height and width are 
+        self.image = pygame.Surface([self.width, self.height])          #different.
+        self.image.fill(WHITE)                                          #for each movement we essentially refetch the self.rect
+        self.image.set_colorkey(WHITE)                                  #and draw it all over again from the middle of the player
+        self.rect = self.image.get_rect()                               #outwards
+        self.rect.x = player.rect.x+12.5                                #
+        self.rect.y = player.rect.y-25                                  #
         
     def down(self, player, screen):
         self.width = 5
@@ -124,7 +124,7 @@ class Sword(pygame.sprite.Sprite):
         screen.blit(self.image, (player.rect.x, player.rect.y))
         
 class Bullet(pygame.sprite.Sprite):
-    
+    """Sprite class for bullets so that player can shoot things"""
     def __init__(self, colour, width, height, x_pos, y_pos):
         super().__init__()
         self.image = pygame.Surface([width, height])
@@ -153,7 +153,7 @@ class Bullet(pygame.sprite.Sprite):
         
         
 class Enemy(pygame.sprite.Sprite):
-    
+    """Enemy sprite class"""
     def __init__(self, colour, width, height, HP=100, dmg=10):
         super().__init__()
         self.colour = colour
@@ -213,7 +213,7 @@ class Enemy(pygame.sprite.Sprite):
                                                 pygame.draw.rect(screen, RED, [self.rect.x+32, self.rect.y-10, 3, 5], 0)
 
 class Drops(pygame.sprite.Sprite):
-
+    """Enemy drops sprite class"""
     def __init__(self, colour, width, height, x_pos, y_pos):
         super().__init__()
         self.colour = colour
@@ -230,7 +230,7 @@ class Drops(pygame.sprite.Sprite):
         self.rect.y = y_pos
 
 class StorePlate(pygame.sprite.Sprite):
-
+    """Pressure plate sprite class to be used in store"""
     def __init__(self, colour, x_pos, y_pos, width, height):
         super().__init__()
         self.colour = colour
@@ -253,20 +253,20 @@ class StorePlate(pygame.sprite.Sprite):
         pygame.draw.rect(screen, BLACK, [(428)+(120/4*3)-2.5, (800-300)+38.5, 5, 5], 0)     #
         pygame.draw.rect(screen, YELLOW, [(702)+52.5, (800-300)+27.5, 15, 25], 0)           #health bar
         pygame.draw.line(screen, ORANGE,((976)+35, 800-275), ((976)+50,(800-260)), 5)       #speed boost lines
-        pygame.draw.line(screen, ORANGE,((976)+50, 800-260), ((976)+35,800-245), 5)
-        pygame.draw.line(screen, ORANGE,((976)+55, 800-275), ((976)+70,(800-260)), 5)
-        pygame.draw.line(screen, ORANGE,((976)+70, 800-260), ((976)+55,800-245), 5)
-        pygame.draw.line(screen, ORANGE,((976)+75, 800-275), ((976)+90,(800-260)), 5)
-        pygame.draw.line(screen, ORANGE,((976)+90, 800-260), ((976)+75,800-245), 5)
+        pygame.draw.line(screen, ORANGE,((976)+50, 800-260), ((976)+35,800-245), 5)         #
+        pygame.draw.line(screen, ORANGE,((976)+55, 800-275), ((976)+70,(800-260)), 5)       #
+        pygame.draw.line(screen, ORANGE,((976)+70, 800-260), ((976)+55,800-245), 5)         #
+        pygame.draw.line(screen, ORANGE,((976)+75, 800-275), ((976)+90,(800-260)), 5)       #
+        pygame.draw.line(screen, ORANGE,((976)+90, 800-260), ((976)+75,800-245), 5)         #
 
 class Hud():
-
+    """Class to allow for Hud to be drawn always"""
     def __init__(self, screen):
-        pygame.draw.rect(screen, BC2, [5, 5, 140, 70], 0)
-        pygame.draw.polygon(screen, BC2, [(145, 5),(170, 37.5), (145, 75)], 0)
+        pygame.draw.rect(screen, BC2, [5, 5, 140, 70], 0)                           #this combination of drawings creates 
+        pygame.draw.polygon(screen, BC2, [(145, 5),(170, 37.5), (145, 75)], 0)      #an arrow-like Hud
                                  
 class HealthBar():
-
+    """Class to create, draw, update, and delete player health bar"""
     def __init__(self, screen, player):
 
         if player.HP == 0:
@@ -295,11 +295,11 @@ class HealthBar():
                                                 pygame.draw.rect(screen, YELLOW, [90, 22.5, 15, 12.5], 0)
 
 class AmmoBar():
-
+    """Class to create, draw, update, and delete player ammo bar"""
     def __init__(self, screen, player):
 
         if player.ammo > 0:
-            pygame.draw.ellipse(screen, BLACK, [10, 45, 15, 25], 0) #draws player ammo
+            pygame.draw.ellipse(screen, BLACK, [10, 45, 15, 25], 0) #draws player ammo according to how much they are carrying
             if player.ammo > 1:
                 pygame.draw.ellipse(screen, BLACK, [30, 45, 15, 25], 0)
                 if player.ammo > 2:
