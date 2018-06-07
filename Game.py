@@ -40,6 +40,12 @@ PG_Background = pygame.image.load("Settings_B.jpg")     #this is the background 
 #feels birthday man
 F_Background = pygame.image.load("pepe.jpg")
 
+#ARROWS
+UA = pygame.image.load("U_ARROW.png")
+LA = pygame.image.load("L_ARROW.png")
+DA = pygame.image.load("D_ARROW.png")
+RA = pygame.image.load("R_ARROW.png")
+
 # screen dimensions and game clock #
 SCREEN_WIDTH = 1250                     #screen width
 SCREEN_HEIGHT = 800                     #screen height
@@ -428,10 +434,10 @@ def Game():
         for event in pygame.event.get():        #
             if event.type == pygame.QUIT:       #if the red box at the top right is clicked
                 pygame.quit()                   #quit the etire code
-            elif event.type == pygame.KEYDOWN:  #
-                if event.key==pygame.K_ESCAPE:
-                    Pause_Menu()
-                    Game = False                #exit the game and return to the main menu
+            #elif event.type == pygame.KEYDOWN:  #
+                #if event.key==pygame.K_ESCAPE:
+                    #Pause_Menu()
+                    #Game = False                #exit the game and return to the main menu
             
                     
         keys = pygame.key.get_pressed()
@@ -572,7 +578,7 @@ def Game():
             elif Y == 5 and X == 1:
                 lvl10 = LVL(100,10,0)
                 lvls.append(lvl10)
-                #e_screen = random.randint(1,2)
+                e_screen = random.randint(1,2)
                 print("lvl10")
 
             elif Y == 6 and X == 1:
@@ -584,7 +590,7 @@ def Game():
             elif Y == 5 and X == 2:
                 lvl11 = LVL(6,11)
                 lvls.append(lvl11)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl11")
 
             #lvl 12 //Roundabout entrance//
@@ -592,56 +598,56 @@ def Game():
                 RUN = False
                 lvl12 = LVL(20,12)
                 lvls.append(lvl12)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl12")
 
             #lvl 13
             elif Y == 6 and X == 3:
                 lvl13 = LVL(10,13)
                 lvls.append(lvl13)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl13")
 
             #lvl 14
             elif Y == 6 and X == 4:
                 lvl14 = LVL(6,14)
                 lvls.append(lvl14)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl14")
 
            #lvl 15
             elif Y == 6 and X == 5:
                 lvl15 = LVL(9,15)
                 lvls.append(lvl15)
-                e_screen = random.randint(1,2)
+                e_screen = 3
                 print("lvl15")
 
             #lvl 16
             elif Y == 5 and X == 5:
                 lvl16 = LVL(8,16,0,3)
                 lvls.append(lvl16)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl16")
 
             #lvl 17
             elif Y == 4 and X == 5:
                 lvl17 = LVL(3,17)
                 lvls.append(lvl17)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl17")
 
             #lvl 18
             elif Y == 4 and X == 4:
                 lvl18 = LVL(6,18)
                 lvls.append(lvl18)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl18")
 
             #lvl 19 //end of sewer roundabout//
             elif Y == 4 and X == 3:
                 lvl19 = LVL(5,19)
                 lvls.append(lvl19)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl19")
     
     
@@ -649,14 +655,14 @@ def Game():
             elif Y == 5 and X == 0:
                 lvl21 = LVL(6,21)
                 lvls.append(lvl21)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl21")
 
             #lvl 22
             elif Y == 5 and X == -1:
                 lvl22 = LVL(30,22)
                 lvls.append(lvl22)
-                e_screen = random.randint(1,2)
+                e_screen = 2
                 print("lvl22")
 
             #lvl 23
@@ -670,7 +676,7 @@ def Game():
             elif Y == 5 and X == -2:
                 lvl24 = LVL(40,24)
                 lvls.append(lvl24)
-                #e_screen = random.randint(2,3)
+                e_screen = random.randint(3)
                 print("lvl24")
 
             
@@ -703,17 +709,17 @@ def Game():
             if Y == 1 and X == 1:
                 tilemap = [
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
-                            [2,2,2,2,2,1,3,1,1,1,1,1,0,0,1,1,1,3,1,1,2,2,2,2,2],
-                            [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,3,1,1,2,2,2,2,2],
-                            [2,2,2,2,2,1,1,3,3,1,1,1,0,0,1,1,1,3,3,1,2,2,2,2,2],
+                            [2,2,2,2,2,1,3,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
+                            [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
+                            [2,2,2,2,2,1,1,3,3,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,3,3,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,2,2,2,2,2],
-                            [2,2,2,2,2,1,3,1,1,1,0,0,0,0,0,0,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,2,2,2,2,2],
-                            [2,2,2,2,2,1,1,1,1,1,0,0,0,0,0,0,1,3,3,1,2,2,2,2,2],
-                            [2,2,2,2,2,1,1,1,3,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2],
+                            [2,2,2,2,2,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,2,2,2,2,2],
+                            [2,2,2,2,2,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,2,2,2,2,2],
+                            [2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2],
                             [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
                             [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
@@ -1400,6 +1406,7 @@ def Game():
                         UNLOCK_YELLOW = False
                     
                         
+            
                 
                 
 
@@ -1422,7 +1429,7 @@ def Game():
                 
                     
                         
-
+             
                     
        
 #########################################################            
@@ -1531,8 +1538,20 @@ def Game():
             main_col = pygame.sprite.collide_rect(player, enemy)    #collisions between player and enemies
             if main_col == True:
                 player.HP -= 10
-                enemy.rect.x -= 100        #Player bounces back on enemy collision
-                enemy.rect.y -= 50         #collisions between enemy and player
+                if enemy.rect.y < player.rect.y:
+                    player.HP - 10
+                    enemy.rect.y -= 250
+                if enemy.rect.y + 30 > player.rect.y:
+                    player.HP - 10
+                    enemy.rect.y += 250
+                if enemy.rect.x < player.rect.x :
+                    player.HP - 10
+                    enemy.rect.x -= 250
+                if enemy.rect.x + 30 > player.rect.x:
+                    player.HP - 10
+                    enemy.rect.x += 250
+                    
+                
 
             melee_col = pygame.sprite.collide_rect(player_sword, enemy)
             if melee_col == True:
@@ -1646,6 +1665,7 @@ def Game():
         if Y == 6 and X == 1:
             PEPE()
             Game = False
+        
                 
         for enemy in enemy_list:    #enemy health bar drawing/updates
             enemy.health(screen)
@@ -1844,13 +1864,17 @@ while Menu:
 
         #shoot controls
         #have to manualy create arrows using a sprite engine
-        Button("",120,430,50,50,BC1,BC2,35,None,"ATK UP")       #hovering over this button will tell the player how to shoot up  
+        Button("",120,430,50,50,BC1,BC2,35,None,"ATK UP")       #hovering over this button will tell the player how to shoot up
+        screen.blit(UA,(120,430))
         Button("",120,500,50,50,BC1,BC2,35,None,"ATK  DOWN")     #hovering over this button will tell the player how to shoot down
+        screen.blit(DA,(120,500))
         Button("",50,500,50,50,BC1,BC2,35,None,"ATK  LEFT")      #hovering over this button will tell the player how to shoot left
+        screen.blit(LA,(50,500))
         Button("",190,500,50,50,BC1,BC2,35,None,"ATK  RIGHT")    #hovering over this button will tell the player how to shoot right
+        screen.blit(RA,(190,500))
 
         #pause menu bind
-        Button("ESC",100,630,90,50,BC1,BC2,35,None,"Toggle Menu") #hovering over this button will tell the player how to toggle the main menu
+        Button("mouse",70,310,120,50,BC1,BC2,35,None,"Use the mouse to shoot ") #hovering over this button will tell the player how to toggle the main menu
         
         Button("Back",20,700,80,50,BC1,BC2,25,M_Menu,None)        #this Button will return the user to the main menu
 
@@ -1860,13 +1884,13 @@ while Menu:
                
         screen.blit(PG_Background ,(0,0))
         TEXT("Transcript #423-27b",SCREEN_WIDTH/2,50,70)
-        TEXT("June 12, 18927",100,200,25,PG_TEXT)
-        TEXT("Since the catastrophe caused by the Xepher plant in 18905, the planet has undergone transformations rendering it into a wasteland.", SCREEN_WIDTH/2,240,18,PG_TEXT)
-        TEXT("The catastrophe caused a  massive increase in radiation levels on the surface. As well as deadly natural phenomenons.", SCREEN_WIDTH/2,280,18,PG_TEXT)
-        TEXT("Trillions were killed in a matter of hours.", SCREEN_WIDTH/2,320,18,PG_TEXT)
+        #TEXT("June 12, 18927",100,200,25,PG_TEXT)
+        TEXT("Your goal is to control the mark-4Xz RT drone to infilitrate xepher corps hidden facility", SCREEN_WIDTH/2,240,18,PG_TEXT)
+        TEXT("Your Turret runs on limited ammo and a faulty shock charge that only allows one shot to register at a time", SCREEN_WIDTH/2,280,18,PG_TEXT)
+        TEXT("There appears to be markets located in your AO. keep on a lockout", SCREEN_WIDTH/2,320,18,PG_TEXT)
         
-        TEXT('Those who survived have migrated into the hollows of the earths crust and have taken to the name "Nesters"',SCREEN_WIDTH/2,380,18,PG_TEXT)
-        TEXT("Due to extensive exposure to radiation most Nesters are far too frail to fight the monsters that lurk under the crust.",SCREEN_WIDTH/2,420,18,PG_TEXT)
+        TEXT('GodSpeed',SCREEN_WIDTH/2,380,18,PG_TEXT)
+        #TEXT("Due to extensive exposure to radiation most Nesters are far too frail to fight the monsters that lurk under the crust.",SCREEN_WIDTH/2,420,18,PG_TEXT)
         
 
         Button("Back",20,700,80,50,BC1,BC2,25,M_Menu)#temporary, for test and faster performence purposes

@@ -11,6 +11,8 @@ B = (153,0,153)
 YELLOW = (255,212,38)
 BC2 = (104,14,75)
 
+EN = pygame.image.load('ENEMY.png')
+PL = pygame.image.load('Hero.png')
 
  
 class Hero(pygame.sprite.Sprite):
@@ -31,7 +33,7 @@ class Hero(pygame.sprite.Sprite):
         self.image.set_colorkey(WHITE)
  
         # Draw the hero
-        pygame.draw.rect(self.image, BLUE, [0, 0, width, height])
+        self.image.blit(PL,(0,0))
         
         # Fetch the rectangle object that has the dimensions of the image.
         self.rect = self.image.get_rect()
@@ -167,12 +169,17 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
-        pygame.draw.rect(self.image, RED, [0, 0, width, height])
+        #pygame.draw.rect(self.image, RED, [0, 0, width, height])
+        self.image.blit(EN,(0,0))
+
+        
         self.rect = self.image.get_rect()
 
         # Get random x/y coordinates
         self.rect.x = random.randrange(0, 1250)
         self.rect.y = random.randrange(0, 800)
+
+        
 
     def move_to_player(self, player):      
         # find direction vector between enemy and player
