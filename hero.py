@@ -197,25 +197,25 @@ class Enemy(pygame.sprite.Sprite):
 
     def health(self, screen):
         if self.HP >= 10:
-            pygame.draw.rect(screen, RED, [self.rect.x+5, self.rect.y-10, 3, 5], 0)
+            pygame.draw.rect(screen, RED, [self.rect.x+5, self.rect.y-10, 2, 5], 0)
             if self.HP >= 20:
-                pygame.draw.rect(screen, RED, [self.rect.x+8, self.rect.y-10, 3, 5], 0)
+                pygame.draw.rect(screen, RED, [self.rect.x+7, self.rect.y-10, 2, 5], 0)
                 if self.HP >= 30:
-                    pygame.draw.rect(screen, RED, [self.rect.x+11, self.rect.y-10, 3, 5], 0)
+                    pygame.draw.rect(screen, RED, [self.rect.x+9, self.rect.y-10, 2, 5], 0)
                     if self.HP >= 40:
-                        pygame.draw.rect(screen, RED, [self.rect.x+14, self.rect.y-10, 3, 5], 0)
+                        pygame.draw.rect(screen, RED, [self.rect.x+11, self.rect.y-10, 2, 5], 0)
                         if self.HP >= 50:
-                            pygame.draw.rect(screen, RED, [self.rect.x+17, self.rect.y-10, 3, 5], 0)
+                            pygame.draw.rect(screen, RED, [self.rect.x+13, self.rect.y-10, 2, 5], 0)
                             if self.HP >= 60:
-                                pygame.draw.rect(screen, RED, [self.rect.x+20, self.rect.y-10, 3, 5], 0)
+                                pygame.draw.rect(screen, RED, [self.rect.x+15, self.rect.y-10, 2, 5], 0)
                                 if self.HP >= 70:
-                                    pygame.draw.rect(screen, RED, [self.rect.x+23, self.rect.y-10, 3, 5], 0)
+                                    pygame.draw.rect(screen, RED, [self.rect.x+17, self.rect.y-10, 2, 5], 0)
                                     if self.HP >= 80:
-                                        pygame.draw.rect(screen, RED, [self.rect.x+26, self.rect.y-10, 3, 5], 0)
+                                        pygame.draw.rect(screen, RED, [self.rect.x+19, self.rect.y-10, 2, 5], 0)
                                         if self.HP >= 90:
-                                            pygame.draw.rect(screen, RED, [self.rect.x+29, self.rect.y-10, 3, 5], 0)
+                                            pygame.draw.rect(screen, RED, [self.rect.x+21, self.rect.y-10, 2, 5], 0)
                                             if self.HP == 100:
-                                                pygame.draw.rect(screen, RED, [self.rect.x+32, self.rect.y-10, 3, 5], 0)
+                                                pygame.draw.rect(screen, RED, [self.rect.x+23, self.rect.y-10, 2, 5], 0)
 
 class Drops(pygame.sprite.Sprite):
 
