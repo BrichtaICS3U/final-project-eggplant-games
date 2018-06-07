@@ -4,6 +4,8 @@ pygame.init()
 from hero import *    #import the sprites that Abbey has made
 from LVLs import LVL                    #FML
 from Door import DOOR, KEY
+from tkinter import *
+from tkinter import messagebox
 
 
 
@@ -26,6 +28,8 @@ I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
 D    = (252, 216, 168)
+YELLOW2 = (255,212,38)
+B = (153,0,153)
 
 #background(s)
 T_background = pygame.image.load("Menu_Background.png") #this is the background for the title screen
@@ -472,7 +476,7 @@ def Game():
 
             #lvl 3
             elif Y == 3 and X == 1:
-                lvl3 = LVL(100,3,1)
+                lvl3 = LVL(100,3,0)
                 e_screen = random.randint(2,3)
                 lvls.append(lvl3)
                 print("lvl3")#this is the lvl where i need to  return the locked door into position
@@ -1344,7 +1348,7 @@ def Game():
                         Bullet_sprites_list.remove(bullet)
 
                     
-                    #e_screen = 0
+                    e_screen = 0
                     for i in range(e_screen):                      #this code adds new enemies to next screen
                         enemy = Enemy(BLACK, 30, 30)                #based off of the number of enemies that was
 
@@ -1608,22 +1612,19 @@ def Game():
                     already_bought = True
                 else:
                     player.rect.y -= 200
-                    print("You dont have enough money / room for what you're trying to buy!")
-                    
+                    Tk().wm_withdraw()
+                    messagebox.showinfo('Rip',"You do not have enough money / space to buy this item")
         """insert code for collisions between enemies here"""
             
         """insert code for collisions between enemies here"""
 
         
 # -------------------end of collisions --------------------------------------------------------------------------------                   
-    
-        HealthBar(screen, player)           #this draws and updates the player health bar(s)
-        TEXT("Player Health", 60, 20, 15)   #add text to explain what the bars are
-        AmmoBar(screen, player)             #draws and updates the player ammo bar
-        TEXT("Player Ammo", 60, 80, 15)
-        TEXT("Money", 40, 140, 15)
+        Hud(screen)                                 #draws hud behind ammo&healthbar to increase visibility
+        HealthBar(screen, player)                   #this draws and updates the player health bar(s)
+        AmmoBar(screen, player)                     #draws and updates the player ammo bar
         money_string = "$ {}".format(player.money)
-        TEXT(money_string, 40, 160, 15)
+        TEXT(money_string, 135, 40, 20, BLACK)
 
         if B_S == True:
             pygame.draw.rect(screen,BLUE,[150,30,15,25])
@@ -1663,11 +1664,11 @@ def Game():
                 if chance <= 50:                            #numbers 1-50 give a drop (50% chance)
                     chance2 = random.randint(0, 100)        #get another random numner
                     if chance2 <= 75:                       #75% chance the drop is for ammo
-                        en_drop = Drops(GRAY, 20, 20, enemy.rect.x, enemy.rect.y)
+                        en_drop = Drops(B, 10, 10, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         ammo_drops_list.add(en_drop)
                     elif chance2 > 75:                      #25% chance the drop is for health
-                        en_drop = Drops(RED, 20, 20, enemy.rect.x, enemy.rect.y)
+                        en_drop = Drops(YELLOW, 20, 25, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         health_drops_list.add(en_drop)
                     

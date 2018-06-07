@@ -304,15 +304,15 @@ class AmmoBar():
     def __init__(self, screen, player):
 
         if player.ammo > 0:
-            pygame.draw.ellipse(screen, BLACK, [10, 45, 15, 25], 0) #draws player ammo
+            pygame.draw.ellipse(screen, B, [10, 45, 15, 25], 0) #draws player ammo
             if player.ammo > 1:
-                pygame.draw.ellipse(screen, BLACK, [30, 45, 15, 25], 0)
+                pygame.draw.ellipse(screen, B, [30, 45, 15, 25], 0)
                 if player.ammo > 2:
-                    pygame.draw.ellipse(screen, BLACK, [50, 45, 15, 25], 0)
+                    pygame.draw.ellipse(screen, B, [50, 45, 15, 25], 0)
                     if player.ammo > 3:
-                        pygame.draw.ellipse(screen, BLACK, [70, 45, 15, 25], 0)
+                        pygame.draw.ellipse(screen, B, [70, 45, 15, 25], 0)
                         if player.ammo > 4:
-                            pygame.draw.ellipse(screen, BLACK, [90, 45, 15, 25], 0)
+                            pygame.draw.ellipse(screen, B, [90, 45, 15, 25], 0)
 
 
         
