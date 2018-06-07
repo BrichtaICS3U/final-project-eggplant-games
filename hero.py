@@ -8,6 +8,9 @@ GREY = (100, 100, 100)
 RED = (255, 0, 0)
 ORANGE = (247,163,7)
 B = (153,0,153)
+YELLOW = (255,212,38)
+BC2 = (104,14,75)
+
 
  
 class Hero(pygame.sprite.Sprite):
@@ -253,7 +256,7 @@ class StorePlate(pygame.sprite.Sprite):
         pygame.draw.rect(screen, BLACK, [(428)+(120/4)-2.5, (800-300)+38.5, 5, 5], 0)       #3 bullets
         pygame.draw.rect(screen, BLACK, [(428)+(120/4*2)-2.5, (800-300)+38.5, 5, 5], 0)     #
         pygame.draw.rect(screen, BLACK, [(428)+(120/4*3)-2.5, (800-300)+38.5, 5, 5], 0)     #
-        pygame.draw.rect(screen, GREEN, [(702)+52.5, (800-300)+27.5, 15, 25], 0)             #health bar
+        pygame.draw.rect(screen, YELLOW, [(702)+52.5, (800-300)+27.5, 15, 25], 0)           #health bar
         pygame.draw.line(screen, ORANGE,((976)+35, 800-275), ((976)+50,(800-260)), 5)       #speed boost lines
         pygame.draw.line(screen, ORANGE,((976)+50, 800-260), ((976)+35,800-245), 5)
         pygame.draw.line(screen, ORANGE,((976)+55, 800-275), ((976)+70,(800-260)), 5)
@@ -261,7 +264,11 @@ class StorePlate(pygame.sprite.Sprite):
         pygame.draw.line(screen, ORANGE,((976)+75, 800-275), ((976)+90,(800-260)), 5)
         pygame.draw.line(screen, ORANGE,((976)+90, 800-260), ((976)+75,800-245), 5)
 
-    
+class Hud():
+
+    def __init__(self, screen):
+        pygame.draw.rect(screen, BC2, [5, 5, 140, 70], 0)
+        pygame.draw.polygon(screen, BC2, [(145, 5),(170, 37.5), (145, 75)], 0)
                                  
 class HealthBar():
 
@@ -272,40 +279,40 @@ class HealthBar():
             pygame.quit()
 
         elif player.HP >= 10:
-            pygame.draw.rect(screen, GREEN, [20, 30, 15, 12.5], 0)
+            pygame.draw.rect(screen, YELLOW, [10, 10, 15, 12.5], 0)
             if player.HP >= 20:
-                pygame.draw.rect(screen, GREEN, [20, 42.5, 15, 12.5], 0)
+                pygame.draw.rect(screen, YELLOW, [10, 22.5, 15, 12.5], 0)
                 if player.HP >= 30:
-                    pygame.draw.rect(screen, GREEN, [40, 30, 15, 12.5], 0)
+                    pygame.draw.rect(screen, YELLOW, [30, 10, 15, 12.5], 0)
                     if player.HP >= 40:
-                        pygame.draw.rect(screen, GREEN, [40, 42.5, 15, 12.5], 0)
+                        pygame.draw.rect(screen, YELLOW, [30, 22.5, 15, 12.5], 0)
                         if player.HP >= 50:
-                            pygame.draw.rect(screen, GREEN, [60, 30, 15, 12.5], 0)
+                            pygame.draw.rect(screen, YELLOW, [50, 10, 15, 12.5], 0)
                             if player.HP >= 60:
-                                pygame.draw.rect(screen, GREEN, [60, 42.5, 15, 12.5], 0)
+                                pygame.draw.rect(screen, YELLOW, [50, 22.5, 15, 12.5], 0)
                                 if player.HP >= 70:
-                                    pygame.draw.rect(screen, GREEN, [80, 30, 15, 12.5], 0)
+                                    pygame.draw.rect(screen, YELLOW, [70, 10, 15, 12.5], 0)
                                     if player.HP >= 80:
-                                        pygame.draw.rect(screen, GREEN, [80, 42.5, 15, 12.5], 0)
+                                        pygame.draw.rect(screen, YELLOW, [70, 22.5, 15, 12.5], 0)
                                         if player.HP >= 90:
-                                            pygame.draw.rect(screen, GREEN, [100, 30, 15, 12.5], 0)
+                                            pygame.draw.rect(screen, YELLOW, [90, 10, 15, 12.5], 0)
                                             if player.HP == 100:
-                                                pygame.draw.rect(screen, GREEN, [100, 42.5, 15, 12.5], 0)
+                                                pygame.draw.rect(screen, YELLOW, [90, 22.5, 15, 12.5], 0)
 
 class AmmoBar():
 
     def __init__(self, screen, player):
 
         if player.ammo > 0:
-            pygame.draw.ellipse(screen, BLACK, [20, 90, 15, 25], 0) #draws player ammo
+            pygame.draw.ellipse(screen, BLACK, [10, 45, 15, 25], 0) #draws player ammo
             if player.ammo > 1:
-                pygame.draw.ellipse(screen, BLACK, [40, 90, 15, 25], 0)
+                pygame.draw.ellipse(screen, BLACK, [30, 45, 15, 25], 0)
                 if player.ammo > 2:
-                    pygame.draw.ellipse(screen, BLACK, [60, 90, 15, 25], 0)
+                    pygame.draw.ellipse(screen, BLACK, [50, 45, 15, 25], 0)
                     if player.ammo > 3:
-                        pygame.draw.ellipse(screen, BLACK, [80, 90, 15, 25], 0)
+                        pygame.draw.ellipse(screen, BLACK, [70, 45, 15, 25], 0)
                         if player.ammo > 4:
-                            pygame.draw.ellipse(screen, BLACK, [100, 90, 15, 25], 0)
+                            pygame.draw.ellipse(screen, BLACK, [90, 45, 15, 25], 0)
 
 
         
