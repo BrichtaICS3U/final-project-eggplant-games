@@ -267,8 +267,8 @@ class StorePlate(pygame.sprite.Sprite):
 class Hud():
 
     def __init__(self, screen):
-        pygame.draw.rect(screen, BC2, [5, 5, 140, 70], 0)
-        pygame.draw.polygon(screen, BC2, [(145, 5),(170, 37.5), (145, 75)], 0)
+        pygame.draw.rect(screen, BC2, [5, 5, 240, 70], 0)
+        pygame.draw.polygon(screen, BC2, [(245, 5),(270, 37.5), (245, 75)], 0)
                                  
 class HealthBar():
 

@@ -1348,7 +1348,7 @@ def Game():
                         Bullet_sprites_list.remove(bullet)
 
                     
-                    e_screen = 0
+                    #e_screen = 0                                   #allows us to cheat and turn off enemies :D
                     for i in range(e_screen):                      #this code adds new enemies to next screen
                         enemy = Enemy(BLACK, 30, 30)                #based off of the number of enemies that was
 
