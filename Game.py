@@ -485,7 +485,7 @@ def Game():
 
             #lvl 3
             elif Y == 3 and X == 1:
-                lvl3 = LVL(100,3,1)
+                lvl3 = LVL(100,3,0)
                 e_screen = random.randint(2,3)
                 lvls.append(lvl3)
                 print("lvl3")#this is the lvl where i need to  return the locked door into position
@@ -576,7 +576,7 @@ def Game():
         
             #lvl 10 //first floor / hub for floor (reference point)//
             elif Y == 5 and X == 1:
-                lvl10 = LVL(100,10,2)
+                lvl10 = LVL(100,10,0)
                 lvls.append(lvl10)
                 e_screen = random.randint(1,2)
                 print("lvl10")
@@ -676,7 +676,7 @@ def Game():
             elif Y == 5 and X == -2:
                 lvl24 = LVL(40,24)
                 lvls.append(lvl24)
-                e_screen = random.randint(3)
+                e_screen = 3
                 print("lvl24")
 
             
@@ -1700,7 +1700,7 @@ def Game():
                         all_sprites_list.add(en_drop)
                         ammo_drops_list.add(en_drop)
                     elif chance2 > 75:                      #25% chance the drop is for health
-                        en_drop = Drops(YELLOW, 20, 25, enemy.rect.x, enemy.rect.y)
+                        en_drop = Drops(YELLOW2, 20, 25, enemy.rect.x, enemy.rect.y)
                         all_sprites_list.add(en_drop)
                         health_drops_list.add(en_drop)
                     
@@ -1887,7 +1887,7 @@ while Menu:
         #TEXT("June 12, 18927",100,200,25,PG_TEXT)
         TEXT("Your goal is to control the mark-4Xz RT drone to infilitrate xepher corps hidden facility", SCREEN_WIDTH/2,240,18,PG_TEXT)
         TEXT("Your Turret runs on limited ammo and a faulty shock charge that only allows one shot to register at a time", SCREEN_WIDTH/2,280,18,PG_TEXT)
-        TEXT("There appears to be markets located in your AO. keep on a lockout", SCREEN_WIDTH/2,320,18,PG_TEXT)
+        TEXT("There appears to be markets located in your AO. keep on a lookout", SCREEN_WIDTH/2,320,18,PG_TEXT)
         
         TEXT('GodSpeed',SCREEN_WIDTH/2,380,18,PG_TEXT)
         #TEXT("Due to extensive exposure to radiation most Nesters are far too frail to fight the monsters that lurk under the crust.",SCREEN_WIDTH/2,420,18,PG_TEXT)
