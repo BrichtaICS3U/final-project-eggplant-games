@@ -485,7 +485,7 @@ def Game():
 
             #lvl 3
             elif Y == 3 and X == 1:
-                lvl3 = LVL(100,3,0)
+                lvl3 = LVL(100,3,1)
                 e_screen = random.randint(2,3)
                 lvls.append(lvl3)
                 print("lvl3")#this is the lvl where i need to  return the locked door into position
@@ -576,7 +576,7 @@ def Game():
         
             #lvl 10 //first floor / hub for floor (reference point)//
             elif Y == 5 and X == 1:
-                lvl10 = LVL(100,10,0)
+                lvl10 = LVL(100,10,2)
                 lvls.append(lvl10)
                 e_screen = random.randint(1,2)
                 print("lvl10")
