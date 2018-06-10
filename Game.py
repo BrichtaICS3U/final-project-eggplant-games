@@ -17,7 +17,7 @@ BROWN = (74,67,23)          #Brown
 SILVER = (204,201,182)      #Silver
 GOLD = (235,207,26)         #Gold
 RED   = (255,0,0)           #test Red
-GREEN = (0,255,0)           #test Green
+GREEN = (0,255,0)           #test Green 
 YELLOW = (255,255,0)
 BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
@@ -51,6 +51,7 @@ SCREEN_WIDTH = 1250                     #screen width
 SCREEN_HEIGHT = 800                     #screen height
 size = (SCREEN_WIDTH,SCREEN_HEIGHT)     #the total dimensions of the screen
 screen = pygame.display.set_mode(size)  #create the display area
+pygame.display.set_caption("Ctrl and Destroy") #set the display name of the screen
 clock = pygame.time.Clock()             #built in pygame clock
 
 
