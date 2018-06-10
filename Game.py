@@ -22,12 +22,12 @@ YELLOW = (255,255,0)
 BLUE  = (0,0,255)           #test Blue
 BC1   = (66,3,61)           #Button colour 1
 BC2   = (104,14,75)         #Button coloutr 2
-PURPLE3 = (140, 18, 101)
+PURPLE3 = (140, 18, 101)    
 PURPLE4 = (179, 25, 130)
 I_TEXT = (255,164,0)        #insztructions text colour (subject to change)
 M_TEXT = (130,2,99)         #menu text colour
 PG_TEXT = (255,164,0)       #pregame text
-D    = (252, 216, 168)
+D    = (252, 216, 168)  
 YELLOW2 = (255,212,38)
 B = (153,0,153)
 
@@ -41,6 +41,7 @@ PG_Background = pygame.image.load("Settings_B.jpg")     #this is the background 
 F_Background = pygame.image.load("pepe.jpg")
 
 #ARROWS
+#these are tge arrows that appear on the contolr menu
 UA = pygame.image.load("U_ARROW.png")
 LA = pygame.image.load("L_ARROW.png")
 DA = pygame.image.load("D_ARROW.png")
@@ -68,6 +69,7 @@ pygame.mixer.music.play(-1)                                                 #
 
 
 # ----------- list of global variables ------------- #
+#there a lot :(
 shoot = True
 LayerP = 1
 b = False
@@ -101,7 +103,8 @@ TILE3 = 9
 TILE4 = 10
 GRATE2 = 11
 RUN = True
-already_bought = False 
+already_bought = False
+#this is the code that defines the tiles number
 tilemap = []
 textures =  {
                 DIRT : pygame.image.load('Dirt.png'),
@@ -223,10 +226,12 @@ def Quit():
     
 
 def P_settings():
+    """switches the layers on the menu"""
     global LayerP
     LayerP += 1
 
 def P_menu():
+    """switches the layers on the menu"""
     global LayerP
     LayerP -= 1
 
@@ -269,6 +274,7 @@ def Change_SCREEN():
     
 
 def Hit_Wall_R():
+    #stops the player from walking into objects
     keys = pygame.key.get_pressed()
     player.rect.x -= player.movespeed
     if keys[pygame.K_LSHIFT]:
@@ -277,6 +283,7 @@ def Hit_Wall_R():
     
 
 def Hit_Wall_L():
+    #stops the player from walking into objects
     keys = pygame.key.get_pressed()
     player.rect.x += player.movespeed
     if keys[pygame.K_LSHIFT]:
@@ -285,6 +292,7 @@ def Hit_Wall_L():
     
         
 def Hit_Wall_U():
+    #stops the player from walking into objects
     keys = pygame.key.get_pressed()
     player.rect.y -= player.movespeed
     if keys[pygame.K_LSHIFT]:
@@ -293,6 +301,7 @@ def Hit_Wall_U():
     
         
 def Hit_Wall_D():
+    #stops the player from walking into objects
     keys = pygame.key.get_pressed()
     player.rect.y += player.movespeed
     if keys[pygame.K_LSHIFT]:
@@ -300,18 +309,22 @@ def Hit_Wall_D():
     
 
 def Unlock_B_D():
+    #unlocks the blue door
     global B_D_L 
     B_D_L = False
 
 def Unlock_R_D():
+    #unlocks the red door
     global R_D_L
     R_D_L = False
 
 def Unlock_Y_D():
+    #unlock the yellow door
     global Y_D_L
     Y_D_L = False
 
 def draw_MAP():
+    #this code thakes the tilemap code and draws the tiles
     global MAPHEIGHT
     global MAPWIDTH
     global tilemap
@@ -391,7 +404,7 @@ def Game():
             
         
     
-    
+    #global variables    
     global Y
     global event
     global SCREEN_WIDTH         #turn the screen width into a global variable for the game
@@ -466,6 +479,9 @@ def Game():
             #                                                                       ___
             ########################################## IMPORTANT DO NOT TOUCH PLZ <(^_^)<
             # this commented blocked portion is the section where the lvls are drawn and the player interacts with the sorrounding
+            """ Y and X are the cooridates of the room
+                LVL is what creates doors, walls, and other objects
+            """
 
             # Forest/outside dungeon ---- Tutorial #
             #lvl 1
@@ -486,7 +502,7 @@ def Game():
 
             #lvl 3
             elif Y == 3 and X == 1:
-                lvl3 = LVL(100,3,0)
+                lvl3 = LVL(100,3,1)
                 e_screen = random.randint(2,3)
                 lvls.append(lvl3)
                 print("lvl3")#this is the lvl where i need to  return the locked door into position
@@ -500,6 +516,7 @@ def Game():
                 lvls.append(lvl4)
                 print("lvl4")
 
+            #this chunk of code is the code that draws the store
             if Y == 3 and X == 3 or Y == 5 and X == -3:
                 if Y == 3 and X == 3:
                     lvl0 = LVL(2)
@@ -577,7 +594,7 @@ def Game():
         
             #lvl 10 //first floor / hub for floor (reference point)//
             elif Y == 5 and X == 1:
-                lvl10 = LVL(100,10,0)
+                lvl10 = LVL(100,10,2)
                 lvls.append(lvl10)
                 e_screen = random.randint(1,2)
                 print("lvl10")
@@ -705,7 +722,7 @@ def Game():
             
             
 
-
+            """this next portion is all tilemaps. the code taht defines which tile is which is at the top of the code"""
         
             if Y == 1 and X == 1:
                 tilemap = [
@@ -1216,8 +1233,9 @@ def Game():
             Generate = False
           
                    
-    
-#hit detection for doors            
+
+            
+        """this section is where the functions draw the LVL objects and the tilemaps"""           
         for lvl in lvls:
             if Y == 3 and X == 3 or Y == 5 and X == -3:
                 lvl0.draw(screen)
@@ -1314,31 +1332,32 @@ def Game():
             
             Door_collision_list = pygame.sprite.spritecollide(player,lvl.doors_list,False)
             key_collision_list  = pygame.sprite.spritecollide(player,lvl.Key_list,False)
-            
+
+            #this is where the door decides if the code allows the player to walk into the door
             for door in Door_collision_list:
                 
                 
                         
                 
-                if door.LOCK == 0:
-                    door.IS_LOCKED()
+                if door.LOCK == 0: #if it is a normal door
+                    door.IS_LOCKED()#unlock the door
 
-                elif door.LOCK == 1:
-                    if B_D_L == False:
-                        door.IS_LOCKED()
+                elif door.LOCK == 1: #if the door is blue
+                    if B_D_L == False:# if it's unlocked
+                        door.IS_LOCKED()#unlock the door
 
-                elif door.LOCK == 2:
-                    if R_D_L == False:
-                        door.IS_LOCKED()
+                elif door.LOCK == 2: #if the door is yellow
+                    if R_D_L == False:#if it's unlocked
+                        door.IS_LOCKED()#unlock the door
 
-                elif door.LOCK == 3:
-                    if Y_D_L == False:
-                        door.IS_LOCKED()
+                elif door.LOCK == 3:#if the door is Red
+                    if Y_D_L == False: #if it's unlocked 
+                        door.IS_LOCKED()#unlock the door
 
-                if door.OPEN == True:
-                    Change_SCREEN()
+                if door.OPEN == True:#if the door is unlocked
+                    Change_SCREEN() #change the X or Y position depending which door is entered
 
-                    store_stuff_list.empty()
+                    store_stuff_list.empty()#remove the store items fomr the screen if the player is in the store
                 
 
                     for enemy in enemy_list:                #this code deletes the previous enemies off the screen
@@ -1346,19 +1365,19 @@ def Game():
                         all_sprites_list.remove(enemy)
                         enemy_list.remove(enemy)
                 
-                    for en_drop in ammo_drops_list:
+                    for en_drop in ammo_drops_list:         #this deletes the ammo that is droped
                         ammo_drops_list.remove(en_drop)
                         all_sprites_list.remove(en_drop)
 
-                    for en_drop in health_drops_list:
+                    for en_drop in health_drops_list:       #this deletes the health that is droped
                         health_drops_list.remove(en_drop)
                         all_sprites_list.remove(en_drop)
 
-                    for en_drop in money_drops_list:
+                    for en_drop in money_drops_list:        #this deletes the money that is droped
                         money_drops_list.remove(en_drop)
                         all_sprites_list.remove(en_drop)
 
-                    for bullet in Bullet_sprites_list:
+                    for bullet in Bullet_sprites_list:      #this deletes the bullets that remain on the screen
                         all_sprites_list.remove(bullet)
                         Bullet_sprites_list.remove(bullet)
 
@@ -1385,23 +1404,23 @@ def Game():
     
             for key in key_collision_list:
 
-                if key.D_N == 1:
-                    if UNLOCK_BLUE == True:
-                        Unlock_B_D()
+                if key.D_N == 1:                                    #if the door is blue
+                    if UNLOCK_BLUE == True:                         #if the key is blue
+                        Unlock_B_D()                                #unlock the blue door
                         print("the blue door has been unlocked")
                         UNLOCK_BLUE = False
                         B_S = True
                     
-                if key.D_N == 2:    
-                    if UNLOCK_RED == True:
-                        Unlock_R_D()
+                if key.D_N == 2:                                    #if the door is Red
+                    if UNLOCK_RED == True:                          #if the key is red
+                        Unlock_R_D()                                #unlock the red door
                         print("the red door has been unlocked")
                         R_S = True
                         UNLOCK_RED = False
 
-                if key.D_N == 3:
-                    if UNLOCK_YELLOW == True:
-                        Unlock_Y_D()
+                if key.D_N == 3:                                    #if the door is yellow
+                    if UNLOCK_YELLOW == True:                       #if the key is yellow
+                        Unlock_Y_D()                                #unlock the yellow door
                         print("the yellow door has been unlocked")
                         Y_S = True
                         UNLOCK_YELLOW = False
@@ -1472,7 +1491,7 @@ def Game():
             player_sword.rect.x = -40
             player_sword.rect.y = -40
 
-        
+        #if the player lets go of the attack key, they will be able to attack again
         for event in pygame.event.get():
             if event.type == pygame.KEYUP:
                 if event.key==pygame.K_UP:
@@ -1556,8 +1575,8 @@ def Game():
 
             melee_col = pygame.sprite.collide_rect(player_sword, enemy)
             if melee_col == True:
-                if keys[pygame.K_UP]:            #if the player is holding E, cue melee attac
-                    enemy.HP -= 35              #decrease enemy health by 10
+                if keys[pygame.K_UP]:            
+                    enemy.HP -= 35              
                     enemy.rect.y -= random.randint(100,200)
                     enemy.rect.x -= random.randint(-300,300)                                        
                 elif keys[pygame.K_RIGHT]:

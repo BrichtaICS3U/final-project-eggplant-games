@@ -122,20 +122,20 @@ class LVL():
         self.Key_list = pygame.sprite.Group()
 
 
-        if Key == 1:
+        if Key == 1: #this is the blue key
             B_Key = KEY(50,50,BLUE,1)
             B_Key.rect.x = 625
             B_Key.rect.y = 730
             self.Key_list.add(B_Key)
 
-        if Key == 2:
+        if Key == 2:# this is thered key 
             R_Key = KEY(50,50,RED,2)
             R_Key.rect.x = 550
             R_Key.rect.y = 375
             self.Key_list.add(R_Key)
 
 
-        if Key == 3:
+        if Key == 3:# this is the yellow key
             Y_Key = KEY(50,50,YELLOW,3)
             Y_Key.rect.x = 1175
             Y_Key.rect.y = 425
@@ -164,7 +164,10 @@ class LVL():
 
         self.hole_list = pygame.sprite.Group()
         
-
+        """every Holes number is equivilant to the lvls number.
+            there are hundreds of holes.
+            I need a life.
+        """
         if Holes == 1:
             
             h1_1 = HOLE(250,800,WHITE)
